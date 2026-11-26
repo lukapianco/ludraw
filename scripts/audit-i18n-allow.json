@@ -1,0 +1,91 @@
+{
+  "$comment": "Exceções do audit:i18n: textos em português que ficam no código de propósito. Cada entrada precisa de motivo (Chat 05.6). Padrões são expressões regulares testadas contra o texto encontrado.",
+  "ignoreDirs": [
+    {
+      "path": "src/components/design-system/",
+      "reason": "Tela #/design-system: referência interna do time, fica em pt-BR (decisão do Chat 05.6)."
+    }
+  ],
+  "entries": [
+    {
+      "file": "src/components/settings/SettingsView.tsx",
+      "pattern": "^(Operações|Educação)$",
+      "reason": "Valores de departamento gravados no perfil (dados, retrocompatíveis); a tela mostra o rótulo traduzido de settings.departments.*."
+    },
+    {
+      "file": "src/utils/permissions.ts",
+      "pattern": "^(Membro do time|Cliente/parceiro|Link público|Membro|Convidado B2B|Visitante \\((leitor|comentador|editor)\\))",
+      "reason": "Rótulos e descrições de referência dos perfis simulados; a tela usa labelKey/descriptionKey (permissions.viewAs.*). O motor fica sem dependência de i18n."
+    },
+    {
+      "file": "src/extensions/registries.ts",
+      "pattern": "contribuição sem id|pertence ao núcleo|já foi registrado",
+      "reason": "Erro de desenvolvedor de extensão (console), não aparece para quem usa o app."
+    },
+    {
+      "file": "src/i18n/index.ts",
+      "pattern": "^\\[(Ƥšéûðõ|i18n\\])",
+      "reason": "Nome do pseudo-idioma e aviso de console do próprio motor."
+    },
+    {
+      "file": "src/boot.tsx",
+      "pattern": "Elemento #root",
+      "reason": "Erro de inicialização para desenvolvedores (index.html quebrado)."
+    },
+    {
+      "file": "src/utils/boardActions.ts",
+      "pattern": "^\\[LuDraw\\] imagem ignorada",
+      "reason": "Aviso de console para desenvolvedores."
+    },
+    {
+      "file": "src/utils/fontLoading.ts",
+      "pattern": "^AaÀà",
+      "reason": "Amostra de glifos para carregar as fontes (não é texto exibido)."
+    },
+    {
+      "file": "src/utils/format.ts",
+      "pattern": " às ",
+      "reason": "Ramo exclusivo do pt-BR que preserva o formato de data de sempre; os outros idiomas usam Intl."
+    },
+    {
+      "file": "src/utils/storedNames.ts",
+      "pattern": "^(Você|Meu espaço)$",
+      "reason": "Valores padrão GRAVADOS nos dados locais desde o Chat 01 (autor sem perfil e espaço padrão). Continuam sendo os valores salvos para não quebrar boards existentes; a tela mostra personLabel()/spaceLabel() no idioma ativo."
+    },
+    {
+      "file": "src/utils/storedDefaults.ts",
+      "pattern": "^(Você|Meu espaço|Pessoal|Visitante)$",
+      "reason": "Chat 07: os mesmos valores GRAVADOS de storedNames.ts (mais o texto legado \"Pessoal\" e o autor \"Visitante\" do link público no servidor), movidos para um módulo sem i18n que o servidor também importa. A tela traduz por personLabel()/spaceLabel()."
+    },
+    {
+      "file": "src/extensions/core.ts",
+      "pattern": "^(Task|Story|Bug)$",
+      "reason": "Valores da coluna Issue Type do CSV de issues: seguem o padrão de importação dos rastreadores em qualquer idioma (I18N_SPEC §4.7)."
+    },
+    {
+      "file": "src/utils/ambientAudio.ts",
+      "pattern": "^(Lo-Fi|Ambient Pad|Focus Pulse)$",
+      "reason": "Nomes próprios das trilhas de áudio ambiente (procedurais, do projeto), iguais em todos os idiomas; a descrição de cada trilha é traduzida."
+    },
+    {
+      "file": "src/utils/mailBanners.ts",
+      "pattern": "^<svg xmlns",
+      "reason": "Desenho SVG das faixas dos e-mails (Chat 08.5 · B2): só formas e a marca \"ludraw\", nenhum texto traduzível."
+    },
+    {
+      "file": "src/utils/mailLayout.ts",
+      "pattern": "^LuDraw$",
+      "reason": "Texto alternativo da faixa = nome da marca (não se traduz)."
+    },
+    {
+      "file": "src/utils/designTokens.ts",
+      "pattern": "^(token --od-.*não existe|cor inválida:)",
+      "reason": "Chat 08.6 · B: erro de desenvolvedor (token ausente ou cor malformada em tokens.css), lançado para o npm run test:design e o console; não aparece para quem usa o app."
+    },
+    {
+      "file": "src/utils/securityHeaders.ts",
+      "pattern": "is not an origin like https://host.example.com",
+      "reason": "Erro de configuração do servidor/build (LUDRAW_CSP_CONNECT_SRC, LUDRAW_FRAME_ANCESTORS), em inglês técnico como os demais erros de boot (I18N_SPEC §4.10); nunca aparece na tela do app (Chat 09 · R2)."
+    }
+  ]
+}

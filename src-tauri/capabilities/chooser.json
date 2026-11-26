@@ -1,0 +1,7 @@
+{
+  "identifier": "chooser",
+  "description": "Só a janela de escolha (documento local `desktop`). As janelas de board não têm permissão nenhuma.",
+  "local": true,
+  "windows": ["chooser"],
+  "permissions": ["allow-desktop-state", "allow-desktop-use-local", "allow-desktop-use-server", "allow-desktop-probe-port"]
+}

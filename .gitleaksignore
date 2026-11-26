@@ -1,0 +1,41 @@
+# LuDraw — falsos positivos do gitleaks já triados (formato: commit:arquivo:regra:linha).
+# Origem: AUDITORIA_08_7 §10.1 (13 falsos positivos + o marcador do S-34, já corrigido) e Chat 09 · R6 (1 novo).
+# O valor de cada marcação NÃO está aqui: o gitleaks roda com --redact. Entrada nova só depois de triagem,
+# com o motivo na linha de cima. Segredo de verdade nunca entra nesta lista: troque o segredo e limpe o histórico.
+
+# S-34 (corrigido no 08.7 · R5): marcador "troque" do LUDRAW_JWT_SECRET no guia antigo; o boot recusa esse valor
+c14d7222db658e5d8a24c66db4b752a5e4304228:docs/TESTAR_LOCALMENTE.md:generic-api-key:75
+# nome da imagem valkey/valkey:9.0.7 (a regra viu "key" em "valkey") — Chat 09 · R4
+a8700b9db107234f4fcfb15cf9e1cfd82d210553:docs/TESTAR_LOCALMENTE.md:generic-api-key:133
+# SHA-256 público da faixa de e-mail (campo "key")
+a471b9907808ec23424d1b23519938a503e0a583:server/src/mail/bannerImages.ts:generic-api-key:13
+# alfabeto do token de configuração (TOKEN_ALPHABET)
+a19ba3d273a5803a8f84b16b8dd1cd6208a8a199:server/src/setup/boot.ts:generic-api-key:23
+# senha/token de TESTE (contas @example.com, servidor descartável)
+a19ba3d273a5803a8f84b16b8dd1cd6208a8a199:server/test/auth.test.ts:generic-api-key:178
+# senha/token de TESTE (contas @example.com, servidor descartável)
+974363e3123dff813f4c43648f4b104c52cf5c75:server/test/auth.test.ts:generic-api-key:203
+# senha/token de TESTE (contas @example.com, servidor descartável)
+a19ba3d273a5803a8f84b16b8dd1cd6208a8a199:server/test/auth.test.ts:generic-api-key:204
+# senha/token de TESTE (contas @example.com, servidor descartável)
+a19ba3d273a5803a8f84b16b8dd1cd6208a8a199:server/test/bootstrap-cli.test.ts:generic-api-key:22
+# senha/token de TESTE (contas @example.com, servidor descartável)
+a19ba3d273a5803a8f84b16b8dd1cd6208a8a199:server/test/bootstrap-cli.test.ts:generic-api-key:47
+# senha/token de TESTE (contas @example.com, servidor descartável)
+a19ba3d273a5803a8f84b16b8dd1cd6208a8a199:server/test/bootstrap-cli.test.ts:generic-api-key:90
+# senha/token de TESTE (contas @example.com, servidor descartável)
+a19ba3d273a5803a8f84b16b8dd1cd6208a8a199:server/test/bootstrap-cli.test.ts:generic-api-key:129
+# senha/token de TESTE (contas @example.com, servidor descartável)
+a19ba3d273a5803a8f84b16b8dd1cd6208a8a199:server/test/bootstrap-cli.test.ts:generic-api-key:133
+# senha/token de TESTE (contas @example.com, servidor descartável)
+72a7ae58f8496dfd9104074bcca932788d0945e6:server/test/domain-signup.test.ts:generic-api-key:26
+# senha/token de TESTE (contas @example.com, servidor descartável)
+26f51b3997caf72abe67f99b63a670da15ed649c:server/test/mail-settings.test.ts:generic-api-key:142
+# senha/token de TESTE (contas @example.com, servidor descartável)
+974363e3123dff813f4c43648f4b104c52cf5c75:server/test/token-link.test.ts:generic-api-key:9
+# SHA-256 público da faixa de e-mail (campo "key"; mesma linha, arquivo regravado na renomeação)
+8ad2e9cc7b459d3e9c33a43503e4b66760148de4:server/src/mail/bannerImages.ts:generic-api-key:13
+# senha/token de TESTE (contas @example.com, servidor descartável)
+e5710131c5e194f2f7887c46999f3282543d17bf:server/test/bootstrap-cli.test.ts:generic-api-key:22
+# nome da imagem do Valkey citado no PROVENANCE (a regra viu "key" em "valkey")
+17a0d76b7a41b5ca454b0e137ea69927db53a220:docs/PROVENANCE.md:generic-api-key:846

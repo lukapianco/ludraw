@@ -1,0 +1,202 @@
+{
+  "apiVersion": 1,
+  "id": "dev.ludraw.modelos-scrum",
+  "name": "Modelos Scrum",
+  "version": "1.0.0",
+  "publisher": "LuDraw",
+  "description": "Planejamento, revisão e retrospectiva da sprint com estruturas travadas, mais o elemento Cartão de história.",
+  "i18n": {
+    "en": {
+      "name": "Scrum templates",
+      "description": "Sprint planning, review and retrospective with locked structures, plus the User story card element."
+    }
+  },
+  "license": "MIT",
+  "kind": "pack",
+  "permissions": [],
+  "provenance": { "originalWork": true, "thirdParty": [] },
+  "contributes": {
+    "elementTypes": [
+      {
+        "id": "cartao-historia",
+        "name": "Cartão de história",
+        "i18n": { "en": { "name": "User story card" } },
+        "strings": {
+          "pt-BR": { "story": "Como [pessoa], quero [ação] para [benefício].", "points": "3 pts", "criteria": "Critério de aceite: descreva como saber que está pronto." },
+          "en": { "story": "As a [person], I want [action] so that [benefit].", "points": "3 pts", "criteria": "Acceptance criteria: describe how you'll know it's done." }
+        },
+        "defaultSize": { "width": 260, "height": 160 },
+        "parts": [
+          { "kind": "rect", "x": 0, "y": 0, "w": 1, "h": 1, "radius": 10, "fill": "#FFFFFF", "stroke": "#C9CCD1", "strokeWidth": 1.5 },
+          { "kind": "rect", "x": 0, "y": 0, "w": 0.03, "h": 1, "radius": 4, "fill": "#3A8156" },
+          { "kind": "text", "x": 0.08, "y": 0.08, "w": 0.66, "h": 0.52, "slot": "main", "text": "{{story}}", "fontSize": 14, "bold": true, "color": "#1C1C1E" },
+          { "kind": "badge", "x": 0.77, "y": 0.08, "w": 0.18, "h": 0.17, "slot": "points", "text": "{{points}}", "fontSize": 11, "fill": "#194B32", "color": "#FFFFFF" },
+          { "kind": "path", "x": 0.08, "y": 0.64, "w": 0.87, "h": 0.02, "d": "M0 50 L100 50", "stroke": "#E1E3E6", "strokeWidth": 1 },
+          { "kind": "text", "x": 0.08, "y": 0.69, "w": 0.87, "h": 0.27, "slot": "criteria", "text": "{{criteria}}", "fontSize": 11, "color": "#4F5A53" }
+        ]
+      }
+    ],
+    "templates": [
+      {
+        "id": "planejamento",
+        "name": "Planejamento da sprint",
+        "description": "Meta, itens escolhidos e capacidade, com a estrutura travada.",
+        "category": "planning",
+        "i18n": { "en": { "name": "Sprint planning", "description": "Goal, chosen items and capacity, with a locked structure." } },
+        "strings": {
+          "pt-BR": {
+            "frame": "Planejamento da sprint",
+            "title": "Planejamento da sprint",
+            "subtitle": "Combine a meta, escolha os itens e confira a capacidade antes de começar.",
+            "goal": "Meta da sprint",
+            "goalHint": "Uma frase sobre o valor que a sprint entrega.",
+            "items": "Itens escolhidos",
+            "itemsHint": "Histórias que cabem na meta, com critério de aceite.",
+            "capacity": "Capacidade e riscos",
+            "capacityHint": "Ausências, dependências e o que pode atrasar.",
+            "goalSticky": "Ao fim da sprint, quem usa o app consegue…",
+            "risk": "Risco: dependência de outra equipe",
+            "absence": "Capacidade: 2 pessoas fora 1 dia"
+          },
+          "en": {
+            "frame": "Sprint planning",
+            "title": "Sprint planning",
+            "subtitle": "Agree on the goal, pick the items and check capacity before you start.",
+            "goal": "Sprint goal",
+            "goalHint": "One sentence about the value this sprint delivers.",
+            "items": "Chosen items",
+            "itemsHint": "Stories that fit the goal, with acceptance criteria.",
+            "capacity": "Capacity and risks",
+            "capacityHint": "Time off, dependencies and what could cause delays.",
+            "goalSticky": "By the end of the sprint, people using the app can…",
+            "risk": "Risk: depends on another team",
+            "absence": "Capacity: 2 people out for 1 day"
+          }
+        },
+        "elements": [
+          { "type": "frame", "ref": "f", "x": 0, "y": 0, "width": 1680, "height": 980, "title": "{{frame}}", "fillColor": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "text", "x": 40, "y": 30, "width": 1200, "height": 60, "text": "{{title}}", "fontSize": 40, "bold": true, "color": "#194B32", "fill": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "text", "x": 40, "y": 96, "width": 1400, "height": 30, "text": "{{subtitle}}", "fontSize": 18, "color": "#4F5A53", "fill": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 40, "y": 150, "width": 520, "height": 790, "fillColor": "#F3F5F0", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 580, "y": 150, "width": 520, "height": 790, "fillColor": "#F3F5F0", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 1120, "y": 150, "width": 520, "height": 790, "fillColor": "#F3F5F0", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "text", "x": 60, "y": 170, "width": 480, "height": 34, "text": "{{goal}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#F3F5F0", "lock": "protected", "background": true },
+          { "type": "text", "x": 60, "y": 208, "width": 480, "height": 24, "text": "{{goalHint}}", "fontSize": 14, "color": "#4F5A53", "fill": "#F3F5F0", "lock": "protected", "background": true },
+          { "type": "text", "x": 600, "y": 170, "width": 480, "height": 34, "text": "{{items}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#F3F5F0", "lock": "protected", "background": true },
+          { "type": "text", "x": 600, "y": 208, "width": 480, "height": 24, "text": "{{itemsHint}}", "fontSize": 14, "color": "#4F5A53", "fill": "#F3F5F0", "lock": "protected", "background": true },
+          { "type": "text", "x": 1140, "y": 170, "width": 480, "height": 34, "text": "{{capacity}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#F3F5F0", "lock": "protected", "background": true },
+          { "type": "text", "x": 1140, "y": 208, "width": 480, "height": 24, "text": "{{capacityHint}}", "fontSize": 14, "color": "#4F5A53", "fill": "#F3F5F0", "lock": "protected", "background": true },
+          { "type": "sticky", "x": 60, "y": 260, "width": 240, "height": 240, "text": "{{goalSticky}}", "color": "#CEF092" },
+          { "type": "composite", "typeId": "cartao-historia", "x": 600, "y": 260, "width": 260, "height": 160 },
+          { "type": "composite", "typeId": "cartao-historia", "x": 600, "y": 440, "width": 260, "height": 160, "fields": { "points": "5 pts" } },
+          { "type": "sticky", "x": 1140, "y": 260, "width": 220, "height": 220, "text": "{{risk}}", "color": "#FFB6A3" },
+          { "type": "sticky", "x": 1380, "y": 260, "width": 220, "height": 220, "text": "{{absence}}", "color": "#C4E7FE" }
+        ]
+      },
+      {
+        "id": "revisao",
+        "name": "Revisão da sprint",
+        "description": "O que ficou pronto, o que não ficou, o retorno das partes interessadas e os ajustes no backlog.",
+        "category": "planning",
+        "i18n": { "en": { "name": "Sprint review", "description": "What got done, what didn't, stakeholder feedback and backlog changes." } },
+        "strings": {
+          "pt-BR": {
+            "frame": "Revisão da sprint",
+            "title": "Revisão da sprint",
+            "subtitle": "Mostre o incremento, ouça quem usa e decida o que muda no backlog.",
+            "done": "Pronto",
+            "notDone": "Não ficou pronto",
+            "feedback": "Retorno das partes interessadas",
+            "backlog": "Ajustes no backlog",
+            "doneSticky": "Exportação em PDF por frames",
+            "notDoneSticky": "Filtro de busca (falta teste)",
+            "feedbackSticky": "Quero escolher a ordem das páginas",
+            "backlogSticky": "Nova história: ordenar páginas antes de exportar"
+          },
+          "en": {
+            "frame": "Sprint review",
+            "title": "Sprint review",
+            "subtitle": "Show the increment, listen to the people who use it and decide what changes in the backlog.",
+            "done": "Done",
+            "notDone": "Not done",
+            "feedback": "Stakeholder feedback",
+            "backlog": "Backlog changes",
+            "doneSticky": "PDF export by frames",
+            "notDoneSticky": "Search filter (still needs testing)",
+            "feedbackSticky": "I want to choose the page order",
+            "backlogSticky": "New story: order pages before exporting"
+          }
+        },
+        "elements": [
+          { "type": "frame", "x": 0, "y": 0, "width": 2200, "height": 900, "title": "{{frame}}", "fillColor": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "text", "x": 40, "y": 30, "width": 1200, "height": 60, "text": "{{title}}", "fontSize": 40, "bold": true, "color": "#194B32", "fill": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "text", "x": 40, "y": 96, "width": 1600, "height": 30, "text": "{{subtitle}}", "fontSize": 18, "color": "#4F5A53", "fill": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 40, "y": 150, "width": 510, "height": 710, "fillColor": "#E3F2E8", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 570, "y": 150, "width": 510, "height": 710, "fillColor": "#FBF0DC", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 1100, "y": 150, "width": 510, "height": 710, "fillColor": "#E3EDF9", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 1630, "y": 150, "width": 510, "height": 710, "fillColor": "#F3F5F0", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "text", "x": 60, "y": 170, "width": 470, "height": 34, "text": "{{done}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#E3F2E8", "lock": "protected", "background": true },
+          { "type": "text", "x": 590, "y": 170, "width": 470, "height": 34, "text": "{{notDone}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#FBF0DC", "lock": "protected", "background": true },
+          { "type": "text", "x": 1120, "y": 170, "width": 470, "height": 34, "text": "{{feedback}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#E3EDF9", "lock": "protected", "background": true },
+          { "type": "text", "x": 1650, "y": 170, "width": 470, "height": 34, "text": "{{backlog}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#F3F5F0", "lock": "protected", "background": true },
+          { "type": "sticky", "x": 60, "y": 230, "width": 220, "height": 220, "text": "{{doneSticky}}", "color": "#BCF8C2" },
+          { "type": "sticky", "x": 590, "y": 230, "width": 220, "height": 220, "text": "{{notDoneSticky}}", "color": "#FFCF7E" },
+          { "type": "sticky", "x": 1120, "y": 230, "width": 220, "height": 220, "text": "{{feedbackSticky}}", "color": "#AACAFF" },
+          { "type": "composite", "typeId": "cartao-historia", "x": 1650, "y": 230, "width": 260, "height": 160, "text": "{{backlogSticky}}", "fields": { "points": "2 pts" } }
+        ]
+      },
+      {
+        "id": "retrospectiva",
+        "name": "Retrospectiva da sprint",
+        "description": "O que ajudou, o que atrapalhou, ideias para testar e os combinados da equipe.",
+        "category": "brainstorm",
+        "i18n": { "en": { "name": "Sprint retrospective", "description": "What helped, what got in the way, ideas to try and team agreements." } },
+        "strings": {
+          "pt-BR": {
+            "frame": "Retrospectiva da sprint",
+            "title": "Retrospectiva da sprint",
+            "subtitle": "Cada pessoa escreve em silêncio; depois o grupo agrupa, vota e escolhe até 2 combinados.",
+            "helped": "O que ajudou",
+            "hindered": "O que atrapalhou",
+            "ideas": "Ideias para testar",
+            "agreements": "Combinados da equipe",
+            "agreementsHint": "No máximo 2, com dono e prazo.",
+            "helpedSticky": "Revisões de código no mesmo dia",
+            "hinderedSticky": "Reuniões no meio da tarde",
+            "ideasSticky": "Bloco de foco sem reuniões às quintas"
+          },
+          "en": {
+            "frame": "Sprint retrospective",
+            "title": "Sprint retrospective",
+            "subtitle": "Everyone writes silently; then the group clusters, votes and picks up to 2 agreements.",
+            "helped": "What helped",
+            "hindered": "What got in the way",
+            "ideas": "Ideas to try",
+            "agreements": "Team agreements",
+            "agreementsHint": "At most 2, each with an owner and a date.",
+            "helpedSticky": "Same-day code reviews",
+            "hinderedSticky": "Meetings in the middle of the afternoon",
+            "ideasSticky": "Meeting-free focus block on Thursdays"
+          }
+        },
+        "elements": [
+          { "type": "frame", "x": 0, "y": 0, "width": 2200, "height": 900, "title": "{{frame}}", "fillColor": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "text", "x": 40, "y": 30, "width": 1200, "height": 60, "text": "{{title}}", "fontSize": 40, "bold": true, "color": "#194B32", "fill": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "text", "x": 40, "y": 96, "width": 1700, "height": 30, "text": "{{subtitle}}", "fontSize": 18, "color": "#4F5A53", "fill": "#FFFFFF", "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 40, "y": 150, "width": 510, "height": 710, "fillColor": "#E3F2E8", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 570, "y": 150, "width": 510, "height": 710, "fillColor": "#FBE6E2", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 1100, "y": 150, "width": 510, "height": 710, "fillColor": "#E3EDF9", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "shape", "shape": "rounded_rectangle", "x": 1630, "y": 150, "width": 510, "height": 710, "fillColor": "#E4EED5", "strokeColor": "none", "strokeWidth": 0, "lock": "protected", "background": true },
+          { "type": "text", "x": 60, "y": 170, "width": 470, "height": 34, "text": "{{helped}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#E3F2E8", "lock": "protected", "background": true },
+          { "type": "text", "x": 590, "y": 170, "width": 470, "height": 34, "text": "{{hindered}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#FBE6E2", "lock": "protected", "background": true },
+          { "type": "text", "x": 1120, "y": 170, "width": 470, "height": 34, "text": "{{ideas}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#E3EDF9", "lock": "protected", "background": true },
+          { "type": "text", "x": 1650, "y": 170, "width": 470, "height": 34, "text": "{{agreements}}", "fontSize": 22, "bold": true, "color": "#18211C", "fill": "#E4EED5", "lock": "protected", "background": true },
+          { "type": "text", "x": 1650, "y": 208, "width": 470, "height": 24, "text": "{{agreementsHint}}", "fontSize": 14, "color": "#4F5A53", "fill": "#E4EED5", "lock": "protected", "background": true },
+          { "type": "sticky", "x": 60, "y": 230, "width": 220, "height": 220, "text": "{{helpedSticky}}", "color": "#BCF8C2" },
+          { "type": "sticky", "x": 590, "y": 230, "width": 220, "height": 220, "text": "{{hinderedSticky}}", "color": "#FFB6A3" },
+          { "type": "sticky", "x": 1120, "y": 230, "width": 220, "height": 220, "text": "{{ideasSticky}}", "color": "#88E0F6" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,4833 @@
+[
+  {
+    "id": "FT-CANVAS-001",
+    "title": "Board infinito com zoom e navegação",
+    "summary": "Área de trabalho sem limites, com zoom de 2% a 400% centrado no cursor e navegação por arraste, roda ou trackpad.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "shortcut": "Espaço + arrastar",
+      "dock": "Mão (mover o board)"
+    },
+    "how": [
+      "Segure Espaço e arraste (ou use a ferramenta Mão, tecla H) para mover o board.",
+      "Use Ctrl + roda do mouse, a pinça do trackpad ou os botões Diminuir zoom / Aumentar zoom no canto inferior.",
+      "Clique no nível de zoom para abrir as opções de zoom; Ctrl + 0 volta a 100%."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o board \"Comece por aqui\""
+      ],
+      "steps": [
+        "Dar zoom de 25% até 200% sobre o fluxograma",
+        "Arrastar com Espaço para outro trecho"
+      ],
+      "alt": "Board infinito com o controle de zoom no canto inferior",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 1
+    },
+    "i18n": {
+      "en": {
+        "title": "Infinite board with zoom and navigation",
+        "summary": "A workspace with no edges, zoom from 2% to 400% centered on the pointer, and navigation by dragging, scroll wheel or trackpad.",
+        "how": [
+          "Hold Space and drag (or use the Hand tool, key H) to move the board.",
+          "Use Ctrl + scroll wheel, a trackpad pinch, or the Zoom out / Zoom in buttons in the bottom corner.",
+          "Click the zoom level to open the zoom options; Ctrl + 0 goes back to 100%."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-CANVAS-002",
+    "title": "Grade de linhas ou pontos e ajuste à grade",
+    "summary": "Mostra uma grade adaptativa ao zoom e, se quiser, prende os objetos a ela.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Vista",
+        "Exibir",
+        "Grade e encaixe"
+      ],
+      "shortcut": "G"
+    },
+    "how": [
+      "Na Vista (canto inferior esquerdo), abra Exibir → Grade e encaixe.",
+      "Escolha Pontos, Linhas ou Nenhum.",
+      "Ligue Ajustar à grade para alinhar ao mover."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Ativar Grade de pontos",
+        "Mover um post-it com Ajustar à grade ligado"
+      ],
+      "alt": "Board com grade de pontos",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-003",
+    "title": "Minimapa",
+    "summary": "Miniatura do board no canto inferior esquerdo; clicar ou arrastar leva a câmera ao ponto.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Vista",
+        "Bússola"
+      ]
+    },
+    "how": [
+      "Clique na Bússola, no começo da Vista (canto inferior esquerdo); para deixá-la sempre aberta, use Exibir → Bússola sempre aberta.",
+      "Clique ou arraste o retângulo da Bússola para navegar."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o board de demonstração (Inserção rápida → Conteúdo de demonstração)"
+      ],
+      "steps": [
+        "Ligar o Minimapa",
+        "Arrastar o retângulo de visão"
+      ],
+      "alt": "Minimapa no canto inferior esquerdo",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-004",
+    "title": "Seleção por retângulo, Shift + clique e laço",
+    "summary": "Seleciona vários objetos arrastando no vazio, somando com Shift ou desenhando um laço livre.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Laço (seleção livre)",
+      "shortcut": "V"
+    },
+    "how": [
+      "Com a ferramenta Selecionar (V), arraste no vazio para selecionar por retângulo.",
+      "Segure Shift e clique para somar ou tirar objetos.",
+      "Para formas irregulares, escolha Laço (seleção livre) no Dock e contorne os objetos."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o board de demonstração"
+      ],
+      "steps": [
+        "Desenhar um laço em volta de 3 post-its espalhados"
+      ],
+      "alt": "Seleção por laço envolvendo post-its",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-005",
+    "title": "Guias inteligentes de alinhamento",
+    "summary": "Linhas guia magnéticas aparecem ao alinhar centros ou bordas com outros objetos.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Vista",
+        "Exibir",
+        "Encaixar em objetos"
+      ]
+    },
+    "how": [
+      "Arraste um objeto perto de outro: as guias aparecem quando bordas ou centros se alinham.",
+      "Segure Ctrl ao arrastar para desligar o ímã.",
+      "Desligue em Vista → Exibir → Encaixar em objetos."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Criar duas formas",
+        "Arrastar uma até alinhar o centro com a outra"
+      ],
+      "alt": "Guias magnéticas entre duas formas",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-006",
+    "title": "Desfazer e refazer",
+    "summary": "Histórico de alterações do board com desfazer e refazer.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Tempo",
+        "Desfazer"
+      ],
+      "shortcut": "Ctrl + Z"
+    },
+    "how": [
+      "Pressione Ctrl + Z para desfazer e Ctrl + Y (ou Ctrl + Shift + Z) para refazer.",
+      "Ou use Desfazer / Refazer no módulo Tempo (canto inferior direito)."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-007",
+    "title": "Encontrar no board",
+    "summary": "Busca texto em post-its, formas, textos e frames e leva a câmera a cada resultado.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Vista",
+        "Encontrar"
+      ],
+      "shortcut": "Ctrl + F"
+    },
+    "how": [
+      "Pressione Ctrl + F (ou a lupa da Vista; em telas estreitas, Exibir → Encontrar).",
+      "Digite o termo.",
+      "Use Anterior / Próximo para passar pelos resultados."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o board \"Comece por aqui\""
+      ],
+      "steps": [
+        "Buscar a palavra \"frame\""
+      ],
+      "alt": "Painel de busca com resultado destacado",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-008",
+    "title": "Ajustar à tela e zoom na seleção",
+    "summary": "Enquadra todo o conteúdo ou só a seleção com um atalho.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no board vazio",
+        "Vista",
+        "Mostrar tudo"
+      ],
+      "shortcut": "Shift + 1"
+    },
+    "how": [
+      "Pressione Shift + 1 (ou Alt + 1) para ver tudo.",
+      "Com objetos selecionados, Shift + 2 dá zoom na seleção.",
+      "Shift + 0 volta a 100%."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-009",
+    "title": "Cor de fundo do board",
+    "summary": "Escolhe uma cor de fundo para o board entre 11 opções ou o padrão do tema.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Cor de fundo"
+      ]
+    },
+    "how": [
+      "Clique no nome do board, no topo, para abrir a Ficha do board → Cor de fundo.",
+      "Clique numa das cores (ou Padrão do tema)."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-010",
+    "title": "Visualização inicial do board",
+    "summary": "Define o enquadramento com que o board abre para quem chega.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no board vazio",
+        "Vista",
+        "Definir visualização atual como inicial"
+      ]
+    },
+    "how": [
+      "Enquadre o board como quer que ele abra.",
+      "Clique direito no vazio → Vista → Definir visualização atual como inicial (ou Definir visualização inicial para enquadrar a seleção).",
+      "Também no Roteiro (Vista) → Usar esta vista como inicial."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-011",
+    "title": "Indicadores de visualização",
+    "summary": "Liga ou desliga barras de rolagem, dimensões do objeto e do projeto, controles de desfazer e conectores.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Vista",
+        "Exibir",
+        "Barras de rolagem"
+      ]
+    },
+    "how": [
+      "Abra Vista → Exibir.",
+      "Ligue ou desligue Barras de rolagem, Medidas do objeto, Medidas do board, Conectores, cursores e o Módulo Tempo."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CANVAS-012",
+    "title": "Tela inteira",
+    "summary": "Esconde a interface do navegador para trabalhar ou apresentar em tela cheia.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Vista",
+        "Exibir",
+        "Tela inteira"
+      ],
+      "shortcut": "F11"
+    },
+    "how": [
+      "Abra Vista → Exibir → Tela inteira (ou F11).",
+      "Pressione Esc para sair."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-001",
+    "title": "Post-its (notas adesivas)",
+    "summary": "Notas com 16 cores próprias, ajuste automático da fonte e criação rápida em sequência.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Nota adesiva",
+      "shortcut": "N",
+      "menu": [
+        "Clique direito no board vazio",
+        "Post-it"
+      ]
+    },
+    "how": [
+      "Clique em Nota adesiva no Dock (ou tecle N) e escolha a cor.",
+      "Clique no board para criar e digite.",
+      "Enquanto edita, Tab cria o próximo post-it ao lado e Ctrl + Enter cria abaixo, com a mesma cor e tags."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Criar um post-it Canário",
+        "Pressionar Tab duas vezes para criar mais dois",
+        "Trocar a cor de um deles na Cinta do objeto"
+      ],
+      "alt": "Três post-its em sequência com cores diferentes",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 2
+    },
+    "i18n": {
+      "en": {
+        "title": "Sticky notes",
+        "summary": "Notes in 16 colors of their own, with text that resizes to fit and quick creation in a row.",
+        "how": [
+          "Click Sticky note in the Dock (or press N) and pick a color.",
+          "Click the board to place it and start typing.",
+          "While editing, Tab adds the next sticky note beside it and Ctrl + Enter adds one below, with the same color and tags."
+        ]
+      }
+    },
+    "related": [
+      "FT-OBJETOS-002",
+      "FT-OBJETOS-003"
+    ]
+  },
+  {
+    "id": "FT-OBJETOS-002",
+    "title": "Tags coloridas nos post-its",
+    "summary": "Etiquetas com 10 cores, gerenciadas por board e aplicadas pela Cinta do objeto.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Tags do board"
+      ]
+    },
+    "how": [
+      "Selecione um post-it e clique em Tags na Cinta do objeto.",
+      "Busque ou crie uma tag.",
+      "Renomeie, recolora ou exclua em Ficha do board → Tags do board."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o board de demonstração"
+      ],
+      "steps": [
+        "Criar a tag \"Urgente\" vermelha",
+        "Aplicar em dois post-its",
+        "Abrir a aba Tags do Painel"
+      ],
+      "alt": "Post-its com tags e a aba Tags do Painel",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-OBJETOS-001"
+    ]
+  },
+  {
+    "id": "FT-OBJETOS-003",
+    "title": "Reações com emoji",
+    "summary": "Uma reação por pessoa por emoji em post-its, com contagem no rodapé.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Selecione um post-it.",
+      "Clique em Reagir na Cinta do objeto e escolha o emoji.",
+      "Clique de novo no mesmo emoji para retirar."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-OBJETOS-001"
+    ]
+  },
+  {
+    "id": "FT-OBJETOS-004",
+    "title": "Texto com formatação rica",
+    "summary": "Fonte (20 opções), tamanho, negrito, itálico, sublinhado, tachado, listas, recuo, link, cor e realce.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Texto",
+      "shortcut": "T"
+    },
+    "how": [
+      "Clique em Texto no Dock (ou tecle T) e clique no board.",
+      "Selecione o objeto e use a Cinta: Estilo do texto (fonte, tamanho, negrito/itálico/sublinhado/tachado, lista, alinhamento e marca-texto), Negrito, Cor do texto e Link.",
+      "Atalhos durante a edição: Ctrl + B, Ctrl + I, Ctrl + U."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Criar um texto",
+        "Aplicar a fonte Fraunces, negrito e uma lista com marcadores"
+      ],
+      "alt": "Texto formatado com lista e realce",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-005",
+    "title": "Formas (11 tipos)",
+    "summary": "Retângulo, retângulo arredondado, oval, losango, triângulo, paralelogramo, estrela, balão de fala, hexágono, cilindro e nuvem, com texto dentro.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Formas",
+      "shortcut": "S"
+    },
+    "how": [
+      "Clique em Formas no Dock (S) e escolha o tipo — R e O criam retângulo e oval direto.",
+      "Clique ou arraste no board.",
+      "Mude preenchimento, borda, opacidade e tipo pela Cinta (Preenchimento; o tipo muda em Forma ▾ → Converter em…)."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Criar um losango e uma nuvem",
+        "Trocar a cor e a opacidade"
+      ],
+      "alt": "Formas variadas com texto",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-006",
+    "title": "Caneta, marca-texto e borracha",
+    "summary": "Desenho à mão livre com espessuras e cores, marca-texto translúcido e borracha.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Caneta",
+      "shortcut": "P"
+    },
+    "how": [
+      "Clique em Caneta no Dock (P) e escolha Fina, Média ou Grossa ou uma cor.",
+      "Desenhe arrastando.",
+      "Use Marca-texto para destacar e Borracha (E) para apagar traços."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-007",
+    "title": "Imagens",
+    "summary": "Insere imagens por botão, arrastar ou Ctrl + V, com compressão; imagem de outro site nunca carrega sozinha (no Modo Servidor, cole o endereço e use \"Baixar para o board\").",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "both",
+    "where": {
+      "dock": "Imagem (também: arrastar ou Ctrl + V)",
+      "menu": [
+        "Clique direito no board vazio",
+        "Inserir aqui",
+        "Inserir imagem…"
+      ]
+    },
+    "how": [
+      "Clique em Imagem no Dock, arraste um arquivo para o board ou cole com Ctrl + V.",
+      "Redimensione pelas alças.",
+      "Colou o endereço de uma imagem de outro site? No Modo Servidor, clique em Baixar para o board no aviso: o servidor baixa a imagem uma vez e ela passa a ficar dentro do board. No Modo Local, salve a imagem e arraste o arquivo.",
+      "Imagem antiga com endereço de outro site aparece como espaço reservado: no Modo Servidor, quem edita clica em Baixar para o board; os outros veem como trazê-la."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Arrastar uma foto para o board"
+      ],
+      "alt": "Imagem inserida com alças de redimensionamento",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-008",
+    "title": "Emojis e adesivos",
+    "summary": "Emojis grandes e adesivos (do LuDraw e das extensões) como objetos do board: clique para o centro da tela ou arraste para o lugar; funciona ao vivo no Modo Servidor.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "both",
+    "where": {
+      "dock": "Emojis e adesivos",
+      "shortcut": "Shift + E"
+    },
+    "how": [
+      "Clique em Emojis e adesivos na Dock (ou Shift + E).",
+      "Busque pelo nome ou troque de aba: Emojis · Adesivos · Das extensões.",
+      "Clique para colocar no centro da tela ou arraste até o ponto do board; Ctrl + Z desfaz.",
+      "Reagir a um post-it fica na Cinta do objeto."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "permissions": [
+      "board.edit"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Emojis and stickers",
+        "summary": "Large emojis and stickers (built in and from extensions) as board objects: click to drop them in the middle of the screen or drag them into place; works live in Server Mode.",
+        "how": [
+          "Click Emojis and stickers in the Dock (or Shift + E).",
+          "Search by name or switch tabs: Emojis · Stickers · From extensions.",
+          "Click to place it in the middle of the screen or drag it to a spot on the board; Ctrl + Z undoes it.",
+          "Reacting to a sticky note stays in the object strip."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-OBJETOS-009",
+    "title": "Transformar: mover, redimensionar, girar e camadas",
+    "summary": "Oito alças de tamanho, alça de rotação com passos de 15°, setas para mover e controle de camadas.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Organizar",
+        "Trazer para a frente"
+      ],
+      "shortcut": "PgUp"
+    },
+    "how": [
+      "Arraste as alças para redimensionar (Shift mantém proporção).",
+      "Arraste a alça de rotação (Shift = passos de 15°).",
+      "Setas movem 1 px (Shift + setas, 10 px).",
+      "Clique direito → Organizar para trazer à frente, enviar para trás ou mudar uma camada."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-010",
+    "title": "Alinhar e distribuir",
+    "summary": "Alinha vários objetos pelas bordas ou centros e distribui o espaço entre eles.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Organizar",
+        "Distribuir na horizontal"
+      ]
+    },
+    "how": [
+      "Selecione 2 ou mais objetos (3 para distribuir).",
+      "Clique direito → Organizar.",
+      "Escolha À esquerda, Ao centro, Ao topo… ou Distribuir na horizontal / vertical."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-011",
+    "title": "Agrupar e desagrupar",
+    "summary": "Junta objetos num grupo que se move e seleciona como um só.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Organizar",
+        "Agrupar"
+      ],
+      "shortcut": "Ctrl + G"
+    },
+    "how": [
+      "Selecione os objetos.",
+      "Pressione Ctrl + G (Ctrl + Shift + G desagrupa)."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-012",
+    "title": "Copiar, colar, duplicar e copiar estilo",
+    "summary": "Área de transferência interna e do sistema, duplicar e transferir o estilo de um objeto para outros.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Editar",
+        "Copiar estilo"
+      ],
+      "shortcut": "Ctrl + D"
+    },
+    "how": [
+      "Ctrl + C / Ctrl + V copiam e colam; Ctrl + D duplica; Alt + arrastar duplica arrastando.",
+      "Ctrl + Alt + C copia o estilo e Ctrl + Alt + V aplica nos selecionados.",
+      "Ctrl + Shift + C copia a seleção como imagem."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-013",
+    "title": "Copiar link para um objeto",
+    "summary": "Gera um link que abre o board com a câmera no objeto.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Copiar como",
+        "Link do objeto"
+      ],
+      "shortcut": "Ctrl + Alt + Shift + C"
+    },
+    "how": [
+      "Clique direito no objeto (ou ⋯ da Cinta) → Copiar como → Link do objeto.",
+      "Envie o link: ao abrir, o board foca o objeto."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-014",
+    "title": "Informações do objeto",
+    "summary": "Mostra tipo, autor, datas, tamanho, rotação, caracteres e ID.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Exportar e info",
+        "Info"
+      ]
+    },
+    "how": [
+      "Clique direito no objeto (ou ⋯ da Cinta) → Exportar e info → Info.",
+      "Confira tipo, autor, datas, tamanho, rotação e ID; O ⋯ da Cinta abre o mesmo menu do botão direito."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-015",
+    "title": "Frames",
+    "summary": "Áreas com título e proporção (Livre, 16:9, 4:3, 1:1, A4, Celular) que levam junto os objetos de dentro.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Frame",
+      "shortcut": "F",
+      "menu": [
+        "Clique direito no board vazio",
+        "Inserir aqui",
+        "Criar frame a partir da seleção"
+      ]
+    },
+    "how": [
+      "Clique em Frame no Dock (F) e escolha a proporção na bandeja (ou troque depois pelo chip Proporção da Cinta).",
+      "Clique ou arraste no board; ou selecione objetos e use Criar frame a partir da seleção.",
+      "Mover o frame move o conteúdo; o título é editável."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Criar 3 post-its",
+        "Selecioná-los e criar frame a partir da seleção",
+        "Renomear o frame"
+      ],
+      "alt": "Frame com post-its dentro",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 5
+    },
+    "i18n": {
+      "en": {
+        "title": "Frames",
+        "summary": "Titled areas with a fixed or free aspect ratio (Free, 16:9, 4:3, A4, Phone) that carry the objects inside them.",
+        "how": [
+          "Click Frame in the Dock (F) and choose an aspect ratio.",
+          "Click or drag on the board, or select objects and use Create frame from selection.",
+          "Moving the frame moves its content; the title is editable."
+        ]
+      }
+    },
+    "related": [
+      "FT-OBJETOS-016",
+      "FT-FACILITACAO-001",
+      "FT-EXPORTAR-008",
+      "FT-EXPORTAR-004"
+    ]
+  },
+  {
+    "id": "FT-OBJETOS-016",
+    "title": "Ocultar conteúdo do frame",
+    "summary": "Esconde o conteúdo de um frame (olhinho) para revelar no momento certo de uma dinâmica.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Frame e modelo",
+        "Ocultar o conteúdo"
+      ]
+    },
+    "how": [
+      "Clique direito no frame → Frame e modelo → Ocultar o conteúdo (ou Conteúdo visível na Cinta) (ou o olhinho do título).",
+      "Use Mostrar o conteúdo para revelar."
+    ],
+    "permissions": [
+      "frame.toggleHidden"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-OBJETOS-017",
+    "title": "Mapa mental",
+    "summary": "Ramifica ideias com Tab (filha) e Enter (irmã), com layout automático e ramos recolhíveis.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Caixa de ferramentas"
+    },
+    "how": [
+      "Na Dock, abra a Caixa de ferramentas (ou /) → Mapa mental.",
+      "Selecione um nó: Tab cria ideia filha, Enter cria irmã, Delete apaga o ramo.",
+      "Use a Cinta do objeto para trocar a direção e recolher/expandir ramos."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Inserir um mapa mental",
+        "Criar 3 ramos com 2 filhos cada"
+      ],
+      "alt": "Mapa mental com ramos coloridos",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 6
+    },
+    "i18n": {
+      "en": {
+        "title": "Mind map",
+        "summary": "Branch out ideas with Tab (child) and Enter (sibling), with automatic layout and collapsible branches.",
+        "how": [
+          "In the Dock, open the Toolbox (or /) → Mind map.",
+          "Select a node: Tab adds a child idea, Enter adds a sibling, Delete removes the branch.",
+          "Use the object strip to change the direction and to collapse or expand branches."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-OBJETOS-018",
+    "title": "Kanban",
+    "summary": "Quadro com colunas, limite WIP e cards com responsável, prazo, prioridade, story points e tags.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Caixa de ferramentas"
+    },
+    "how": [
+      "Na Dock, abra a Caixa de ferramentas (ou /) → Kanban.",
+      "Use Novo card / Nova coluna na Cinta do objeto (o nome do quadro fica na identidade, à esquerda).",
+      "Arraste cards entre colunas; um clique no card (sem arrastar) abre o editor completo."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Inserir um Kanban",
+        "Criar 4 cards com prioridades diferentes",
+        "Mover um card para \"Em andamento\""
+      ],
+      "alt": "Kanban com cards e prioridades",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 7
+    },
+    "i18n": {
+      "en": {
+        "title": "Kanban",
+        "summary": "A board of columns with WIP limits and cards that hold an assignee, due date, priority, story points and tags.",
+        "how": [
+          "In the Dock, open the Toolbox (or /) → Kanban.",
+          "Use New card / New column in the object strip.",
+          "Drag cards between columns; a single click on a card (without dragging) opens the full editor."
+        ]
+      }
+    },
+    "related": [
+      "FT-IMPORTAR-005",
+      "FT-EXPORTAR-005"
+    ]
+  },
+  {
+    "id": "FT-OBJETOS-019",
+    "title": "Tabelas",
+    "summary": "Tabela editável com teclado de planilha, mesclagem, bordas, estilos, ordenação e cópia para planilhas.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Caixa de ferramentas",
+      "menu": [
+        "Clique direito na célula",
+        "Mesclar células"
+      ]
+    },
+    "how": [
+      "Na Dock, abra a Caixa de ferramentas (ou /) → Tabela.",
+      "Clique numa célula e digite; setas, Tab e Enter navegam.",
+      "Clique direito na célula para inserir/excluir linhas e colunas, mesclar, alinhar, colorir, bordas e ordenar."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Inserir uma tabela 4 × 3",
+        "Preencher e mesclar o cabeçalho",
+        "Aplicar linhas alternadas"
+      ],
+      "alt": "Tabela formatada com cabeçalho mesclado",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 8
+    },
+    "i18n": {
+      "en": {
+        "title": "Tables",
+        "summary": "Editable tables with spreadsheet-style keys, merged cells, borders, styles, sorting and copy to spreadsheets.",
+        "how": [
+          "In the Dock, open the Toolbox (or /) → Table.",
+          "Click a cell and type; the arrow keys, Tab and Enter move between cells.",
+          "Right-click a cell to insert or delete rows and columns, merge, align, color, add borders and sort."
+        ]
+      }
+    },
+    "related": [
+      "FT-EXPORTAR-006",
+      "FT-IMPORTAR-005"
+    ]
+  },
+  {
+    "id": "FT-OBJETOS-020",
+    "title": "Inserção rápida de conjuntos prontos",
+    "summary": "Bloco de post-its 3 × 3, fluxograma simples, brainwriting e conteúdo de demonstração com um clique.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Inserção rápida"
+    },
+    "how": [
+      "Clique em Inserção rápida (raio) no Dock.",
+      "Escolha Bloco de post-its, Fluxograma simples, Brainwriting ou Conteúdo de demonstração."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CONECTORES-001",
+    "title": "Conectores entre objetos",
+    "summary": "Linhas reta, curva ou em cotovelo que acompanham os objetos, com pontas configuráveis.",
+    "category": "conectores",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Conector (seta)",
+      "shortcut": "L"
+    },
+    "how": [
+      "Escolha Conector (seta) no Dock (L) e arraste de um objeto a outro — ou puxe um dos 4 pontos de ancoragem.",
+      "Na Cinta, use Traço (espessura, percurso e estilo), Pontas (início e fim, com ⇄ para inverter) e Cor da linha.",
+      "Trocar as extremidades da linha inverte o sentido."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Criar duas formas",
+        "Ligar com um conector em cotovelo e ponta Seta cheia"
+      ],
+      "alt": "Duas formas ligadas por conector em cotovelo",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 4
+    },
+    "i18n": {
+      "en": {
+        "title": "Connectors between objects",
+        "summary": "Straight, curved or elbow lines that follow the objects they join, with configurable ends.",
+        "how": [
+          "Pick Connector (arrow) in the Dock (L) and drag from one object to another, or pull one of its 4 anchor points.",
+          "In the object strip, change Line type, Start cap, End cap, Line thickness and Line color.",
+          "Swapping the line's ends reverses its direction."
+        ]
+      }
+    },
+    "related": [
+      "FT-CONECTORES-002",
+      "FT-CONECTORES-003",
+      "FT-CONECTORES-004"
+    ]
+  },
+  {
+    "id": "FT-CONECTORES-002",
+    "title": "Texto na linha",
+    "summary": "Rótulo editável em qualquer ponto da linha, com fonte, tamanho, cores, fundo, borda e cantos.",
+    "category": "conectores",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Dê duplo clique em qualquer ponto da linha e digite (ou Enter com a linha selecionada).",
+      "Arraste a pílula para deslizar o texto pela rota.",
+      "Use Estilo do texto da linha na Cinta do objeto para fonte, cores, fundo e borda."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CONECTORES-003",
+    "title": "Saltos de linha e roteamento automático",
+    "summary": "Linhas em cotovelo desviam dos objetos ligados e fazem um pequeno salto ao cruzar outra linha.",
+    "category": "conectores",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Use o tipo de linha em cotovelo.",
+      "Ajustar percurso automaticamente recalcula a rota; os saltos aparecem sozinhos nos cruzamentos (também no export)."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-CONECTORES-004",
+    "title": "Criar objeto conectado pelos pontos de ancoragem",
+    "summary": "Os 4 pontos ao redor de um objeto criam um novo objeto já ligado ou puxam uma seta.",
+    "category": "conectores",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Passe o mouse sobre um objeto para ver os 4 pontos.",
+      "Clique num ponto para criar um objeto conectado ou arraste para puxar uma seta.",
+      "Inserir forma, na Cinta da linha, adiciona uma forma no meio."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-DIAGRAMAS-001",
+    "title": "Diagrama por texto",
+    "summary": "Escreva o fluxo em texto e gere formas e conectores nativos editáveis, com prévia ao vivo e guia da sintaxe.",
+    "category": "diagramas",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Caixa de ferramentas"
+    },
+    "how": [
+      "Na Dock, abra a Caixa de ferramentas (ou /) → Diagrama por texto.",
+      "Escreva o fluxo (ou use o Guia da sintaxe passo a passo).",
+      "Confira a prévia e insira no board."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Abrir Diagrama por texto",
+        "Usar o exemplo de fluxo de login",
+        "Inserir no board"
+      ],
+      "alt": "Modal do diagrama por texto com prévia",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 9
+    },
+    "i18n": {
+      "en": {
+        "title": "Text diagrams",
+        "summary": "Write a flow as text and get native, editable shapes and connectors, with a live preview and a syntax guide.",
+        "how": [
+          "In the Dock, open the Toolbox (or /) → Text diagram.",
+          "Write the flow (or follow the step-by-step Syntax guide).",
+          "Check the preview and insert it into the board."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-FACILITACAO-001",
+    "title": "Modo Apresentação",
+    "summary": "Navegação em tela cheia de frame em frame, com câmera animada e ordem dos slides editável.",
+    "category": "facilitacao",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {
+      "ruler": "Apresentar",
+      "menu": [
+        "Clique direito no objeto",
+        "Frame e modelo",
+        "Apresentar a partir deste frame"
+      ]
+    },
+    "how": [
+      "Crie frames para cada slide.",
+      "Clique em Apresentar na barra do topo (ou no ▷ de um frame no Roteiro).",
+      "← / → ou espaço passam os slides; Esc sai.",
+      "Reordene os slides no Roteiro (Vista)."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o modelo \"Retrospectiva ágil\" como board novo"
+      ],
+      "steps": [
+        "Clicar em Apresentar",
+        "Avançar dois slides"
+      ],
+      "alt": "Modo Apresentação com controles",
+      "theme": "dark"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 10
+    },
+    "i18n": {
+      "en": {
+        "title": "Presentation mode",
+        "summary": "Full-screen navigation from frame to frame, with an animated camera and an editable slide order.",
+        "how": [
+          "Create one frame per slide.",
+          "Click Present in the top bar (or the ▷ next to a frame in the Script).",
+          "← / → or Space move between slides; Esc leaves.",
+          "Reorder the slides in the Script (View)."
+        ]
+      }
+    },
+    "related": [
+      "FT-OBJETOS-015",
+      "FT-EXPORTAR-004"
+    ]
+  },
+  {
+    "id": "FT-FACILITACAO-002",
+    "title": "Cronômetro com música",
+    "summary": "Contagem regressiva com alarme e música ambiente gerada no navegador (Lo-Fi, Ambient Pad, Focus Pulse).",
+    "category": "facilitacao",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Facilitar",
+        "Cronômetro"
+      ]
+    },
+    "how": [
+      "Clique em Facilitar (batuta) na barra do topo → Cronômetro.",
+      "Escolha 1, 3, 5, 10, 15 min ou um tempo personalizado e a música.",
+      "Inicie, pause, some +1 min ou zere; o tempo restante aparece ao lado da batuta."
+    ],
+    "permissions": [
+      "timer.manage"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-FACILITACAO-003",
+    "title": "Votação por pontos",
+    "summary": "Cada pessoa distribui pontos em post-its, formas e cards; modo anônimo e pódio com resultados.",
+    "category": "facilitacao",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Facilitar",
+        "Votação"
+      ]
+    },
+    "how": [
+      "Abra Facilitar → Votação.",
+      "Defina pergunta, pontos por pessoa, prazo e anonimato.",
+      "Participantes clicam nos itens para votar (Shift + clique retira).",
+      "Encerrar e revelar resultados mostra o pódio."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o modelo \"Retrospectiva ágil\""
+      ],
+      "steps": [
+        "Criar votação com 3 pontos",
+        "Votar em 3 post-its",
+        "Revelar resultados"
+      ],
+      "alt": "Pódio da votação por pontos",
+      "theme": "light"
+    },
+    "permissions": [
+      "voting.manage"
+    ],
+    "readme": {
+      "highlight": true,
+      "priority": 11
+    },
+    "i18n": {
+      "en": {
+        "title": "Dot voting",
+        "summary": "Each person spreads points across sticky notes, shapes and cards, with an anonymous mode and a results podium.",
+        "how": [
+          "Open Facilitate → Voting.",
+          "Set the question, points per person, time limit and anonymity.",
+          "Participants click items to vote (Shift + click takes a point back).",
+          "End and reveal results shows the podium."
+        ]
+      }
+    },
+    "related": [
+      "FT-FACILITACAO-004"
+    ]
+  },
+  {
+    "id": "FT-FACILITACAO-004",
+    "title": "Enquete",
+    "summary": "Pergunta com respostas, múltipla escolha e anônima; com Mostrar resultado parcial todos acompanham a contagem, desligado ela só aparece ao encerrar (para todos).",
+    "category": "facilitacao",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Facilitar",
+        "Enquete"
+      ]
+    },
+    "how": [
+      "Abra Facilitar → Enquete.",
+      "Escreva a pergunta e as respostas (ou traga do board).",
+      "Decida se todos acompanham o resultado parcial e encerre para revelar."
+    ],
+    "permissions": [
+      "voting.manage"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-FACILITACAO-003"
+    ]
+  },
+  {
+    "id": "FT-FACILITACAO-005",
+    "title": "Modo Privado (criação cega)",
+    "summary": "Cada pessoa cria post-its que os outros veem borrados até o facilitador revelar todos de uma vez. No Modo Servidor o texto nem sai do servidor antes de revelar.",
+    "category": "facilitacao",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Facilitar",
+        "Modo Privado"
+      ]
+    },
+    "how": [
+      "Abra Facilitar → Modo Privado → Ativar Modo Privado.",
+      "Os post-its novos ficam ocultos para os demais (teste com Facilitar → Ver como…).",
+      "O facilitador usa Encerrar e revelar todas as notas."
+    ],
+    "permissions": [
+      "privateMode.toggle",
+      "privateMode.reveal"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-FACILITACAO-006",
+    "title": "Galeria de templates",
+    "summary": "Seis modelos prontos (SWOT, Retrospectiva, Modelo de negócio em 9 blocos, Kanban de sprint, Jornada do usuário, Arquitetura) com estrutura travada no fundo.",
+    "category": "facilitacao",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/templates",
+      "dock": "Caixa de ferramentas"
+    },
+    "how": [
+      "No board, abra a Caixa de ferramentas → Trazer e levar → Templates (ou a aba Templates da Mesa).",
+      "Filtre por categoria e escolha o modelo.",
+      "Insira no board atual ou crie um board novo."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir a Mesa na aba Templates"
+      ],
+      "steps": [
+        "Escolher \"Matriz SWOT\"",
+        "Criar board novo"
+      ],
+      "alt": "Galeria de templates com miniaturas",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 12
+    },
+    "i18n": {
+      "en": {
+        "title": "Template gallery",
+        "summary": "Six ready-made layouts (SWOT, Retrospective, nine-block business model, Sprint Kanban, User journey, Architecture) with their structure locked in the background.",
+        "how": [
+          "On the board, open the Toolbox → Bring in and take out → Templates (or the Templates tab on the Desk).",
+          "Filter by category and pick a template.",
+          "Insert it into the current board or start a new board with it."
+        ]
+      }
+    },
+    "related": [
+      "FT-FACILITACAO-007"
+    ]
+  },
+  {
+    "id": "FT-FACILITACAO-007",
+    "title": "Salvar como template",
+    "summary": "Guarda a seleção ou o board inteiro como template pessoal, do time (diretório de templates do time) ou do workspace.",
+    "category": "facilitacao",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Salvar como modelo"
+      ]
+    },
+    "how": [
+      "Selecione objetos (ou nada, para o board inteiro).",
+      "Use Salvar como template no menu do objeto ou Ficha do board → Salvar como modelo.",
+      "Escolha onde guardar: Só para mim, Para o time ou Para o workspace.",
+      "Encontre na Mesa (aba Templates) ou na galeria, nas abas Meus, Do time e Do workspace."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-FACILITACAO-006"
+    ],
+    "permissions": [
+      "workspace.templates.team",
+      "workspace.templates.manage"
+    ]
+  },
+  {
+    "id": "FT-COLABORACAO-001",
+    "title": "Comentários com conversas e @menções",
+    "summary": "Pins de comentário no board com respostas, @menções, resolver/reabrir e filtros no Painel.",
+    "category": "colaboracao",
+    "status": "stable",
+    "since": {
+      "chat": "04"
+    },
+    "availability": "local",
+    "where": {
+      "dock": "Comentário",
+      "shortcut": "C",
+      "ruler": "Conversas"
+    },
+    "how": [
+      "Escolha Comentário no Dock (C) e clique no board.",
+      "Escreva (use @ para mencionar) e envie.",
+      "Responda, resolva e filtre em Conversas (barra do topo); Ir até leva a câmera ao pin; Shift + C oculta os pins."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o board de demonstração"
+      ],
+      "steps": [
+        "Criar um comentário com @menção",
+        "Responder",
+        "Abrir a aba Comentários"
+      ],
+      "alt": "Conversa de comentário aberta",
+      "theme": "light"
+    },
+    "permissions": [
+      "board.comment",
+      "comment.delete"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-COLABORACAO-002"
+    ]
+  },
+  {
+    "id": "FT-COLABORACAO-002",
+    "title": "Registro de atividades",
+    "summary": "Linha do tempo de quem criou, moveu, bloqueou ou exportou, agrupada, filtrável e mostrada no idioma da interface.",
+    "category": "colaboracao",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Tempo",
+        "Linha do tempo",
+        "Ver eventos"
+      ]
+    },
+    "how": [
+      "Abra a Linha do tempo (ampulheta no módulo Tempo) → Ver eventos.",
+      "Escolha uma versão para ver só os eventos daquele trecho.",
+      "Clique numa entrada para focar os objetos."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-COLABORACAO-003",
+    "title": "Inserir board em outra página",
+    "summary": "Gera o código para mostrar o board (só leitura) dentro de outra página HTML.",
+    "category": "colaboracao",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {
+      "ruler": "Compartilhar"
+    },
+    "how": [
+      "Clique em Compartilhar na barra do topo → Inserir em outro site….",
+      "Escolha o tamanho e a visualização.",
+      "Copie o código e cole na página."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-COLABORACAO-004",
+    "title": "Compartilhar com pessoas e link público",
+    "summary": "Dá acesso por board (editor, comentador ou leitor, com prazo), escolhe facilitadores e cria um link público de visitante com senha, validade e controle de download.",
+    "category": "colaboracao",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "ruler": "Compartilhar"
+    },
+    "how": [
+      "No board, clique em Compartilhar na barra do topo (ou ⋯ do board na Mesa → Compartilhar…).",
+      "Na aba Pessoas, escolha alguém do workspace, o papel e o prazo e clique em Adicionar.",
+      "Na aba Facilitadores, marque quem conduz cronômetro, votação e Modo Privado.",
+      "Na aba Link público, ligue o link, escolha o nível, a validade e a senha e copie o endereço.",
+      "Sem LUDRAW_JWT_SECRET no servidor, o endereço do link aparece só na criação; perdeu? Na aba Link público, clique em Gerar link novo para copiar (o antigo para de funcionar)."
+    ],
+    "permissions": [
+      "board.share",
+      "board.publicLink"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-COLABORACAO-005",
+      "FT-GOVERNANCA-008"
+    ]
+  },
+  {
+    "id": "FT-GOVERNANCA-001",
+    "title": "Bloqueio em quatro níveis",
+    "summary": "Bloqueio padrão, bloqueio protegido de facilitador, estrutura de fundo e estrutura de fundo protegida.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Bloqueio"
+      ],
+      "shortcut": "Ctrl + Shift + L"
+    },
+    "how": [
+      "Selecione o objeto → clique direito → Bloqueio (ou o cadeado da Cinta; o escudo \"Bloqueio avançado\" traz os outros níveis). Para destravar, segure o cadeado 2 s (mouse ou Enter/Espaço).",
+      "Escolha o nível; estruturas de fundo vão para trás e não entram na seleção por retângulo.",
+      "Destravar um bloqueio protegido pede confirmação e permissão."
+    ],
+    "permissions": [
+      "element.lockStandard",
+      "element.lockProtected",
+      "element.unlockProtected"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-002",
+    "title": "Visualizar como… (simular perfis)",
+    "summary": "Simula como uma pessoa do workspace (inclusive usuários simulados) ou um perfil genérico vê a Mesa e o board e o que pode fazer.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Facilitar",
+        "Ver como…"
+      ]
+    },
+    "how": [
+      "Clique em Facilitar → Ver como… no board (ou em Visualizar como… no cabeçalho da Mesa).",
+      "Escolha uma pessoa do workspace ou um perfil genérico: uma faixa mostra a simulação ativa.",
+      "Volte para Eu mesmo ou clique em Sair da simulação."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-GOVERNANCA-003",
+      "FT-GOVERNANCA-004"
+    ]
+  },
+  {
+    "id": "FT-GOVERNANCA-003",
+    "title": "Permissões centralizadas",
+    "summary": "Toda ação que altera o board passa pela mesma regra de permissão, com o motivo explicado quando é negada.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Tente uma ação não permitida no perfil atual (por exemplo, editar como leitor em Visualizar como…).",
+      "O app bloqueia e mostra o motivo."
+    ],
+    "docs": "ai-memory/ARCHITECTURE_MAP.md §5",
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-004",
+    "title": "Exportação negada por padrão a leitores",
+    "summary": "Visitantes leitores e comentadores só exportam quando o link ou a política do espaço permitem.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Simule um visitante leitor em Visualizar como….",
+      "Tente exportar: o motivo aparece e nada é baixado."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-GOVERNANCA-003",
+      "FT-EXPORTAR-011"
+    ]
+  },
+  {
+    "id": "FT-GOVERNANCA-005",
+    "title": "Histórico de versões",
+    "summary": "Versões automáticas, salvas com nome e de segurança (antes de restaurar ou de excluir em massa), com prévia e restauração em 1 clique registrada no Activity Log e na auditoria.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Tempo",
+        "Linha do tempo"
+      ]
+    },
+    "how": [
+      "Abra a Linha do tempo (ampulheta no módulo Tempo, ou Ficha do board → Histórico).",
+      "Use Salvar versão (com nome, opcional) para guardar o estado atual.",
+      "Escolha uma versão para ver a prévia somente leitura no próprio canvas.",
+      "Restaurar esta versão (2º clique confirma) guarda antes uma versão de segurança; Ctrl+Z também desfaz."
+    ],
+    "permissions": [
+      "board.edit",
+      "board.restoreSnapshot"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-GOVERNANCA-011",
+      "FT-COLABORACAO-002"
+    ]
+  },
+  {
+    "id": "FT-GOVERNANCA-006",
+    "title": "Lixeira",
+    "summary": "Excluir um board manda para a lixeira; dá para restaurar até o prazo da política, depois ele some sozinho.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "route": "#/trash"
+    },
+    "how": [
+      "Na Ficha do board (clique no nome do board), escolha Mover para a lixeira (o aviso traz Desfazer).",
+      "Na Mesa, abra a aba Lixeira para restaurar ou excluir de vez.",
+      "Administradores veem a lixeira do workspace inteiro em Administração → Lixeira."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "permissions": [
+      "board.delete",
+      "workspace.trash.manage"
+    ],
+    "related": [
+      "FT-GOVERNANCA-008"
+    ]
+  },
+  {
+    "id": "FT-IMPORTAR-001",
+    "title": "Importar arquivo",
+    "summary": "Abre planilhas, CSV/TSV, SVG, .excalidraw, tabelas HTML, texto, imagens e backups .ludraw.",
+    "category": "importar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Importar…",
+        "Importar arquivo"
+      ],
+      "dock": "Caixa de ferramentas"
+    },
+    "how": [
+      "Abra Ficha do board → Importar… (ou clique direito no vazio → Importar arquivo…).",
+      "Escolha um ou mais arquivos.",
+      "Confira o plano e insira."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Importar um .svg e um .csv"
+      ],
+      "alt": "Modal Exportar/Importar na aba Importar",
+      "theme": "light"
+    },
+    "permissions": [
+      "board.edit"
+    ],
+    "readme": {
+      "highlight": true,
+      "priority": 13
+    },
+    "i18n": {
+      "en": {
+        "title": "Import a file",
+        "summary": "Opens spreadsheets, CSV/TSV, SVG, .excalidraw, HTML tables, plain text, images and .ludraw backups.",
+        "how": [
+          "Open Board card → Import… (or right-click an empty spot → Import file…).",
+          "Choose one or more files.",
+          "Review the plan and insert."
+        ]
+      }
+    },
+    "related": [
+      "FT-IMPORTAR-002",
+      "FT-IMPORTAR-003",
+      "FT-IMPORTAR-004",
+      "FT-IMPORTAR-005",
+      "FT-IMPORTAR-006"
+    ]
+  },
+  {
+    "id": "FT-IMPORTAR-002",
+    "title": "Colar de qualquer lugar",
+    "summary": "Ctrl + V entende objetos do LuDraw, imagens, SVG, tabelas, listas e texto e transforma em objetos nativos.",
+    "category": "importar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "shortcut": "Ctrl + V",
+      "menu": [
+        "Clique direito no board vazio",
+        "Colar"
+      ]
+    },
+    "how": [
+      "Copie de outro programa.",
+      "Clique no board e pressione Ctrl + V.",
+      "Lista vira post-its, parágrafo vira texto, tabela vira tabela nativa."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-IMPORTAR-006",
+      "FT-IMPORTAR-007"
+    ]
+  },
+  {
+    "id": "FT-IMPORTAR-003",
+    "title": "SVG vetorial editável",
+    "summary": "Retângulos, círculos e caminhos do SVG viram formas e conectores nativos editáveis.",
+    "category": "importar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Importar…",
+        "Importar arquivo"
+      ]
+    },
+    "how": [
+      "Importe um .svg ou cole o código <svg>.",
+      "Edite cores, textos e setas como objetos do board."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-IMPORTAR-004",
+    "title": "Arquivos .excalidraw",
+    "summary": "Formas, textos, setas ligadas, traços, imagens e frames de arquivos .excalidraw viram objetos nativos.",
+    "category": "importar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Importar…",
+        "Importar arquivo"
+      ]
+    },
+    "how": [
+      "Importe o arquivo .excalidraw (ou cole o conteúdo).",
+      "Confira o resumo e insira."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-IMPORTAR-005",
+    "title": "Importar planilha",
+    "summary": "Planilhas .xlsx, .ods, .csv e .tsv viram Tabela, Kanban ou Post-its, com prévia, escolha de aba e cabeçalho.",
+    "category": "importar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Importar…",
+        "Importar arquivo"
+      ]
+    },
+    "how": [
+      "Importe ou cole a planilha.",
+      "No modal Importar planilha, confira a prévia, a aba e Primeira linha é cabeçalho.",
+      "Escolha o destino (Tabela, Kanban ou Post-its) e, se quiser, Criar um frame com o nome da planilha."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir um board novo em branco"
+      ],
+      "steps": [
+        "Importar um .xlsx com 3 colunas",
+        "Escolher destino Kanban"
+      ],
+      "alt": "Modal Importar planilha com prévia",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 14
+    },
+    "i18n": {
+      "en": {
+        "title": "Import a spreadsheet",
+        "summary": ".xlsx, .ods, .csv and .tsv sheets become a Table, a Kanban or sticky notes, with a preview, sheet picker and header option.",
+        "how": [
+          "Import or paste the spreadsheet.",
+          "In the Import spreadsheet dialog, check the preview, the sheet and First row is a header.",
+          "Choose the destination (Table, Kanban or sticky notes) and, if you like, Create a frame named after the spreadsheet."
+        ]
+      }
+    },
+    "related": [
+      "FT-OBJETOS-019",
+      "FT-OBJETOS-018"
+    ]
+  },
+  {
+    "id": "FT-IMPORTAR-006",
+    "title": "Inspetor de colagem",
+    "summary": "Mostra o que está na área de transferência, o que será lido e a prévia antes de inserir.",
+    "category": "importar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Importar…",
+        "Inspetor de colagem"
+      ]
+    },
+    "how": [
+      "Abra Ficha do board → Importar… → Inspetor de colagem.",
+      "Cole na área indicada.",
+      "Confira os tipos recebidos e o plano; insira, cole como texto ou como imagem."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-IMPORTAR-002",
+      "FT-IMPORTAR-007"
+    ]
+  },
+  {
+    "id": "FT-IMPORTAR-007",
+    "title": "Proteção contra dado codificado",
+    "summary": "Texto colado que parece dado codificado de outro programa não é inserido sem confirmação.",
+    "category": "importar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Cole um texto muito longo e codificado.",
+      "O app avisa e oferece Inserir mesmo assim ou Colar como texto."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-IMPORTAR-008",
+    "title": "Importar backup .ludraw",
+    "summary": "Restaura um board a partir do arquivo de backup.",
+    "category": "importar",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Importar…",
+        "Importar arquivo"
+      ]
+    },
+    "how": [
+      "Abra Ficha do board → Importar… e escolha o arquivo .ludraw (ou Novo board → Importar backup (.ludraw) na Mesa).",
+      "Confira o plano e insira."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-001",
+    "title": "Exportar como imagem PNG",
+    "summary": "PNG em 1x, 2x ou 4x do board inteiro ou só da seleção.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Exportar…",
+        "Imagem PNG"
+      ]
+    },
+    "how": [
+      "Abra Ficha do board → Exportar… → Imagem PNG.",
+      "Escolha o que exportar e a qualidade, confira a prévia e exporte."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-002",
+    "title": "Salvar como PDF",
+    "summary": "PDF de página única com o board inteiro.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Exportar…",
+        "PDF — página única"
+      ]
+    },
+    "how": [
+      "Abra Ficha do board → Exportar… → PDF — página única.",
+      "Escolha o que exportar e exporte."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-003",
+    "title": "SVG vetorial",
+    "summary": "Exporta board, seleção ou frames como SVG com formas, linhas e textos vetoriais.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Exportar…"
+      ]
+    },
+    "how": [
+      "Abra Ficha do board → Exportar… e escolha SVG.",
+      "Escolha o que exportar (board, seleção ou frames) e baixe."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-004",
+    "title": "PDF multipáginas por frames",
+    "summary": "Um PDF com uma página por frame, na ordem dos slides, com resolução para impressão.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Exportar…",
+        "PDF — multipáginas por frames"
+      ]
+    },
+    "how": [
+      "Organize os slides no Roteiro (Vista).",
+      "Abra Ficha do board → Exportar… → PDF — multipáginas por frames.",
+      "Escolha a resolução e exporte."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o modelo \"Retrospectiva ágil\""
+      ],
+      "steps": [
+        "Exportar PDF multipáginas por frames em 3x"
+      ],
+      "alt": "Resumo da exportação de PDF por frames",
+      "theme": "light"
+    },
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": true,
+      "priority": 15
+    },
+    "i18n": {
+      "en": {
+        "title": "Multi-page PDF by frames",
+        "summary": "One PDF with a page per frame, in slide order, at print resolution.",
+        "how": [
+          "Arrange the slides in the Script (View).",
+          "Open Board card → Export… → PDF — multi-page by frames.",
+          "Choose the resolution and export."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-005",
+    "title": "CSV de issues para rastreadores",
+    "summary": "Post-its e cards viram linhas de issue (resumo, tipo, prioridade, responsável, etiquetas, votos…) para importar em rastreadores.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Exportar…",
+        "CSV de issues (rastreadores)"
+      ]
+    },
+    "how": [
+      "Abra Ficha do board → Exportar… → CSV de issues (rastreadores).",
+      "Escolha o tipo e as colunas extras.",
+      "Baixe e importe no seu rastreador."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-OBJETOS-018",
+      "FT-OBJETOS-001"
+    ]
+  },
+  {
+    "id": "FT-EXPORTAR-006",
+    "title": "Tabelas em CSV e de volta para planilhas",
+    "summary": "Exporta tabelas em CSV (ponto e vírgula ou vírgula) ou copia como TSV + HTML preservando mesclagens e cores.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito na célula",
+        "Levar para planilhas"
+      ]
+    },
+    "how": [
+      "Clique direito numa célula → Levar para planilhas.",
+      "Copie a tabela inteira (TSV + HTML) ou exporte a tabela em CSV.",
+      "Ou use Ficha do board → Exportar… → Tabelas em CSV."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-007",
+    "title": "Lista de objetos em CSV",
+    "summary": "Exporta os objetos selecionados em CSV, com proteção contra fórmulas.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Exportar e info",
+        "Exportar para CSV (planilha)"
+      ]
+    },
+    "how": [
+      "Selecione os objetos.",
+      "Clique direito → Exportar e info → Exportar para CSV (planilha)."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-008",
+    "title": "Exportar um frame",
+    "summary": "Exporta só um frame em PDF de alta resolução, PNG 2x/4x ou SVG.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Frame e modelo",
+        "Exportar frame"
+      ]
+    },
+    "how": [
+      "Clique direito no frame → Frame e modelo → Exportar frame (ou Exportar na Cinta do frame).",
+      "Escolha PDF (alta resolução), PNG — Alta qualidade (2x), PNG — Ultra HD (4x) ou SVG vetorial."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-009",
+    "title": "Backup do board (.ludraw)",
+    "summary": "Arquivo com todo o conteúdo do board para guardar ou mover entre computadores.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Exportar…",
+        "Backup .ludraw"
+      ]
+    },
+    "how": [
+      "Abra Ficha do board → Exportar… → Backup .ludraw.",
+      "Guarde o arquivo .ludraw."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-010",
+    "title": "Copiar como imagem",
+    "summary": "Copia a seleção como imagem para colar em outros programas.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Copiar como",
+        "Imagem"
+      ],
+      "shortcut": "Ctrl + Shift + C"
+    },
+    "how": [
+      "Selecione os objetos.",
+      "Pressione Ctrl + Shift + C e cole onde quiser."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXPORTAR-011",
+    "title": "Todos os formatos (modal Exportar)",
+    "summary": "Um só lugar para exportar board, seleção ou frames em qualquer formato, com resumo do que sai.",
+    "category": "exportar",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Ficha do board",
+        "Exportar…"
+      ]
+    },
+    "how": [
+      "Abra Ficha do board → Exportar….",
+      "Escolha o formato e o que exportar.",
+      "Confira o resumo e exporte."
+    ],
+    "permissions": [
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXPORTAR-001",
+      "FT-EXPORTAR-002",
+      "FT-EXPORTAR-003",
+      "FT-EXPORTAR-004",
+      "FT-EXPORTAR-005",
+      "FT-EXPORTAR-006"
+    ]
+  },
+  {
+    "id": "FT-DASHBOARD-001",
+    "title": "Mesa (início)",
+    "summary": "Lista de boards em grade ou lista, com abas Todos, Meus, Favoritos, Recentes e Templates, ordenação e filtro.",
+    "category": "dashboard",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/"
+    },
+    "how": [
+      "Abra o app: a Mesa mostra Retomar, Começar com… e seus boards.",
+      "Alterne Grade / Lista e use Ordenar por e Filtrar por tipo."
+    ],
+    "demo": {
+      "setup": [
+        "Ter 4 boards criados"
+      ],
+      "steps": [
+        "Abrir a Mesa em grade"
+      ],
+      "alt": "Mesa com cartões de boards",
+      "theme": "light"
+    },
+    "readme": {
+      "highlight": true,
+      "priority": 3
+    },
+    "i18n": {
+      "en": {
+        "title": "Desk (home)",
+        "summary": "Your boards in a grid or a list, with All, Mine, Favorites, Recent and Templates tabs, sorting and filters.",
+        "how": [
+          "Open the app: the Desk shows Pick up where I left off, Start with… and your boards.",
+          "Switch between Grid / List and use Sort by and Filter by type."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-DASHBOARD-002",
+    "title": "Busca de boards e ações",
+    "summary": "Paleta de comandos para abrir boards e executar ações sem tirar a mão do teclado.",
+    "category": "dashboard",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "shortcut": "Ctrl + K"
+    },
+    "how": [
+      "Na Mesa, pressione Ctrl + K (ou clique em Buscar).",
+      "Digite o nome do board ou da ação.",
+      "Enter abre."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-DASHBOARD-003",
+    "title": "Novo board (em branco, guiado, template ou backup)",
+    "summary": "Cria board em branco, guiado (Comece por aqui), a partir de template ou importando backup.",
+    "category": "dashboard",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Mais formas de criar um board",
+        "Comece por aqui (guiado)"
+      ]
+    },
+    "how": [
+      "Na Mesa, clique em Novo board (em branco) ou na seta ao lado.",
+      "Escolha Comece por aqui (guiado), A partir de template… ou Importar backup (.ludraw)."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-DASHBOARD-004",
+    "title": "Favoritos e recentes",
+    "summary": "Marque boards como favoritos e reencontre os recentes.",
+    "category": "dashboard",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/favorites"
+    },
+    "how": [
+      "Clique na estrela do cartão (ou Marcar como favorito na Ficha do board).",
+      "Abra as abas Favoritos ou Recentes; no board, Ctrl K também lista Favoritos e Recentes."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-DASHBOARD-005",
+    "title": "Ações do cartão de board",
+    "summary": "Abrir, renomear, duplicar, fazer backup, ver detalhes e excluir direto da Mesa.",
+    "category": "dashboard",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Mais opções",
+        "Duplicar"
+      ]
+    },
+    "how": [
+      "Na Mesa, clique em Mais opções no cartão.",
+      "Escolha Abrir, Renomear, Duplicar, Fazer backup (.ludraw), Detalhes ou Excluir."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-DASHBOARD-006",
+    "title": "Board de boas-vindas \"Comece por aqui\"",
+    "summary": "Board guiado com passo a passo e mini fluxograma, criado na primeira abertura.",
+    "category": "dashboard",
+    "status": "stable",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Mais formas de criar um board",
+        "Comece por aqui (guiado)"
+      ]
+    },
+    "how": [
+      "Abra o app pela primeira vez (ou crie um board guiado).",
+      "Siga os passos numerados."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-DASHBOARD-007",
+    "title": "Organização, times e projetos",
+    "summary": "Seletor em trilha Organização › Time › Projeto, com Espaço pessoal privado, Compartilhados comigo e Geral; num time, os projetos aparecem como pastas e os boards de projeto levam um selo de pasta.",
+    "category": "dashboard",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "+ Novo time",
+        "+ Novo projeto",
+        "Mover para…"
+      ]
+    },
+    "how": [
+      "Clique na trilha ao lado do logo, no cabeçalho da Mesa.",
+      "Escolha Espaço pessoal, Compartilhados comigo, Geral ou um time; dentro do time, abra um projeto pela pasta.",
+      "Crie times (administradores) e projetos (membros, se a política permitir) pelo rodapé do seletor.",
+      "No ⋯ de um board, use Mover para… para trocar o lugar."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "permissions": [
+      "workspace.teams.manage",
+      "workspace.projects.create",
+      "board.move"
+    ],
+    "related": [
+      "FT-GOVERNANCA-007"
+    ]
+  },
+  {
+    "id": "FT-DASHBOARD-008",
+    "title": "Notificações",
+    "summary": "Central de notificações de menções e atividades.",
+    "category": "dashboard",
+    "status": "planned",
+    "since": {
+      "chat": "07"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Planejado para o Chat 07 (colaboração)."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-001",
+    "title": "Salvamento automático local",
+    "summary": "Tudo é salvo neste dispositivo automaticamente, com indicador ao lado do nome do board.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Edite normalmente.",
+      "O indicador ao lado do nome do board mostra \"Salvando neste dispositivo…\" e depois \"Salvo neste dispositivo\"."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-002",
+    "title": "Login local e perfil",
+    "summary": "Conta local com nome, e-mail, organização e função.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/settings/profile"
+    },
+    "how": [
+      "Entre com uma conta local.",
+      "Abra Configurações (menu do usuário) → Perfil e edite os dados."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-003",
+    "title": "Configurações pessoais de notificações",
+    "summary": "Escolhe o que notifica e por qual canal. Desde o Chat 06, membros e convites ficam na Administração do Workspace.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/settings/notifications"
+    },
+    "how": [
+      "Abra o menu do usuário → Configurações.",
+      "Escolha a aba Notificações."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-GOVERNANCA-007"
+    ]
+  },
+  {
+    "id": "FT-SISTEMA-004",
+    "title": "Tema claro e escuro",
+    "summary": "Alterna o tema da interface; post-its e conteúdo mantêm as cores.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Abra o Painel (\\ ou Ctrl + /).",
+      "Clique em Alternar tema; sem escolha salva, o app segue o tema do sistema."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-005",
+    "title": "Painel do board",
+    "summary": "Painel lateral com abas Navegação, Frames, Comentários, Atividades e Tags — substituído pelas gavetas do Estúdio v2 no Chat 08.2.",
+    "category": "sistema",
+    "status": "removed",
+    "since": {
+      "chat": "02"
+    },
+    "availability": "local",
+    "where": {
+      "shortcut": "\\ ou Ctrl + /"
+    },
+    "how": [
+      "Pressione \\ ou Ctrl + / para reabrir a última gaveta usada (ou a Ficha do board).",
+      "F6 / Shift + F6 passam pelas regiões: Ficha, Roda, Vista, Tempo e Dock; Esc fecha a gaveta e devolve o foco."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "deprecation": {
+      "since": "08.2",
+      "date": "2026-11-10",
+      "reason": "O Estúdio v2 dá um único lugar a cada função: Navegação e Frames foram para a Vista (Bússola e Roteiro), Comentários para Conversas, Atividades para a Linha do tempo (Ver eventos) e Tags para a Ficha do board. O atalho \\ (ou Ctrl + /) passou a reabrir a última gaveta.",
+      "replacedBy": "FT-SISTEMA-019",
+      "migration": "Nenhuma: era só um contêiner de interface; nenhum dado de board muda.",
+      "removedIn": "08.2"
+    }
+  },
+  {
+    "id": "FT-SISTEMA-006",
+    "title": "Preferências de entrada e seleção",
+    "summary": "Escolhe mouse ou trackpad (ou detecção automática) e se o retângulo de seleção pega objetos só de passar por cima.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Você",
+        "Navegar com"
+      ]
+    },
+    "how": [
+      "Clique em Você (seu avatar, no fim da barra do topo) → Navegar com e escolha Automático, Mouse ou Trackpad.",
+      "Ligue ou desligue Selecionar só de passar por cima."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-007",
+    "title": "Sistema visual (Design System vivo)",
+    "summary": "Tela com tokens, componentes e telas, organizada por tipo de design (cada assunto uma vez, na versão atual), para quem contribui.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/design-system"
+    },
+    "devTool": {
+      "env": "LUDRAW_ENABLE_DESIGN_SYSTEM"
+    },
+    "how": [
+      "Abra o menu do usuário → Sistema visual (ou a rota #/design-system). Só aparece sem servidor ou com LUDRAW_ENABLE_DESIGN_SYSTEM ligado no servidor (padrão no desenvolvimento; a imagem Docker desliga, e então a rota leva à tela inicial).",
+      "Use o índice ou os atalhos da barra do topo para ir a um grupo (Fundamentos, Componentes base, Estúdio, Canvas e objetos, Facilitação e governança, Colaboração ao vivo, Mesa, Telas e fluxos)."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-008",
+    "title": "Splash de abertura",
+    "summary": "Logo animado enquanto o app carrega, respeitando o tema e Reduzir movimento.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "03"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Abra o app.",
+      "A splash some quando os dados e as fontes estão prontos (com Reduzir movimento, sem animação)."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-009",
+    "title": "Atalhos de teclado (lista)",
+    "summary": "Lista dos atalhos agrupados por Ferramentas, Edição e Visualização.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Menu do usuário",
+        "Atalhos de teclado"
+      ],
+      "shortcut": "?"
+    },
+    "how": [
+      "Pressione ? no board (ou menu do usuário → Atalhos de teclado).",
+      "Os atalhos de um caractere podem ser desligados em Acessibilidade."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-010",
+    "title": "Fontes autohospedadas (funciona offline)",
+    "summary": "As 18 famílias de fontes vêm com o app; nada é baixado de servidores de fontes, também offline e no export.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "05.5"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Use qualquer uma das 40 fontes na gaveta Estilo do texto da Cinta, mesmo sem internet.",
+      "O export espera as fontes carregarem antes de desenhar."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-011",
+    "title": "Idioma da interface",
+    "summary": "Interface em português (Brasil) ou inglês, com troca na hora, opção de seguir o navegador e datas, números e listas no formato do idioma.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "05.6"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/settings/profile"
+    },
+    "how": [
+      "Abra Configurações (menu do usuário) → Perfil.",
+      "Em “Idioma e região”, escolha o idioma ou “Seguir o navegador”; a interface muda sem recarregar e a escolha fica salva.",
+      "Conteúdo novo (board de boas-vindas, templates, colunas do Kanban) nasce no idioma ativo; o que você já escreveu nunca é traduzido.",
+      "Para testar traduções, acrescente ?lang=<código> à URL (ex.: ?lang=qps mostra o pseudo-idioma)."
+    ],
+    "demo": {
+      "setup": [
+        "Abrir o app com um board aberto e o Painel na aba Atividades"
+      ],
+      "steps": [
+        "Configurações → Perfil → Idioma e região → English",
+        "Voltar ao board: barra do topo, Dock, gavetas e linha do tempo em inglês, sem recarregar",
+        "Abrir com ?lang=qps para ver o pseudo-idioma"
+      ],
+      "alt": "Configurações com o seletor de idioma em English e o board com a interface em inglês",
+      "theme": "light"
+    },
+    "related": [
+      "FT-SISTEMA-012",
+      "FT-COLABORACAO-002"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-012",
+    "title": "Idiomas da comunidade",
+    "summary": "Qualquer pessoa pode acrescentar um idioma só com arquivos JSON; o app o encontra sozinho e completa o que faltar com o idioma de reserva.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "05.6"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/settings/profile"
+    },
+    "how": [
+      "Copie src/locales/en para src/locales/<código> e traduza os valores (guia em docs/TRANSLATING.md).",
+      "Rode npm run audit:i18n até zerar os erros e teste com ?lang=<código>.",
+      "Com status “community” no _meta.json, o idioma aparece em Configurações → Perfil → Idioma e região; em “draft”, só por ?lang=."
+    ],
+    "docs": "docs/TRANSLATING.md",
+    "related": [
+      "FT-SISTEMA-011"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-ACESSIBILIDADE-001",
+    "title": "Reduzir movimento",
+    "summary": "Diminui as animações da interface e da splash.",
+    "category": "acessibilidade",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Você",
+        "Reduzir movimento"
+      ]
+    },
+    "how": [
+      "Abra Você (seu avatar, na barra do topo).",
+      "Ligue Reduzir movimento."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-ACESSIBILIDADE-002",
+    "title": "Atalhos de um caractere desligáveis",
+    "summary": "Desliga os atalhos de uma tecla (V, N, T…) para quem usa leitor de tela ou teclados especiais.",
+    "category": "acessibilidade",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Você",
+        "Atalhos de teclado de um caractere"
+      ]
+    },
+    "how": [
+      "Abra Você (seu avatar, na barra do topo).",
+      "Desmarque Atalhos de teclado de um caractere."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-ACESSIBILIDADE-003",
+    "title": "Seleção precisa",
+    "summary": "Afina a área de clique de linhas e traços de caneta para selecionar exatamente o que está sob o cursor.",
+    "category": "acessibilidade",
+    "status": "stable",
+    "since": {
+      "chat": "01"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Você",
+        "Seleção precisa"
+      ]
+    },
+    "how": [
+      "Abra Você (seu avatar, na barra do topo).",
+      "Ligue Seleção precisa."
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXTENSOES-001",
+    "title": "Registries internos de importadores, exportadores, formas e modelos",
+    "summary": "O núcleo registra 12 importadores, 8 exportadores, 11 formas e 6 modelos num mesmo mecanismo, base da futura plataforma de extensões.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "05"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Para desenvolvedores: veja src/extensions/registries.ts e src/extensions/core.ts.",
+      "Os modais Importar/Exportar e a Galeria de templates leem estes registries."
+    ],
+    "docs": "ai-memory/EXTENSIONS_SPEC.md",
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-EXTENSOES-002",
+    "title": "Plataforma de extensões",
+    "summary": "Pacotes declarativos e extensões programáveis em Web Worker isolado, instalados por arquivo local, com integridade conferida, permissões aprovadas e revogáveis e a política do workspace aplicada.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Configurações",
+        "Extensões"
+      ],
+      "route": "#/settings/extensions"
+    },
+    "how": [
+      "Abra Configurações → Extensões.",
+      "Ative uma extensão oficial ou use \"Instalar arquivo .ludraw-ext…\".",
+      "Confira licença, proveniência, permissões e o hash na tela de aprovação e confirme.",
+      "As contribuições aparecem no Dock, na Galeria, no Ctrl+K e no Painel sem recarregar."
+    ],
+    "docs": "ai-memory/EXTENSIONS_SPEC.md",
+    "readme": {
+      "highlight": false
+    },
+    "permissions": [
+      "extensions.use",
+      "extensions.manage",
+      "extensions.useScripts"
+    ],
+    "related": [
+      "FT-EXTENSOES-001",
+      "FT-EXTENSOES-003",
+      "FT-EXTENSOES-004",
+      "FT-EXTENSOES-005",
+      "FT-EXTENSOES-006",
+      "FT-EXTENSOES-007"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Extension platform",
+        "summary": "Declarative packs and programmable extensions in an isolated Web Worker, installed from a local file, with integrity checks, approved and revocable permissions and the workspace policy applied.",
+        "how": [
+          "Open Settings → Extensions.",
+          "Turn on an official extension or use “Install .ludraw-ext file…”.",
+          "Check the license, provenance, permissions and hash on the approval screen and confirm.",
+          "Contributions show up in the Dock, the Gallery, Ctrl+K and the Panel without reloading."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-EXTENSOES-003",
+    "title": "Modo Seguro das extensões",
+    "summary": "Desliga todas as extensões de uma vez, sem desinstalar, pelo botão em Configurações ou abrindo o app com ?safe=1.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Configurações",
+        "Extensões",
+        "Modo Seguro"
+      ],
+      "route": "#/settings/extensions"
+    },
+    "how": [
+      "Abra Configurações → Extensões.",
+      "Ligue \"Modo Seguro\" (ou abra o endereço com ?safe=1 só naquela aba).",
+      "Desligue o Modo Seguro para voltar ao normal."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-002"
+    ]
+  },
+  {
+    "id": "FT-EXTENSOES-004",
+    "title": "Política de extensões aplicada",
+    "summary": "A política do workspace (todas, só pacotes declarativos ou nenhuma) e a lista de extensões permitidas valem na instalação e na ativação; visitantes de link público não usam extensões.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/admin/policies"
+    },
+    "how": [
+      "Em Administração do Workspace → Políticas, escolha o nível de extensões.",
+      "Opcional: preencha a lista de extensões permitidas com ids no formato dev.autor.nome.",
+      "Em Configurações → Extensões, extensões fora da política aparecem bloqueadas com o motivo."
+    ],
+    "permissions": [
+      "extensions.use",
+      "extensions.manage",
+      "extensions.useScripts",
+      "workspace.policies.manage"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-002"
+    ]
+  },
+  {
+    "id": "FT-EXTENSOES-005",
+    "title": "Tema Grafite (extensão oficial)",
+    "summary": "Tema neutro em tons de grafite para claro e escuro, com contraste AA conferido; vem embutido e desligado.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Configurações",
+        "Extensões",
+        "Tema da interface"
+      ],
+      "route": "#/settings/extensions"
+    },
+    "how": [
+      "Em Configurações → Extensões, ative \"Tema Grafite\".",
+      "Em \"Tema da interface\", escolha Grafite.",
+      "Para voltar, escolha \"Padrão do LuDraw\" ou desative a extensão."
+    ],
+    "extension": {
+      "id": "dev.ludraw.tema-grafite",
+      "defaultEnabled": false
+    },
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-002"
+    ]
+  },
+  {
+    "id": "FT-EXTENSOES-006",
+    "title": "Formas de fluxograma (extensão oficial)",
+    "summary": "Terminador, decisão, processo, documento e banco de dados no flyout Formas do Dock, com o desenho copiado no elemento.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Configurações",
+        "Extensões"
+      ],
+      "dock": "Formas"
+    },
+    "how": [
+      "Em Configurações → Extensões, ative \"Formas de fluxograma\".",
+      "No board, abra Formas no Dock e escolha uma forma da seção da extensão.",
+      "Clique ou arraste no canvas para criar; conecte como qualquer forma."
+    ],
+    "extension": {
+      "id": "dev.ludraw.formas-fluxograma",
+      "defaultEnabled": false
+    },
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-002"
+    ]
+  },
+  {
+    "id": "FT-EXTENSOES-007",
+    "title": "Modelos Scrum (extensão oficial)",
+    "summary": "Planejamento, revisão e retrospectiva da sprint com estruturas protegidas, mais o elemento composto Cartão de história.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Configurações",
+        "Extensões"
+      ],
+      "dock": "Caixa de ferramentas"
+    },
+    "how": [
+      "Em Configurações → Extensões, ative \"Modelos Scrum\".",
+      "Na Mesa, use \"Começar com…\" ou a Galeria de templates.",
+      "No board, insira o Cartão de história pela Caixa de ferramentas → Das extensões ativas."
+    ],
+    "extension": {
+      "id": "dev.ludraw.modelos-scrum",
+      "defaultEnabled": false
+    },
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-002",
+      "FT-FACILITACAO-006"
+    ]
+  },
+  {
+    "id": "FT-EXTENSOES-008",
+    "title": "Extensões programáveis isoladas",
+    "summary": "O código da extensão roda num Web Worker isolado pela política do navegador, sem rede nem acesso ao app; tudo passa pela API ludraw.* com as permissões aprovadas.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Configurações",
+        "Extensões"
+      ],
+      "route": "#/settings/extensions"
+    },
+    "how": [
+      "Ative uma extensão programável em Configurações → Extensões.",
+      "Aprove as permissões pedidas (cada uma em linguagem simples).",
+      "Em Detalhes, revogue ou devolva permissões e veja a execução e os acessos à rede."
+    ],
+    "permissions": [
+      "extensions.use",
+      "extensions.manage",
+      "extensions.useScripts",
+      "board.edit"
+    ],
+    "docs": "ai-memory/EXTENSIONS_SPEC.md",
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-002",
+      "FT-EXTENSOES-003",
+      "FT-EXTENSOES-004"
+    ]
+  },
+  {
+    "id": "FT-EXTENSOES-009",
+    "title": "Comandos e painéis de extensões",
+    "summary": "Extensões acrescentam comandos ao Ctrl+K e à Caixa de ferramentas (seção \"Das extensões ativas\") e painéis isolados numa janela flutuante.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "shortcut": "Ctrl K",
+      "dock": "Caixa de ferramentas"
+    },
+    "how": [
+      "No board, aperte Ctrl+K ou abra a Caixa de ferramentas (/) e use o filtro Extensões: comandos, painéis, elementos e importadores ficam em \"Das extensões ativas\", com o nome da extensão e o tipo.",
+      "Painéis de extensões abrem numa janela flutuante: arraste pelo cabeçalho (ou use as setas com o foco nele) e feche com Esc."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-008"
+    ]
+  },
+  {
+    "id": "FT-EXTENSOES-010",
+    "title": "Contador de palavras (extensão oficial)",
+    "summary": "Comando no Ctrl+K que soma as palavras dos post-its selecionados; só lê o board.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Configurações",
+        "Extensões"
+      ],
+      "shortcut": "Ctrl K"
+    },
+    "how": [
+      "Em Configurações → Extensões, ative \"Contador de palavras\" e aprove as permissões.",
+      "No board, selecione post-its.",
+      "Aperte Ctrl+K e escolha \"Contar palavras dos post-its selecionados\"."
+    ],
+    "extension": {
+      "id": "dev.ludraw.contador-palavras",
+      "defaultEnabled": false
+    },
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-009"
+    ]
+  },
+  {
+    "id": "FT-EXTENSOES-011",
+    "title": "Formatos de diagrama abertos .drawio (extensão oficial)",
+    "summary": "Importa arquivos .drawio (XML aberto, com ou sem compressão) como formas, textos, frames e conectores editáveis, com grupos e rotas das linhas; não lê a área de transferência de outros programas.",
+    "category": "extensoes",
+    "status": "stable",
+    "since": {
+      "chat": "06.5"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Configurações",
+        "Extensões"
+      ]
+    },
+    "how": [
+      "Em Configurações → Extensões, ative \"Formatos de diagrama abertos (.drawio)\" e aprove as permissões.",
+      "No board, use Importar arquivo (ou arraste o arquivo .drawio para o canvas).",
+      "Confira os avisos (páginas extras e formas aproximadas) e ajuste o diagrama."
+    ],
+    "extension": {
+      "id": "dev.ludraw.formatos-drawio",
+      "defaultEnabled": false
+    },
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-008"
+    ]
+  },
+  {
+    "id": "FT-GOVERNANCA-007",
+    "title": "Administração do Workspace",
+    "summary": "Área só para administradores com visão geral, alertas, membros, convidados B2B, times e projetos, políticas, auditoria, lixeira e transferência.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "route": "#/admin/overview",
+      "menu": [
+        "Administração do Workspace",
+        "Gerenciar workspace"
+      ]
+    },
+    "how": [
+      "Abra o menu do avatar → Administração do Workspace (ou o seletor de espaço → Gerenciar workspace).",
+      "Na Visão geral, confira os alertas (por exemplo, só existe 1 administrador).",
+      "Em Membros, mude papéis, suspenda, reative ou remova (anonimiza); o último administrador fica protegido.",
+      "Em modo local, use Adicionar usuários simulados para testar papéis com Visualizar como…."
+    ],
+    "permissions": [
+      "workspace.admin.view",
+      "workspace.members.manage"
+    ],
+    "related": [
+      "FT-GOVERNANCA-008",
+      "FT-GOVERNANCA-009",
+      "FT-GOVERNANCA-010",
+      "FT-COLABORACAO-005"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-008",
+    "title": "Políticas e domínios do workspace",
+    "summary": "Nome da organização, domínios de e-mail permitidos e políticas de links públicos, convidados, exportação, retenção e extensões, aplicadas na interface pelo can().",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "route": "#/admin/policies"
+    },
+    "how": [
+      "Abra Administração do Workspace → Políticas e domínios.",
+      "Edite a organização (nome, domínios em chips, exigir domínio para membros) e salve.",
+      "Ajuste as políticas e clique em Salvar; cada alteração entra na auditoria com antes e depois."
+    ],
+    "permissions": [
+      "workspace.policies.manage"
+    ],
+    "related": [
+      "FT-GOVERNANCA-004",
+      "FT-COLABORACAO-004"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-009",
+    "title": "Auditoria do workspace",
+    "summary": "Registro de convites, papéis, links públicos, políticas, lixeira e transferências, com filtros e exportação CSV; autores aparecem pelo nome atual (conta removida = Usuário removido).",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "route": "#/admin/audit"
+    },
+    "how": [
+      "Abra Administração do Workspace → Auditoria.",
+      "Filtre por autor, ação e período; abra as alterações de um evento.",
+      "Clique em Exportar CSV para baixar o que está filtrado."
+    ],
+    "permissions": [
+      "workspace.audit.view"
+    ],
+    "related": [
+      "FT-COLABORACAO-002"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-010",
+    "title": "Transferência de propriedade (offboarding)",
+    "summary": "Assistente em 4 passos para passar os boards de quem sai para quem fica, com prévia e opção de suspender a conta depois.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "route": "#/admin/transfer"
+    },
+    "how": [
+      "Abra Administração do Workspace → Transferência (ou o botão de transferir na linha do membro).",
+      "Escolha quem sai e quem recebe.",
+      "Revise a prévia dos boards e desmarque o que não deve mudar.",
+      "Confirme (opcional: suspender a conta depois)."
+    ],
+    "permissions": [
+      "workspace.ownership.transfer"
+    ],
+    "related": [
+      "FT-GOVERNANCA-007"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-COLABORACAO-005",
+    "title": "Convites por link ou código",
+    "summary": "Convida membros, administradores ou convidados B2B (restritos a um projeto ou board) com link e código copiáveis e prazo; a pessoa aceita na tela de entrada.",
+    "category": "colaboracao",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "route": "#/invite",
+      "menu": [
+        "Convidar",
+        "Tenho um convite"
+      ]
+    },
+    "how": [
+      "Clique em Convidar no cabeçalho da Mesa (ou em Administração → Membros/Convidados).",
+      "Informe o e-mail, o papel, os times (ou o projeto/board do convidado) e a validade.",
+      "Copie o link ou o código e envie para a pessoa.",
+      "Ela abre o link (ou usa Tenho um convite na entrada) e cria a conta com o e-mail convidado."
+    ],
+    "permissions": [
+      "workspace.members.invite",
+      "workspace.guests.invite"
+    ],
+    "related": [
+      "FT-GOVERNANCA-007",
+      "FT-COLABORACAO-004"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-DASHBOARD-009",
+    "title": "Busca global profunda",
+    "summary": "Procura pelo nome do board, pelo time/projeto e pelo texto dentro de post-its, formas, textos, frames, mapas mentais, Kanbans e tabelas — só nos boards que a pessoa pode ver.",
+    "category": "dashboard",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "both",
+    "where": {
+      "shortcut": "Ctrl + K"
+    },
+    "how": [
+      "Na Mesa, clique no campo de busca do cabeçalho ou tecle Ctrl + K.",
+      "Digite pelo menos 2 letras: aparecem os boards e o grupo Dentro dos boards.",
+      "Escolha um resultado: o board abre com o objeto encontrado selecionado."
+    ],
+    "permissions": [
+      "board.view"
+    ],
+    "related": [
+      "FT-DASHBOARD-007"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-011",
+    "title": "Backup completo do workspace",
+    "summary": "Exporta e restaura um arquivo .ludraw-workspace com organização, políticas, pessoas, times, projetos, templates, auditoria, boards e versões; formato e versão são validados antes de aplicar.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "local",
+    "where": {
+      "route": "#/admin/backup"
+    },
+    "how": [
+      "Abra Administração do Workspace → Backup.",
+      "Clique em Baixar backup para gerar o arquivo .ludraw-workspace.",
+      "Para restaurar, use Escolher arquivo…, confira o resumo e confirme com 2 cliques.",
+      "Boards daqui que não estão no backup vão para a lixeira (nada é apagado na hora)."
+    ],
+    "permissions": [
+      "workspace.backup.manage"
+    ],
+    "related": [
+      "FT-GOVERNANCA-007",
+      "FT-GOVERNANCA-005"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-013",
+    "title": "Armazenamento local sem limite de 5 MB",
+    "summary": "Os boards e o histórico de versões ficam no banco do navegador (IndexedDB), com migração automática do armazenamento antigo e alternativa segura quando o navegador não libera o banco.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "local",
+    "where": {},
+    "how": [
+      "Nada a fazer: na primeira abertura depois da atualização, os boards migram sozinhos e um aviso confirma.",
+      "Em Administração → Backup, a linha de armazenamento mostra qual banco está em uso."
+    ],
+    "related": [
+      "FT-GOVERNANCA-011"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-014",
+    "title": "Cadastro por convite e modo offline isolado",
+    "summary": "Depois que a organização tem um administrador, novas contas só entram por convite; “Continuar sem conta” vira um espaço isolado, só com os próprios boards.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "06"
+    },
+    "availability": "local",
+    "where": {
+      "menu": [
+        "Tenho um convite"
+      ]
+    },
+    "how": [
+      "Na tela de entrada, a aba Criar conta avisa quando a organização só aceita convites.",
+      "Use Tenho um convite e cole o código ou o link recebido.",
+      "Continuar sem conta abre o Modo offline: seus boards ficam separados da organização."
+    ],
+    "permissions": [
+      "workspace.boards.create"
+    ],
+    "related": [
+      "FT-COLABORACAO-005",
+      "FT-GOVERNANCA-007"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-015",
+    "title": "Modo Servidor (conectar a um servidor da equipe)",
+    "summary": "Liga o app a um servidor LuDraw da equipe (sozinho, quando aberto pelo endereço dele): boards, pessoas, permissões e links passam a ficar no servidor; o Modo Local continua separado.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "07"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/settings/profile",
+      "menu": [
+        "Conectar a um servidor Homelab",
+        "Configurar servidor…",
+        "Permitir modo local neste servidor"
+      ]
+    },
+    "how": [
+      "Abra o app pelo endereço do servidor: ele detecta o servidor sozinho e vai para o primeiro acesso ou para a entrada com o nome da organização.",
+      "App aberto fora do servidor: na tela de entrada clique em Conectar a um servidor Homelab, digite o endereço e clique em Testar conexão; confira a organização e clique em Conectar (o app recarrega).",
+      "Entre com e-mail e senha ou com o login da empresa. Mudanças salvas em outra janela ou por outra pessoa aparecem num aviso com Recarregar.",
+      "O Modo Local, com servidor, vem bloqueado; o admin libera em Admin → Políticas → Permitir modo local neste servidor (ou LUDRAW_ALLOW_LOCAL_MODE). Aí a entrada mostra Usar só neste navegador (sem sincronizar)."
+    ],
+    "permissions": [
+      "workspace.boards.create"
+    ],
+    "readme": {
+      "highlight": true,
+      "priority": 12
+    },
+    "related": [
+      "FT-SISTEMA-016",
+      "FT-GOVERNANCA-012",
+      "FT-GOVERNANCA-013",
+      "FT-SISTEMA-023",
+      "FT-GOVERNANCA-016"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Server Mode (connect to a team server)",
+        "summary": "Connects the app to your team’s LuDraw server (on its own when opened from its address): boards, people, permissions and links live on the server; Local Mode stays separate.",
+        "how": [
+          "Open the app from the server’s address: it finds the server on its own and goes to the first-run setup or to the sign-in screen with the organization name.",
+          "App opened elsewhere: on the sign-in screen click Connect to a Homelab server, type the address and click Test connection; check the organization and click Connect (the app reloads).",
+          "Sign in with email and password or with company login. Changes saved in another window or by someone else show up in a notice with Reload.",
+          "With a server, Local Mode is blocked; an admin allows it in Admin → Policies → Allow local mode on this server (or LUDRAW_ALLOW_LOCAL_MODE). The sign-in screen then shows Use only in this browser (no sync)."
+        ]
+      }
+    },
+    "demo": {
+      "setup": [
+        "Servidor local rodando (npm run server:dev) com o banco vazio",
+        "App em npm run dev"
+      ],
+      "steps": [
+        "Abrir o app pelo endereço do servidor (detecção automática)",
+        "Concluir o primeiro acesso (#/setup)",
+        "Criar um board e ver o selo Salvo no servidor ao lado do nome do board"
+      ],
+      "alt": "Janela de conexão com o servidor mostrando a organização encontrada",
+      "theme": "light"
+    }
+  },
+  {
+    "id": "FT-SISTEMA-016",
+    "title": "Primeiro acesso do servidor",
+    "summary": "Assistente de 3 passos (organização, administrador, pronto) que só aparece com o banco vazio, exige o token impresso nos logs do servidor e deixa de existir depois de concluído.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "07"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/setup"
+    },
+    "how": [
+      "Suba o servidor e copie o token de configuração que aparece uma vez no log (perdeu? npm run setup:token; no Docker: docker compose exec app ludraw setup:token).",
+      "Conecte o app ao servidor: o assistente abre sozinho.",
+      "Passo 1: token, nome da organização, domínios permitidos e o modo da instalação (definitivo).",
+      "Passo 2: seu nome, e-mail e senha; confira o resumo e clique em Criar organização.",
+      "Passo 3: crie o primeiro Time ou convide alguém; o assistente não volta mais."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-SISTEMA-015",
+      "FT-SISTEMA-017"
+    ]
+  },
+  {
+    "id": "FT-SISTEMA-017",
+    "title": "Configuração por variáveis e recuperação pela linha de comando",
+    "summary": "Para homelab/DevOps: LUDRAW_ORG_NAME, LUDRAW_ADMIN_EMAIL e LUDRAW_ADMIN_PASSWORD (ou _FILE) criam a organização no primeiro boot; admin:create e admin:reset-password recuperam o acesso, tudo no Audit Log.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "07"
+    },
+    "availability": "server",
+    "where": {},
+    "how": [
+      "Defina as variáveis LUDRAW_* no server/.env (ver server/.env.example) e suba o servidor com o banco vazio.",
+      "Entre com o administrador criado: a troca de senha é obrigatória no primeiro login; depois remova a senha do .env.",
+      "Para recuperar o acesso: npm run admin:reset-password -- --email <e-mail> (ou --generate) no servidor (no Docker: docker compose exec app ludraw admin:reset-password --email <e-mail> --generate).",
+      "Para criar outro administrador: npm run admin:create -- --email <e-mail> --name <nome>."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-SISTEMA-016",
+      "FT-GOVERNANCA-013",
+      "FT-SISTEMA-024"
+    ]
+  },
+  {
+    "id": "FT-GOVERNANCA-012",
+    "title": "Login da empresa (SSO por OIDC)",
+    "summary": "Entrar com o provedor da empresa (Keycloak, Authentik, Google, Entra ID…) configurado no servidor; conta nova só com convite ou para domínios permitidos.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "07"
+    },
+    "availability": "server",
+    "where": {
+      "menu": [
+        "Entrar com {label}"
+      ]
+    },
+    "how": [
+      "O administrador do servidor define OIDC_ISSUER, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET e OIDC_REDIRECT_URI.",
+      "Na entrada do Modo Servidor aparece o botão Entrar com o nome do provedor.",
+      "Depois do provedor, o app volta sozinho para a Mesa (nenhum token passa pela URL)."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-SISTEMA-015",
+      "FT-COLABORACAO-005"
+    ]
+  },
+  {
+    "id": "FT-GOVERNANCA-013",
+    "title": "Sessões e troca de senha",
+    "summary": "No Modo Servidor: troca de senha, sair de todos os dispositivos e sair que apaga deste navegador a cópia da organização, perguntando antes se há mudanças não enviadas.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "07"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/settings/profile",
+      "menu": [
+        "Trocar senha…",
+        "Sair de todos os dispositivos",
+        "Baixar e sair"
+      ]
+    },
+    "how": [
+      "Abra Configurações → Perfil → Sessão.",
+      "Clique em Trocar senha… para definir uma senha nova (as outras sessões são encerradas).",
+      "Clique em Sair de todos os dispositivos para encerrar todas as sessões abertas.",
+      "Ao sair com mudanças que o servidor ainda não recebeu, escolha Baixar e sair para guardar um arquivo do board antes."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-SISTEMA-015",
+      "FT-GOVERNANCA-007"
+    ]
+  },
+  {
+    "id": "FT-COLABORACAO-006",
+    "title": "Edição ao vivo com várias pessoas",
+    "summary": "No Modo Servidor, todos editam o mesmo board ao mesmo tempo; sem rede, a edição continua no aparelho e volta objeto por objeto, deixando de fora só o que outra pessoa usa ou apagou.",
+    "category": "colaboracao",
+    "status": "beta",
+    "since": {
+      "chat": "08"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/board/:id"
+    },
+    "how": [
+      "Conecte o app a um servidor LuDraw e abra um board com outra pessoa.",
+      "Edite normalmente: o que cada um faz aparece para os outros em instantes.",
+      "O selo ao lado do nome do board mostra Ao vivo, Sincronizando ou Sem conexão.",
+      "Ctrl + Z desfaz só o que você fez, sem apagar o trabalho dos outros."
+    ],
+    "permissions": [
+      "board.edit",
+      "board.comment"
+    ],
+    "related": [
+      "FT-COLABORACAO-007",
+      "FT-COLABORACAO-002",
+      "FT-SISTEMA-015"
+    ],
+    "readme": {
+      "highlight": true
+    },
+    "demo": {
+      "setup": [
+        "Servidor ligado (npm run server:dev) e duas janelas com pessoas diferentes no mesmo board."
+      ],
+      "steps": [
+        "Crie um post-it numa janela.",
+        "Veja o post-it surgir na outra e mova-o por lá."
+      ],
+      "alt": "Duas janelas do mesmo board: um post-it criado numa aparece na outra.",
+      "theme": "light"
+    },
+    "i18n": {
+      "en": {
+        "title": "Live editing with several people",
+        "summary": "In Server Mode everyone edits the same board at once and sees changes right away; offline, editing continues on the device and merges back when the connection returns. Undo is per person.",
+        "how": [
+          "Connect the app to an LuDraw server and open a board with someone else.",
+          "Edit as usual: what each person does shows up for the others within moments.",
+          "The badge next to the board name shows Live, Syncing or Offline.",
+          "Ctrl + Z undoes only what you did, without erasing other people’s work."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-COLABORACAO-007",
+    "title": "Presença: cursores, seleção e quem está editando",
+    "summary": "Cursor com nome, caixa de seleção e contorno do que cada pessoa seleciona ou edita; o servidor decide quem chegou primeiro e o objeto fica bloqueado até a pessoa soltar.",
+    "category": "colaboracao",
+    "status": "beta",
+    "since": {
+      "chat": "08"
+    },
+    "availability": "server",
+    "where": {
+      "menu": [
+        "Mostrar cursores dos colaboradores",
+        "Movimento suave dos cursores"
+      ]
+    },
+    "how": [
+      "Abra um board ao vivo com outra pessoa.",
+      "Veja o cursor, a seleção e o que ela está editando na cor dela.",
+      "Um objeto selecionado por outra pessoa não entra na sua seleção até ela soltar.",
+      "Em Visualizar, ligue ou desligue os cursores e o movimento suave."
+    ],
+    "related": [
+      "FT-COLABORACAO-006",
+      "FT-COLABORACAO-008",
+      "FT-GOVERNANCA-014"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-COLABORACAO-008",
+    "title": "Seguir a tela de um colega",
+    "summary": "Clique no avatar de alguém na barra do topo para a sua tela acompanhar a dela; mexer na tela pausa, com Voltar a seguir e Parar de seguir.",
+    "category": "colaboracao",
+    "status": "beta",
+    "since": {
+      "chat": "08"
+    },
+    "availability": "server",
+    "where": {
+      "menu": [
+        "Voltar a seguir",
+        "Parar de seguir"
+      ]
+    },
+    "how": [
+      "No board ao vivo, clique no avatar da pessoa na barra do topo.",
+      "Sua tela acompanha a dela; arrastar ou dar zoom pausa o seguir.",
+      "Use Voltar a seguir ou Parar de seguir na faixa do topo."
+    ],
+    "related": [
+      "FT-COLABORACAO-007",
+      "FT-FACILITACAO-008"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-FACILITACAO-008",
+    "title": "Trazer todos até mim",
+    "summary": "O facilitador conduz a tela de todos: quem está no board passa a seguir a dele; cada pessoa pode sair do modo seguir, e a condução acaba quando ele para ou sai do board.",
+    "category": "facilitacao",
+    "status": "beta",
+    "since": {
+      "chat": "08"
+    },
+    "availability": "server",
+    "where": {
+      "menu": [
+        "Trazer todos até mim",
+        "Parar de conduzir",
+        "Sair do modo seguir"
+      ]
+    },
+    "how": [
+      "No board ao vivo, abra Facilitar → Conduzir a tela → Trazer todos até mim.",
+      "Navegue: a tela de todos acompanha a sua.",
+      "Quem quiser usa Sair do modo seguir; você encerra com Parar de conduzir."
+    ],
+    "permissions": [
+      "followMe.lead"
+    ],
+    "related": [
+      "FT-COLABORACAO-008",
+      "FT-FACILITACAO-001"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-014",
+    "title": "Cores diferentes para cada pessoa",
+    "summary": "Política do servidor: quando duas pessoas têm cores iguais ou muito parecidas, quem chega depois recebe uma cor bem diferente para cursor, contornos e avatar.",
+    "category": "governanca",
+    "status": "beta",
+    "since": {
+      "chat": "08"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/admin/policies",
+      "menu": [
+        "Cores diferentes para cada pessoa nos boards ao vivo"
+      ]
+    },
+    "how": [
+      "Abra Administração → Políticas (Modo Servidor).",
+      "No grupo Servidor, ligue ou desligue Cores diferentes para cada pessoa nos boards ao vivo."
+    ],
+    "permissions": [
+      "workspace.policies.manage"
+    ],
+    "related": [
+      "FT-COLABORACAO-007"
+    ],
+    "readme": {
+      "highlight": false
+    }
+  },
+  {
+    "id": "FT-SISTEMA-018",
+    "title": "Trazer boards deste navegador para o servidor",
+    "summary": "No Modo Servidor, copia para a organização os boards criados no Modo Local deste navegador: você escolhe quais e o destino; as cópias locais ficam intactas, nada é duplicado e cada board recusado mostra o motivo.",
+    "category": "sistema",
+    "status": "beta",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/settings/profile",
+      "menu": [
+        "Trazer boards deste navegador"
+      ]
+    },
+    "how": [
+      "Na Mesa, quando aparecer a faixa sobre boards do Modo Local, clique em Trazer boards deste navegador (ou vá em Configurações → Perfil → Sessão).",
+      "Marque os boards e escolha o destino (Espaço pessoal, Geral ou um time/projeto em que você pode criar boards).",
+      "Clique em Trazer: os que estiverem acima dos limites mostram o motivo e não impedem os outros; os já trazidos aparecem como Já está no servidor."
+    ],
+    "permissions": [
+      "workspace.boards.create"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-SISTEMA-015",
+      "FT-GOVERNANCA-013"
+    ]
+  },
+  {
+    "id": "FT-GOVERNANCA-015",
+    "title": "Linha do tempo com prévia somente leitura",
+    "summary": "Versões como pontos e atividade como barras numa só linha; escolher um ponto mostra o board daquele momento no próprio canvas, sem mexer no board atual.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Tempo",
+        "Linha do tempo"
+      ]
+    },
+    "how": [
+      "Clique na ampulheta do módulo Tempo (canto inferior direito).",
+      "Escolha um ponto (ou arraste o seletor) para ver o board daquele momento; dá para navegar, mas não editar.",
+      "Voltar ao agora (ou Esc) fecha a prévia; Restaurar esta versão e Excluir versão pedem permissão de restaurar.",
+      "Ver eventos lista o que aconteceu naquele trecho."
+    ],
+    "permissions": [
+      "board.edit",
+      "board.restoreSnapshot"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-GOVERNANCA-005",
+      "FT-COLABORACAO-002"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Timeline with read-only preview",
+        "summary": "Versions as points and activity as bars on one line; picking a point shows the board at that moment right on the canvas, without touching the current board.",
+        "how": [
+          "Click the hourglass in the Time module (bottom right corner).",
+          "Pick a point (or drag the slider) to see the board at that moment; you can move around but not edit.",
+          "Back to now (or Esc) closes the preview; Restore this version and Delete version need the restore permission.",
+          "See events lists what happened in that stretch."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-SISTEMA-019",
+    "title": "Ficha do board",
+    "summary": "Nome, favorito, lugar, ações do board (novo, duplicar, exportar, importar, modelo, histórico, fundo, tags) e detalhes como dono, datas e tamanho, num só cartão.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Ficha do board"
+      ],
+      "shortcut": "\\ ou Ctrl + /"
+    },
+    "how": [
+      "Clique no nome do board, no começo da barra do topo.",
+      "Renomeie, marque como favorito ou use Mover para… para trocar o lugar.",
+      "Use os atalhos da grade para exportar, importar, salvar como modelo, abrir o histórico, mudar o fundo ou as tags.",
+      "Confira em Detalhes o dono, as datas, quem editou por último e o tamanho."
+    ],
+    "permissions": [
+      "board.edit",
+      "board.move",
+      "board.delete"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-CANVAS-009",
+      "FT-EXPORTAR-011",
+      "FT-IMPORTAR-001"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Board card",
+        "summary": "Name, favorite, location, board actions (new, duplicate, export, import, template, history, background, tags) and details such as owner, dates and size, in a single card.",
+        "how": [
+          "Click the board name at the start of the top bar.",
+          "Rename it, mark it as a favorite or use Move to… to change its location.",
+          "Use the grid shortcuts to export, import, save as a template, open the history, change the background or the tags.",
+          "Check Details for the owner, the dates, who edited last and the size."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-FACILITACAO-009",
+    "title": "Facilitar: controles da sessão num só lugar",
+    "summary": "Cronômetro, votação, enquete, Modo Privado, conduzir a tela e Ver como… em cartões; o estado (tempo restante, votando, privado) aparece ao lado da batuta.",
+    "category": "facilitacao",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Facilitar"
+      ]
+    },
+    "how": [
+      "Clique na batuta (Facilitar) na barra do topo.",
+      "Escolha um cartão: cada um abre o controle que você já conhece.",
+      "Sem permissão, o cartão mostra o motivo em vez de abrir."
+    ],
+    "permissions": [
+      "timer.manage",
+      "voting.manage",
+      "privateMode.toggle",
+      "followMe.lead"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-FACILITACAO-002",
+      "FT-FACILITACAO-003",
+      "FT-FACILITACAO-005",
+      "FT-FACILITACAO-008"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Facilitate: session controls in one place",
+        "summary": "Timer, voting, poll, Private Mode, leading the view and View as… as cards; the state (time left, voting, private) shows next to the baton.",
+        "how": [
+          "Click the baton (Facilitate) in the top bar.",
+          "Pick a card: each one opens the control you already know.",
+          "Without permission, the card shows the reason instead of opening."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-CANVAS-013",
+    "title": "Destacar por tag",
+    "summary": "Esmaece o que não tem as tags escolhidas para destacar um assunto; só muda a visualização de quem ligou, nada no board.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Vista",
+        "Exibir",
+        "Destacar por tag"
+      ]
+    },
+    "how": [
+      "Abra Vista → Exibir → Destacar por tag.",
+      "Clique em uma ou mais tags: os objetos sem elas ficam esmaecidos (frames e comentários continuam visíveis).",
+      "Limpar volta ao normal."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-OBJETOS-002"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Highlight by tag",
+        "summary": "Dims everything without the chosen tags so one subject stands out; it only changes the view of whoever turned it on, nothing on the board.",
+        "how": [
+          "Open View → Display → Highlight by tag.",
+          "Click one or more tags: objects without them are dimmed (frames and comments stay visible).",
+          "Clear returns to normal."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-COLABORACAO-009",
+    "title": "Conversas com \"Ir até\"",
+    "summary": "Todas as conversas do board em cartões, com filtro, menções, resolver rápido e \"Ir até\", que leva a câmera ao pin e o destaca.",
+    "category": "colaboracao",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "ruler": "Conversas"
+    },
+    "how": [
+      "Clique em Conversas na barra do topo (o número mostra as abertas).",
+      "Filtre por Abertas, Resolvidas ou Todas e resolva direto no cartão.",
+      "Ir até leva a câmera ao pin e abre a conversa."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-COLABORACAO-001"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Conversations with “Go to”",
+        "summary": "All the board conversations as cards, with filters, mentions, quick resolve and “Go to”, which moves the camera to the pin and highlights it.",
+        "how": [
+          "Click Conversations in the top bar (the number shows the open ones).",
+          "Filter by Open, Resolved or All and resolve right on the card.",
+          "Go to moves the camera to the pin and opens the conversation."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-SISTEMA-020",
+    "title": "Caixa de ferramentas",
+    "summary": "Tudo o que se insere no board, agrupado pelo que você quer fazer (Organizar, Diagramar, Apresentar, Trazer e levar), com busca, recentes e uma seção própria para o que vem de extensões.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "dock": "Caixa de ferramentas",
+      "shortcut": "/"
+    },
+    "how": [
+      "Clique na Caixa de ferramentas, no fim da Dock (ou aperte /): a busca já vem focada.",
+      "Digite para filtrar tudo, inclusive extensões; Enter insere o primeiro resultado no centro da tela.",
+      "Use o filtro Tudo · Do LuDraw · Extensões; o que vem de extensão aparece em \"Das extensões ativas\", com o nome da extensão e o tipo.",
+      "Itens com o selo \"Em breve\" aparecem desabilitados até ficarem prontos."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-EXTENSOES-009",
+      "FT-OBJETOS-018",
+      "FT-FACILITACAO-006"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Toolbox",
+        "summary": "Everything you can add to the board, grouped by what you want to do (Organize, Diagram, Present, Bring in and take out), with search, recents and a separate section for what comes from extensions.",
+        "how": [
+          "Click the Toolbox at the end of the Dock (or press /): the search box is ready to type.",
+          "Type to filter everything, extensions included; Enter adds the first result to the middle of the screen.",
+          "Use the All · Built into LuDraw · Extensions filter; what comes from extensions shows under \"From active extensions\", with the extension name and type.",
+          "Items marked \"Coming soon\" stay disabled until they are ready."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-OBJETOS-021",
+    "title": "Cinta do objeto",
+    "summary": "Barra presa ao que está selecionado: identidade (tipo ou nome), chips com os valores atuais e, sempre à direita, Comentar · Bloqueio avançado · Bloquear · ⋯ (o mesmo menu do botão direito).",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Editar"
+      ]
+    },
+    "how": [
+      "Selecione um objeto: a Cinta aparece logo abaixo dele (ou acima, se não couber), com a lingueta apontando para ele.",
+      "Clique na identidade para converter (post-it, texto, forma), filtrar a seleção (vários objetos) ou renomear (frame e Kanban).",
+      "Os chips mostram o valor atual e abrem uma gaveta: Estilo do texto, Traço, Pontas, Proporção…",
+      "O cadeado trava com um clique; para destravar, segure 2 s (mouse ou Enter/Espaço). O ⋯ abre o menu do objeto."
+    ],
+    "permissions": [
+      "board.edit",
+      "element.unlockProtected",
+      "frame.toggleHidden",
+      "board.export"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-GOVERNANCA-001",
+      "FT-OBJETOS-004",
+      "FT-CONECTORES-001"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Object strip",
+        "summary": "A bar attached to whatever is selected: identity (type or name), chips with the current values and, always on the right, Comment · Advanced lock · Lock · ⋯ (the same menu as right-click).",
+        "how": [
+          "Select an object: the strip shows up right below it (or above, if there is no room), with the tab pointing at it.",
+          "Click the identity to convert (sticky note, text, shape), filter the selection (several objects) or rename (frame and Kanban).",
+          "Chips show the current value and open a drawer: Text style, Stroke, Ends, Aspect ratio…",
+          "The padlock locks with one click; to unlock, hold it for 2 s (mouse or Enter/Space). The ⋯ opens the object menu."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-OBJETOS-022",
+    "title": "Fontes do board (40) com busca",
+    "summary": "40 famílias de licença aberta em cinco grupos (Sem serifa, Serifa, Manuscrita, Display, Mono), com busca e Recentes; cada família só é baixada quando usada.",
+    "category": "objetos",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Clique direito no objeto",
+        "Editar"
+      ]
+    },
+    "how": [
+      "Selecione um texto, post-it ou forma e abra o chip Estilo do texto na Cinta.",
+      "Busque pelo nome ou percorra os grupos; as usadas por último ficam em Recentes.",
+      "O mesmo seletor aparece no texto da linha do conector e nas células da tabela."
+    ],
+    "permissions": [
+      "board.edit"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-SISTEMA-010",
+      "FT-OBJETOS-004"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Board fonts (40) with search",
+        "summary": "40 open-licence families in five groups (Sans serif, Serif, Handwriting, Display, Mono), with search and Recent; each family is only downloaded when it is used.",
+        "how": [
+          "Select a text, sticky note or shape and open the Text style chip on the strip.",
+          "Search by name or browse the groups; the ones you used last stay under Recent.",
+          "The same picker shows up for connector line text and table cells."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-CANVAS-014",
+    "title": "Cursores contextuais",
+    "summary": "O cursor mostra o que vai acontecer: mover no que está selecionado, mão para navegar, cruz para criar, direção certa nas alças (mesmo girado) e um cursor próprio para girar.",
+    "category": "canvas",
+    "status": "stable",
+    "since": {
+      "chat": "08.2"
+    },
+    "availability": "both",
+    "where": {
+      "dock": "Mão (mover o board)"
+    },
+    "how": [
+      "Passe o mouse sobre um objeto selecionado: o cursor vira \"mover\"; arrastando, \"agarrar\".",
+      "Nas alças, o cursor aponta para a direção do redimensionamento, acompanhando a rotação; na alça de girar, aparece o cursor de rotação.",
+      "Com a Mão ou Espaço, o cursor é de mão; nas ferramentas de criar, uma cruz; no Texto, o cursor de texto. Objeto travado mostra \"não permitido\" ao tentar mover."
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "related": [
+      "FT-OBJETOS-009",
+      "FT-GOVERNANCA-001"
+    ],
+    "i18n": {
+      "en": {
+        "title": "Contextual cursors",
+        "summary": "The cursor shows what will happen: move on what is selected, a hand to navigate, a cross to create, the right direction on the handles (even when rotated) and a cursor of its own for rotating.",
+        "how": [
+          "Hover a selected object: the cursor turns into \"move\"; while dragging, \"grab\".",
+          "On the handles, the cursor points the resize direction, following the rotation; on the rotate handle, the rotation cursor shows up.",
+          "With the Hand or Space you get a hand; creation tools show a cross; Text shows the text cursor. A locked object shows \"not allowed\" when you try to move it."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-016",
+    "title": "Envio de e-mail (SMTP opcional)",
+    "summary": "Liga o envio de e-mail do servidor por variáveis ou pelo painel, sem reiniciar; sem e-mail tudo continua funcionando por links.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "08.5"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/admin/policies",
+      "menu": [
+        "Administração do Workspace",
+        "Políticas e domínios",
+        "Envio de e-mail"
+      ]
+    },
+    "how": [
+      "Abra Administração do Workspace → Políticas e domínios → Envio de e-mail.",
+      "Preencha Servidor SMTP, porta, usuário, senha e remetente (campos definidos por variável aparecem travados: o servidor manda).",
+      "Ligue Usar a configuração deste painel e clique em Salvar.",
+      "Clique em Enviar e-mail de teste: a mensagem vai para o seu próprio e-mail."
+    ],
+    "permissions": [
+      "workspace.policies.manage"
+    ],
+    "related": [
+      "FT-SISTEMA-021",
+      "FT-GOVERNANCA-017",
+      "FT-GOVERNANCA-020"
+    ],
+    "docs": "server/.env.example",
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "E-mail sending (optional SMTP)",
+        "summary": "Turns on the server’s e-mail sending through variables or the panel, without a restart; without e-mail everything keeps working through links.",
+        "how": [
+          "Open Workspace administration → Policies and domains → E-mail sending.",
+          "Fill in SMTP server, port, user, password and sender (fields set by variables show up locked: the server decides).",
+          "Turn on Use this panel’s settings and click Save.",
+          "Click Send test e-mail: the message goes to your own e-mail."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-SISTEMA-021",
+    "title": "Esqueci minha senha por e-mail",
+    "summary": "Com e-mail no servidor, a pessoa recebe um link de uso único (30 min) para criar outra senha; a resposta é a mesma exista ou não a conta.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "08.5"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/forgot",
+      "menu": [
+        "Esqueci minha senha"
+      ]
+    },
+    "how": [
+      "Na tela de entrada, clique em Esqueci minha senha.",
+      "Digite o seu e-mail e envie: a tela confirma do mesmo jeito para qualquer endereço.",
+      "Abra o link recebido por e-mail e crie a nova senha (todas as sessões abertas são encerradas)."
+    ],
+    "related": [
+      "FT-GOVERNANCA-016",
+      "FT-GOVERNANCA-013"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "Forgot my password by e-mail",
+        "summary": "With e-mail on the server, the person gets a single-use link (30 min) to set a new password; the reply is the same whether or not the account exists.",
+        "how": [
+          "On the sign-in screen, click I forgot my password.",
+          "Type your e-mail and send it: the screen confirms the same way for any address.",
+          "Open the link you received by e-mail and set the new password (every open session is ended)."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-SISTEMA-022",
+    "title": "Confirmar o e-mail",
+    "summary": "Uma faixa na Mesa pede a confirmação do e-mail; confirmado, ele passa a servir para recuperar a senha e receber convites.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "08.5"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/",
+      "menu": [
+        "Mesa",
+        "Enviar link de confirmação"
+      ]
+    },
+    "how": [
+      "Com e-mail no servidor e o seu ainda não confirmado, a Mesa mostra Confirme seu e-mail.",
+      "Clique em Enviar link de confirmação.",
+      "Abra o link recebido (vale por 60 minutos, em qualquer navegador)."
+    ],
+    "related": [
+      "FT-SISTEMA-021"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "Confirm your e-mail",
+        "summary": "A banner on the Desk asks you to confirm your e-mail; once confirmed, it can be used to recover the password and receive invitations.",
+        "how": [
+          "With e-mail on the server and yours not yet confirmed, the Desk shows Confirm your e-mail.",
+          "Click Send confirmation link.",
+          "Open the link you received (valid for 60 minutes, in any browser)."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-017",
+    "title": "Convites por e-mail",
+    "summary": "O convite pode sair por e-mail direto do servidor, além do link copiável de sempre.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "08.5"
+    },
+    "availability": "server",
+    "where": {
+      "menu": [
+        "Convidar",
+        "Enviar o convite por e-mail"
+      ]
+    },
+    "how": [
+      "Clique em Convidar (Mesa ou Administração → Membros).",
+      "Digite o e-mail e marque Enviar o convite por e-mail.",
+      "Confirme: o servidor envia o e-mail e o link também fica disponível para copiar."
+    ],
+    "permissions": [
+      "workspace.members.invite"
+    ],
+    "related": [
+      "FT-GOVERNANCA-016",
+      "FT-GOVERNANCA-018"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "Invitations by e-mail",
+        "summary": "The invitation can be sent by e-mail straight from the server, besides the usual copyable link.",
+        "how": [
+          "Click Invite (Desk or Administration → Members).",
+          "Type the e-mail and tick Send the invitation by e-mail.",
+          "Confirm: the server sends the e-mail and the link is also available to copy."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-018",
+    "title": "Link de convite geral",
+    "summary": "Um link para várias pessoas, com papel fixo, validade, limite de usos e domínio opcional; pode ser desativado a qualquer momento.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "08.5"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/admin/members",
+      "menu": [
+        "Administração do Workspace",
+        "Membros",
+        "Links de convite",
+        "Novo link"
+      ]
+    },
+    "how": [
+      "Abra Administração do Workspace → Membros → Links de convite e clique em Novo link.",
+      "Escolha o papel, a validade, o limite de usos e, se quiser, Só e-mails do domínio; clique em Criar link.",
+      "Copie o link na hora (ele só aparece agora) e compartilhe.",
+      "Com e-mail no servidor, cada pessoa confirma o endereço antes de a conta ser criada; sem e-mail, cada uso vira um pedido na fila. Desativar encerra o link."
+    ],
+    "permissions": [
+      "workspace.members.manage"
+    ],
+    "related": [
+      "FT-GOVERNANCA-019",
+      "FT-GOVERNANCA-017"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "General invite link",
+        "summary": "One link for several people, with a fixed role, validity, use limit and optional domain; it can be turned off at any time.",
+        "how": [
+          "Open Workspace administration → Members → Invite links and click New link.",
+          "Choose the role, validity, use limit and, if you want, Only e-mails from domain; click Create link.",
+          "Copy the link right away (it is shown only now) and share it.",
+          "With e-mail on the server, each person confirms the address before the account is created; without e-mail, each use becomes a request in the queue. Turn off ends the link."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-019",
+    "title": "Pedidos de acesso",
+    "summary": "Quem não tem convite pede acesso pela tela de entrada; a administração aprova (gera um convite) ou recusa numa fila em Membros.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "08.5"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/admin/members",
+      "menu": [
+        "Administração do Workspace",
+        "Políticas e domínios",
+        "Aceitar pedidos de acesso"
+      ]
+    },
+    "how": [
+      "Em Administração do Workspace → Políticas e domínios, ligue Aceitar pedidos de acesso.",
+      "Na tela de entrada aparece Não tem convite? Pedir acesso: a pessoa informa nome, e-mail e uma mensagem opcional (com e-mail no servidor, confirma pelo link recebido).",
+      "Em Membros → Pedidos de acesso, clique em Aprovar (escolha o acesso e crie o convite) ou Recusar."
+    ],
+    "permissions": [
+      "workspace.members.manage",
+      "workspace.policies.manage"
+    ],
+    "related": [
+      "FT-GOVERNANCA-018"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "Access requests",
+        "summary": "People without an invitation request access from the sign-in screen; administrators approve (creating an invitation) or decline in a queue under Members.",
+        "how": [
+          "In Workspace administration → Policies and domains, turn on Accept access requests.",
+          "The sign-in screen shows No invitation? Request access: the person enters name, e-mail and an optional message (with e-mail on the server, they confirm through the link they receive).",
+          "In Members → Access requests, click Approve (choose the access and create the invitation) or Decline."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-GOVERNANCA-020",
+    "title": "Cadastro com o e-mail da organização",
+    "summary": "Quem tem e-mail de um domínio cadastrado cria a própria conta como membro, provando o e-mail; desligado por padrão e sem mostrar os domínios.",
+    "category": "governanca",
+    "status": "stable",
+    "since": {
+      "chat": "08.5"
+    },
+    "availability": "server",
+    "where": {
+      "route": "#/register",
+      "menu": [
+        "Administração do Workspace",
+        "Políticas e domínios",
+        "Permitir cadastro com o e-mail da organização"
+      ]
+    },
+    "how": [
+      "Cadastre o domínio da organização em Políticas e domínios e deixe o envio de e-mail funcionando.",
+      "Ligue Permitir cadastro com o e-mail da organização (o servidor recusa sem e-mail ou sem domínio).",
+      "Na tela de entrada aparece Criar conta com o e-mail da organização: a pessoa digita o e-mail e conclui pelo link recebido.",
+      "Só vale o domínio exato; pessoas removidas não voltam sozinhas e há um teto diário de contas criadas."
+    ],
+    "permissions": [
+      "workspace.policies.manage"
+    ],
+    "related": [
+      "FT-GOVERNANCA-016",
+      "FT-GOVERNANCA-019"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "Sign-up with the organization’s e-mail",
+        "summary": "People with an e-mail from a registered domain create their own member account by proving the e-mail; off by default and the domains are never shown.",
+        "how": [
+          "Register the organization’s domain under Policies and domains and keep e-mail sending working.",
+          "Turn on Allow sign-up with the organization’s e-mail (the server refuses without e-mail or a domain).",
+          "The sign-in screen shows Create an account with your organization e-mail: the person types the e-mail and finishes through the link they receive.",
+          "Only the exact domain counts; removed people do not come back on their own and there is a daily cap of accounts created."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-SISTEMA-023",
+    "title": "Aviso do Modo Local com servidor",
+    "summary": "No Modo Local de um app que tem servidor, uma faixa na Mesa e um selo no board lembram que os boards ficam só neste navegador, com o botão Entrar no servidor.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "08.5"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Mesa",
+        "Ficha do board",
+        "Só neste navegador"
+      ]
+    },
+    "how": [
+      "Com o Modo Local permitido pelo servidor, na entrada clique em Usar só neste navegador (sem sincronizar) e depois em Continuar sem conta.",
+      "A Mesa mostra a faixa Modo Local: estes boards ficam só neste navegador…; no board, o selo Só neste navegador aparece ao lado de Salvo.",
+      "Clique no selo: a gaveta Você mostra o aviso com Entrar no servidor.",
+      "Entrar no servidor grava o board e volta ao Modo Servidor; lá, Trazer boards deste navegador leva os boards para a organização."
+    ],
+    "related": [
+      "FT-SISTEMA-015",
+      "FT-SISTEMA-018"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "Local Mode notice with a server",
+        "summary": "In Local Mode of an app that has a server, a Desk banner and a board badge remind you that boards stay only in this browser, with a Go to the server button.",
+        "how": [
+          "With Local Mode allowed by the server, on the sign-in screen click Use only in this browser (no sync) and then Continue without an account.",
+          "The Desk shows the banner Local Mode: these boards stay only in this browser…; on the board, the This browser only badge sits next to Saved.",
+          "Click the badge: the You drawer shows the notice with Go to the server.",
+          "Going to the server saves the board and returns to Server Mode; there, Bring boards from this browser moves the boards into the organization."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-SISTEMA-024",
+    "title": "Instalação com Docker, backup e restauração",
+    "summary": "Imagem única (app, API e tempo real) e docker-compose de produção com PostgreSQL, migração separada e senhas por arquivo, mais backup e restauração com SHA-256 conferido.",
+    "category": "sistema",
+    "status": "stable",
+    "since": {
+      "chat": "09"
+    },
+    "availability": "server",
+    "where": {},
+    "how": [
+      "Na pasta do repositório: node scripts/docker-secrets.mjs (gera os segredos em deploy/secrets/ sem mostrar os valores).",
+      "Opcional: copie deploy/ludraw.env.example para deploy/ludraw.env e defina o endereço público, o e-mail ou o SSO.",
+      "docker compose up -d --build sobe o banco, a migração e o app; abra http://localhost:8080 e conclua o Primeiro acesso do servidor com o token de docker compose logs app.",
+      "Várias instâncias (opcional): node scripts/docker-secrets.mjs, LUDRAW_REDIS_URL_FILE=/run/secrets/redis_url no deploy/ludraw.env e docker compose --profile redis up -d (Valkey) — limites de tentativa e o painel de e-mail passam a valer para todas.",
+      "Backup: node scripts/docker-backup.mjs backup (pasta com o banco, as imagens e o manifest.json).",
+      "Restauração: node scripts/docker-backup.mjs restore <pasta> --yes (apaga o conteúdo atual do banco; funciona numa máquina nova, com segredos novos). Guia completo em docs/DOCKER.md e docs/BACKUP.md."
+    ],
+    "related": [
+      "FT-SISTEMA-016",
+      "FT-SISTEMA-017"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "Docker installation, backup and restore",
+        "summary": "One image (app, API and real-time) and a production docker-compose with PostgreSQL, a separate migration and file-based passwords, plus backup and restore with a verified SHA-256.",
+        "how": [
+          "In the repository folder: node scripts/docker-secrets.mjs (creates the secrets in deploy/secrets/ without showing the values).",
+          "Optional: copy deploy/ludraw.env.example to deploy/ludraw.env and set the public address, e-mail or SSO.",
+          "docker compose up -d --build starts the database, the migration and the app; open http://localhost:8080 and finish the server's first-run setup with the token from docker compose logs app.",
+          "Several instances (optional): node scripts/docker-secrets.mjs, LUDRAW_REDIS_URL_FILE=/run/secrets/redis_url in deploy/ludraw.env and docker compose --profile redis up -d (Valkey) — attempt limits and the e-mail panel then apply to all of them.",
+          "Backup: node scripts/docker-backup.mjs backup (a folder with the database, the images and manifest.json).",
+          "Restore: node scripts/docker-backup.mjs restore <folder> --yes (replaces the current database content; works on a new machine with new secrets). Full guide in docs/DOCKER.md and docs/BACKUP.md."
+        ]
+      }
+    }
+  },
+  {
+    "id": "FT-SISTEMA-025",
+    "title": "Aplicativo desktop (Windows e Linux)",
+    "summary": "Programa que abre o LuDraw numa janela própria e, no primeiro uso, pergunta onde trabalhar: neste computador (Modo Local) ou no servidor da organização. Lembra a escolha e explica cada problema de conexão.",
+    "category": "sistema",
+    "status": "beta",
+    "since": {
+      "chat": "09.1"
+    },
+    "availability": "both",
+    "where": {
+      "menu": [
+        "Trocar onde trabalhar…"
+      ]
+    },
+    "how": [
+      "Primeira abertura: escolha Trabalhar neste computador (sem internet e sem conta) ou digite o endereço do servidor e clique em Conectar.",
+      "O servidor é testado antes de abrir: aparecem a organização, o login da empresa e onde ele abre. Se algo falhar, a tela diz o motivo (endereço, rede, certificado, versão) e o que fazer.",
+      "Depois disso o programa abre direto no lugar escolhido. Para mudar: menu LuDraw → Trocar onde trabalhar…, ou Configurações → Configurar servidor… no Modo Local.",
+      "Links para outros sites abrem no navegador do sistema e os arquivos exportados vão para a pasta Downloads. Os boards deste computador não aparecem no navegador nem no servidor: leve-os por exportação ou backup.",
+      "Instale pelo instalador do Windows (só para o seu usuário, sem administrador) ou pelo pacote .deb do Linux, e confira o arquivo pelo SHA256SUMS. Desinstalar não apaga os boards. Ao fechar, o programa espera o board terminar de gravar."
+    ],
+    "related": [
+      "FT-SISTEMA-015"
+    ],
+    "readme": {
+      "highlight": false
+    },
+    "i18n": {
+      "en": {
+        "title": "Desktop app (Windows and Linux)",
+        "summary": "A program that opens LuDraw in its own window and, on first use, asks where to work: on this computer (Local Mode) or on your organization’s server. It remembers the choice and explains each connection problem.",
+        "how": [
+          "First launch: choose Work on this computer (no internet, no account) or type the server address and click Connect.",
+          "The server is tested before it opens: the organization, the company sign-in and where it opens are shown. If something fails, the screen says why (address, network, certificate, version) and what to do.",
+          "From then on the program opens straight where you chose. To change it: menu LuDraw → Change where you work…, or Settings → Set up server… in Local Mode.",
+          "Links to other sites open in the system browser and exported files go to the Downloads folder. Boards on this computer don’t show up in the browser or on the server: move them by export or backup.",
+          "Install with the Windows installer (for your user only, no administrator) or the Linux .deb package, and check the file against SHA256SUMS. Uninstalling does not delete your boards. When closing, the program waits for the board to finish saving."
+        ]
+      }
+    }
+  }
+]

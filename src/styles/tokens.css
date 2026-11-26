@@ -1,0 +1,151 @@
+/*
+ * ============================================================================
+ *  LuDraw — Design Tokens (fonte da verdade visual)
+ * ----------------------------------------------------------------------------
+ *  Criado no Chat 01. Este arquivo é compartilhado por todo o time (humanos e
+ *  instâncias do Claude). Antes de criar uma cor/sombra/raio novo, procure aqui.
+ *  Se precisar estender, adicione o token aqui, documente em
+ *  `ai-memory/DESIGN_SYSTEM.md` e exiba-o na tela "Sistema visual" (#/design-system).
+ *
+ *  Paleta base: verde-floresta #194B32 (primária) + verde-pistache #D0E4AE (secundária).
+ *  Princípio: alto contraste legível (≥ 4.5:1 em texto), sem preto/branco puros
+ *  em grandes áreas para não cansar a vista.
+ * ============================================================================
+ */
+
+:root {
+  /* ---------- Marca ---------- */
+  --od-brand-50: #f4f9ec;
+  --od-brand-100: #e7f1d6;
+  --od-brand-200: #d0e4ae; /* secundária oficial */
+  --od-brand-300: #b4d38a;
+  --od-brand-400: #8fbe72;
+  --od-brand-500: #5fa067;
+  --od-brand-600: #3a8156;
+  --od-brand-700: #2a6646;
+  --od-brand-800: #20573b;
+  --od-brand-900: #194b32; /* primária oficial */
+  --od-brand-950: #0f2e1f;
+
+  /* ---------- Superfícies (Light) ---------- */
+  --od-canvas: #f5f6f8; /* fundo do board (CLAUDE.md) */
+  --od-canvas-dot: #d1d5db; /* pontos da grade (CLAUDE.md) */
+  --od-canvas-dot-major: #b9bfc8;
+  --od-app-bg: #f7f8f5; /* fundo das telas de dashboard/login */
+  --od-panel: #ffffff;
+  --od-panel-hover: #f1f4ec;
+  --od-panel-active: #e4eed5;
+  --od-panel-sunken: #f3f5f0;
+  --od-border: rgba(25, 45, 32, 0.09);
+  --od-border-strong: rgba(25, 45, 32, 0.18);
+
+  /* ---------- Texto ---------- */
+  --od-text: #18211c;
+  --od-text-muted: #4f5a53;
+  --od-text-subtle: #616b64; /* Chat 08.6 · B (D-04): era #7d877f (3,4–3,7:1); agora ≥ 4,6:1 em todo fundo claro */
+  --od-text-inverse: #f4f9ec;
+
+  /* ---------- Interação ---------- */
+  --od-accent: #194b32;
+  --od-accent-hover: #123a26;
+  --od-accent-pressed: #0d2c1d;
+  --od-accent-contrast: #d0e4ae;
+  --od-accent-soft: #e4eed5;
+  --od-selection: #1f7a4c; /* caixa de seleção, alças e marquee */
+  --od-selection-fill: rgba(31, 122, 76, 0.08);
+  --od-guide: #e0457b; /* smart guides — cor complementar para destacar do verde */
+  /* Chat 08.6 · B (D-05): anel = traço SÓLIDO de 2 px (≥ 3:1 com o fundo) + halo suave; antes era só o halo (1,5:1) */
+  --od-focus-color: #1f7a4c;
+  --od-focus-ring: 0 0 0 2px var(--od-focus-color), 0 0 0 5px rgba(31, 122, 76, 0.18);
+  --od-on-selection: #ffffff; /* texto/ícone sobre --od-selection (selos de tamanho, alças, marcadores) */
+  --od-input-border: #868e86; /* Chat 08.6 · B (D-06): borda de campo ≥ 3:1 (antes --od-border-strong, 1,4:1) */
+  --od-favorite: #b48112; /* Chat 08.6 · B (D-15): estrela de favorito ≥ 3:1 (o #E0A21B fixo dava 2,25:1 no claro) */
+
+  /* ---------- Semânticas ---------- */
+  --od-success: #2d784c; /* Chat 08.6 · B (D-09): era #2f7d4f (4,35:1 sobre success-soft) */
+  --od-success-soft: #e3f2e8;
+  --od-warning: #976010; /* Chat 08.6 · B (D-09): era #a66a12 (4,48:1 no painel, 3,96:1 sobre warning-soft) */
+  --od-warning-soft: #fbf0dc;
+  --od-danger: #bc3f2c; /* Chat 06.5: era #c2412d — escurecido 3 % para danger/danger-soft chegar a 4,5:1 (AA) */
+  --od-danger-soft: #fbe6e2;
+  --od-danger-on-inverse: #f08672; /* erro sobre a superfície invertida (toast escuro no tema claro) */
+  --od-info: #2c64a8;
+  --od-info-soft: #e3edf9;
+
+  /* ---------- Elevação ---------- */
+  --od-shadow-panel: 0 0 0 1px rgba(20, 36, 26, 0.05), 0 2px 10px rgba(20, 36, 26, 0.08);
+  --od-shadow-pop: 0 0 0 1px rgba(20, 36, 26, 0.06), 0 10px 32px -6px rgba(20, 36, 26, 0.18);
+  --od-shadow-modal: 0 0 0 1px rgba(20, 36, 26, 0.06), 0 24px 64px -12px rgba(20, 36, 26, 0.32);
+
+  /* ---------- Movimento ---------- */
+  --od-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --od-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --od-ease-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --od-dur-fast: 120ms;
+  --od-dur-base: 180ms;
+  --od-dur-slow: 260ms;
+
+  /* ---------- Espaçamento & Raios (grade de 4px) ---------- */
+  --od-space-1: 4px;
+  --od-space-2: 8px;
+  --od-space-3: 12px;
+  --od-space-4: 16px;
+  --od-space-6: 24px;
+  --od-space-8: 32px;
+  --od-radius-sm: 6px;
+  --od-radius-md: 8px;
+  --od-radius-lg: 10px;
+  --od-radius-xl: 12px;
+  --od-radius-2xl: 16px;
+
+  color-scheme: light;
+}
+
+.dark {
+  /* ---------- Superfícies (Dark) — valores do CLAUDE.md ---------- */
+  --od-canvas: #16161a;
+  --od-canvas-dot: #2e2e38;
+  --od-canvas-dot-major: #3c3c48;
+  --od-app-bg: #121215;
+  --od-panel: #212126;
+  --od-panel-hover: #2a2a31;
+  --od-panel-active: #2f3a2c;
+  --od-panel-sunken: #1a1a1f;
+  --od-border: #32323a;
+  --od-border-strong: #45454f;
+
+  --od-text: #eceee9;
+  --od-text-muted: #bac1bb; /* Chat 08.6 · B: era #aab2ab — sobe junto com o terciário para manter a hierarquia */
+  --od-text-subtle: #9fa7a0; /* Chat 08.6 · B (D-04): era #7c847e (3,7–4,2:1); agora ≥ 4,6:1 em todo fundo escuro */
+  --od-text-inverse: #12301f;
+
+  --od-accent: #d0e4ae;
+  --od-accent-hover: #bfd993;
+  --od-accent-pressed: #a9cc78;
+  --od-accent-contrast: #12301f;
+  --od-accent-soft: rgba(208, 228, 174, 0.13);
+  --od-selection: #9fd08a;
+  --od-selection-fill: rgba(159, 208, 138, 0.1);
+  --od-guide: #ff6b9a;
+  --od-focus-color: #9fd08a;
+  --od-focus-ring: 0 0 0 2px var(--od-focus-color), 0 0 0 5px rgba(159, 208, 138, 0.22);
+  --od-on-selection: #12301f;
+  --od-input-border: #6a6d71;
+  --od-favorite: #e0a21b;
+
+  --od-success: #7fcb95;
+  --od-success-soft: rgba(127, 203, 149, 0.14);
+  --od-warning: #e9b45c;
+  --od-warning-soft: rgba(233, 180, 92, 0.14);
+  --od-danger: #f08672;
+  --od-danger-soft: rgba(240, 134, 114, 0.14);
+  --od-danger-on-inverse: #bc3f2c; /* toast claro no tema escuro */
+  --od-info: #7fb0ee;
+  --od-info-soft: rgba(127, 176, 238, 0.14);
+
+  --od-shadow-panel: 0 0 0 1px #32323a, 0 2px 12px rgba(0, 0, 0, 0.35);
+  --od-shadow-pop: 0 0 0 1px #3a3a44, 0 12px 36px -6px rgba(0, 0, 0, 0.6);
+  --od-shadow-modal: 0 0 0 1px #3a3a44, 0 28px 72px -12px rgba(0, 0, 0, 0.7);
+
+  color-scheme: dark;
+}

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenDraw — Splash (referência)</title>
+<!--
+  REFERÊNCIA DE ANIMAÇÃO — baseada na splash criada pelo usuário (física de mola com inércia + squash & stretch).
+  Abra este arquivo direto no navegador para ver. Tecla T alterna claro/escuro; botão "Reiniciar" repete.
+  No app, os valores --sp-* abaixo devem vir dos tokens reais (`src/styles/tokens.css`, `--od-*`) e o tema
+  deve seguir o tema do app (classe/atributo do Tailwind), não esta lógica de demonstração.
+-->
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  /* Fallbacks dos tokens (claro). Marca: #194B32 + #D0E4AE. Canvas claro #F5F6F8 / escuro #16161A */
+  :root{
+    --sp-bg:#F5F6F8; --sp-bg-edge:#ECEEF1;
+    --sp-tile:#194B32; --sp-ink:#D0E4AE;           /* ícone: ladrilho verde-floresta + traço pistache */
+    --sp-glow:#194B32; --sp-glow-op:.10;
+    --sp-text:#194B32; --sp-muted:#5B6B62;
+    --sp-ease:cubic-bezier(0.22,1,0.36,1);
+  }
+  :root[data-theme="dark"]{
+    --sp-bg:#16161A; --sp-bg-edge:#0F0F12;
+    --sp-glow:#D0E4AE; --sp-glow-op:.12;
+    --sp-text:#D0E4AE; --sp-muted:#9AA79F;
+  }
+  html,body{height:100%}
+  body{background:var(--sp-bg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden}
+
+  .splash{
+    position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+    background:radial-gradient(circle at 50% 45%,var(--sp-bg) 0%,var(--sp-bg-edge) 100%);
+    transition:opacity .42s var(--sp-ease),visibility .42s var(--sp-ease);
+  }
+  .splash.is-leaving{opacity:0;visibility:hidden}
+  .splash.is-leaving .logo-wrap{transform:scale(.94)}
+  .logo-wrap{position:relative;display:grid;place-items:center;transition:transform .42s var(--sp-ease)}
+  .glow{position:absolute;width:180px;height:180px;border-radius:50%;background:var(--sp-glow);opacity:var(--sp-glow-op);filter:blur(55px);pointer-events:none}
+  .logo{width:132px;height:132px;overflow:visible;filter:drop-shadow(0 16px 30px rgba(0,0,0,.28))}
+  .wordmark{font-weight:650;font-size:22px;letter-spacing:-.01em;color:var(--sp-text);opacity:0;transform:translateY(6px);animation:wm-in .6s .35s var(--sp-ease) forwards}
+  @keyframes wm-in{to{opacity:1;transform:none}}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  @media (prefers-reduced-motion:reduce){
+    .wordmark{animation:none;opacity:1;transform:none}
+    .splash,.logo-wrap{transition-duration:.01ms}
+  }
+
+  /* Só para a demonstração */
+  .app-placeholder{position:fixed;inset:0;display:grid;place-items:center;color:var(--sp-muted);gap:14px;text-align:center}
+  .app-placeholder button{padding:8px 14px;border-radius:10px;border:1px solid var(--sp-muted);background:transparent;color:var(--sp-text);cursor:pointer;font:inherit}
+</style>
+</head>
+<body>
+
+<div class="app-placeholder">
+  <div>App carregado (demonstração).<br><small>Tecla <b>T</b> alterna claro/escuro</small></div>
+  <button id="replay" type="button">Reiniciar splash</button>
+</div>
+
+<div class="splash" id="splash" role="status" aria-live="polite">
+  <span class="sr-only">Carregando o OpenDraw…</span>
+  <div class="logo-wrap">
+    <div class="glow"></div>
+    <svg class="logo" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <rect width="100" height="100" rx="26" fill="var(--sp-tile)"/>
+      <circle cx="24" cy="64" r="4" fill="var(--sp-ink)"/>
+      <path class="sp-path" d="M 24 64 C 35 35, 48 30, 56 44 C 63 56, 72 52, 76 39"
+            fill="none" stroke="var(--sp-ink)" stroke-width="8" stroke-linecap="round"/>
+      <g class="sp-dot-g"><circle r="7.8" fill="var(--sp-ink)"/></g>
+    </svg>
+  </div>
+  <div class="wordmark" aria-hidden="true">opendraw</div>
+</div>
+
+<script>
+/**
+ * Animação do logo — física em fases (todas com inércia):
+ *  line      a bolinha é puxada por uma mola ao longo da curva e desenha a linha;
+ *  airEnd    ao completar a linha ela se DESPRENDE com a velocidade que tinha, sobe acima do ponto final (salto)
+ *            e assenta numa mola sub-amortecida, esticando um pouco na direção do movimento;
+ *  hopBack   para voltar, ganha um pulinho (sobe um pouco) antes de cair de volta no fim da linha;
+ *  lineBack  recolhe a linha com inércia (aceita a velocidade da queda);
+ *  airStart  passa do ponto inicial por inércia, "pula" um pouco e assenta (esticando minimamente).
+ * Squash & stretch pela velocidade, volume preservado, ângulo suavizado.
+ *
+ * API: const a = startLogoAnimation(svg, { reduceMotion });
+ *      a.settleAtEnd(maxMs) -> Promise: resolve quando o logo está COMPLETO e assentado (bolinha no topo) ou após maxMs
+ *      a.stop()             -> cancela o loop e remove listeners
+ */
+function startLogoAnimation(svg, { reduceMotion = false } = {}) {
+  const path = svg.querySelector('.sp-path');
+  const dotG = svg.querySelector('.sp-dot-g');
+  const L = path.getTotalLength();
+  const startPt = path.getPointAtLength(0), endPt = path.getPointAtLength(L);
+  const finalDot = { x: 73.5, y: 27.5 };                         // posição final da bolinha (topo direito)
+  const unit = (x, y) => { const m = Math.hypot(x, y) || 1; return { x: x / m, y: y / m }; };
+  const a2 = path.getPointAtLength(L - 2), b2 = path.getPointAtLength(2);
+  const tEnd = unit(endPt.x - a2.x, endPt.y - a2.y);              // direção da linha ao chegar no fim
+  const tOut = unit(startPt.x - b2.x, startPt.y - b2.y);          // direção de saída ao passar do início (voltando)
+  const upFromEnd = unit(finalDot.x - endPt.x, finalDot.y - endPt.y);
+
+  // ---- Ajustes finos (mexa aqui para dar mais/menos "peso") ----
+  const T = {
+    line:     { k: 62,  c: 9.2, target: 1.15 },                   // ida pela curva
+    airEnd:   { k: 210, c: 9.0, carry: 1.0, boost: 46 },          // salto no final: carry = quanto da velocidade é herdado; boost = impulso extra para cima
+    hopBack:  { k: 100, c: 7.0, kick: 120 },                       // pulinho antes de voltar
+    lineBack: { k: 40,  c: 7.8, target: -0.16 },                  // volta pela curva
+    airStart: { k: 190, c: 9.0, carry: 0.9, hop: 34 },            // passa do início, pula e assenta
+    holdEnd: 0.45, holdStart: 0.22                                // pausas (s)
+  };
+  const STRETCH = {                                               // [ganho por unidade de velocidade, teto]
+    line: [0.0012, 0.22], airEnd: [0.0034, 0.28], hopBack: [0.0022, 0.16],
+    lineBack: [0.0007, 0.12], airStart: [0.0016, 0.12], holdEnd: [0, 0], holdStart: [0, 0]
+  };
+
+  path.style.strokeDasharray = L;
+  const draw = (x, y, line, angle = 0, sx = 1, sy = 1) => {
+    path.style.strokeDashoffset = L * (1 - line);
+    dotG.setAttribute('transform', `translate(${x} ${y}) rotate(${angle}) scale(${sx} ${sy})`);
+  };
+
+  // Estado final estático (movimento reduzido): logo completo, sem loop
+  if (reduceMotion) {
+    draw(finalDot.x, finalDot.y, 1);
+    return { settleAtEnd: () => Promise.resolve(), stop() {} };
+  }
+
+  let phase = 'line', s = 0, sv = 0, hold = 0;
+  let p = { x: startPt.x, y: startPt.y }, v = { x: 0, y: 0 };
+  let prev = { x: startPt.x, y: startPt.y }, angle = 0, stretch = 1;
+  let last = performance.now(), raf = 0, stopped = false;
+  let waiters = [];
+
+  const enter = (name) => { phase = name; };
+  const freeSpring = (h, tx, ty, k, c) => {                       // corpo livre preso por mola amortecida
+    v.x += ((tx - p.x) * k - v.x * c) * h; v.y += ((ty - p.y) * k - v.y * c) * h;
+    p.x += v.x * h; p.y += v.y * h;
+  };
+
+  const step = (h) => {
+    if (phase === 'line') {
+      const cfg = T.line, g = s > 0.41 && s < 0.74 ? 1.8 : 0;
+      sv += ((cfg.target - s) * cfg.k - sv * cfg.c + g) * h; s += sv * h;
+      if (s >= 1) {                                               // desprende: herda a velocidade da linha + impulso
+        s = 1; const sp = Math.max(sv * L, 0) * T.airEnd.carry;
+        p = { x: endPt.x, y: endPt.y };
+        v = { x: tEnd.x * sp + upFromEnd.x * T.airEnd.boost, y: tEnd.y * sp + upFromEnd.y * T.airEnd.boost };
+        enter('airEnd');
+      } else { const pt = path.getPointAtLength(Math.max(s, 0) * L); p = { x: pt.x, y: pt.y }; }
+    } else if (phase === 'airEnd') {
+      freeSpring(h, finalDot.x, finalDot.y, T.airEnd.k, T.airEnd.c);
+    } else if (phase === 'hopBack') {
+      freeSpring(h, endPt.x, endPt.y, T.hopBack.k, T.hopBack.c);
+      const dx = endPt.x - p.x, dy = endPt.y - p.y;
+      if (Math.hypot(dx, dy) < 1.6 && v.x * dx + v.y * dy > 0) { // caiu de volta no fim da linha: segue pela curva
+        const back = Math.max(-(v.x * tEnd.x + v.y * tEnd.y), 25);
+        s = 1; sv = -back / L; enter('lineBack');
+      }
+    } else if (phase === 'lineBack') {
+      const cfg = T.lineBack, g = s > 0.41 && s < 0.74 ? -0.9 : 0;
+      sv += ((cfg.target - s) * cfg.k - sv * cfg.c + g) * h; s += sv * h;
+      if (s <= 0) {                                               // passa do início por inércia e "pula"
+        s = 0; const sp = Math.max(-sv * L, 0) * T.airStart.carry;
+        p = { x: startPt.x, y: startPt.y };
+        v = { x: tOut.x * sp, y: tOut.y * sp - T.airStart.hop };
+        enter('airStart');
+      } else { const pt = path.getPointAtLength(s * L); p = { x: pt.x, y: pt.y }; }
+    } else if (phase === 'airStart') {
+      freeSpring(h, startPt.x, startPt.y, T.airStart.k, T.airStart.c);
+    }
+  };
+
+  const frame = (now) => {
+    if (stopped) return;
+    const dt = Math.min((now - last) / 1000, 0.05); last = now;
+    const n = Math.max(1, Math.ceil(dt / (1 / 240)));              // subpassos: estável mesmo com quedas de FPS
+    for (let i = 0; i < n; i++) step(dt / n);
+
+    const rested = (tx, ty) => Math.hypot(p.x - tx, p.y - ty) < 0.12 && Math.hypot(v.x, v.y) < 3;
+    if (phase === 'airEnd' && rested(finalDot.x, finalDot.y)) {
+      p = { x: finalDot.x, y: finalDot.y }; v = { x: 0, y: 0 }; hold = 0; enter('holdEnd');
+      waiters.forEach(r => r()); waiters = [];
+    } else if (phase === 'holdEnd') {
+      hold += dt;
+      if (hold >= T.holdEnd) {                                    // pulinho para trás: sobe um pouco antes de voltar
+        v = { x: upFromEnd.x * T.hopBack.kick, y: upFromEnd.y * T.hopBack.kick }; enter('hopBack');
+      }
+    } else if (phase === 'airStart' && rested(startPt.x, startPt.y)) {
+      p = { x: startPt.x, y: startPt.y }; v = { x: 0, y: 0 }; hold = 0; s = 0; sv = 0; enter('holdStart');
+    } else if (phase === 'holdStart') {
+      hold += dt; if (hold >= T.holdStart) enter('line');
+    }
+
+    const lineRatio = phase === 'line' || phase === 'lineBack' ? Math.min(Math.max(s, 0), 1)
+                    : (phase === 'airEnd' || phase === 'holdEnd' || phase === 'hopBack') ? 1 : 0;
+    const d = dt || 0.016, vx = (p.x - prev.x) / d, vy = (p.y - prev.y) / d, sp = Math.hypot(vx, vy);
+    const [gain, cap] = STRETCH[phase];
+    const want = 1 + Math.min(sp * gain, cap);
+    stretch += (want - stretch) * 0.5;                             // suaviza trocas de fase
+    if (sp > 4) {                                                  // ângulo suavizado (menor caminho)
+      const target = Math.atan2(vy, vx) * 180 / Math.PI;
+      let diff = ((target - angle + 540) % 360) - 180;
+      angle += diff * 0.45;
+    }
+    draw(p.x, p.y, lineRatio, angle, stretch, 1 / Math.sqrt(stretch));
+    prev = { x: p.x, y: p.y };
+    raf = requestAnimationFrame(frame);
+  };
+
+  const onVis = () => {                                            // pausa com a aba oculta
+    if (document.hidden) cancelAnimationFrame(raf);
+    else if (!stopped) { last = performance.now(); raf = requestAnimationFrame(frame); }
+  };
+  document.addEventListener('visibilitychange', onVis);
+  draw(p.x, p.y, 0);
+  raf = requestAnimationFrame(frame);
+
+  return {
+    settleAtEnd(maxMs = 2800) {
+      return new Promise((resolve) => {
+        if (phase === 'holdEnd') return resolve();
+        const t = setTimeout(resolve, maxMs);
+        waiters.push(() => { clearTimeout(t); resolve(); });
+      });
+    },
+    stop() { stopped = true; cancelAnimationFrame(raf); document.removeEventListener('visibilitychange', onVis); }
+  };
+}
+
+/* ---------- Demonstração: tempo mínimo + "app pronto" simulado + saída suave ---------- */
+const MIN_MS = 1100, MAX_MS = 4000;
+const splash = document.getElementById('splash');
+const svg = splash.querySelector('svg');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let anim;
+
+function runSplash() {
+  splash.classList.remove('is-leaving');
+  anim && anim.stop();
+  anim = startLogoAnimation(svg, { reduceMotion: reduce });
+  const minTime = new Promise(r => setTimeout(r, MIN_MS));
+  const appReady = new Promise(r => setTimeout(r, 2200));               // no app: hidratação do store + document.fonts.ready
+  const failsafe = new Promise(r => setTimeout(r, MAX_MS));
+  Promise.race([Promise.all([minTime, appReady]), failsafe])
+    .then(() => anim.settleAtEnd())                                      // termina com o logo completo
+    .then(() => { splash.classList.add('is-leaving'); setTimeout(() => anim.stop(), 450); });
+}
+document.getElementById('replay').addEventListener('click', runSplash);
+addEventListener('keydown', e => {
+  if (e.key.toLowerCase() === 't') {
+    const r = document.documentElement; r.dataset.theme = r.dataset.theme === 'dark' ? 'light' : 'dark';
+  }
+});
+runSplash();
+</script>
+</body>
+</html>

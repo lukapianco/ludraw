@@ -1,0 +1,9 @@
+{
+  "code": "en",
+  "name": "English",
+  "nativeName": "English",
+  "dir": "ltr",
+  "fallback": "pt-BR",
+  "translators": ["Equipe LuDraw"],
+  "status": "official"
+}

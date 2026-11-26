@@ -1,0 +1,30 @@
+{
+  "apiVersion": 1,
+  "id": "dev.ludraw.formatos-drawio",
+  "name": "Formatos de diagrama abertos (.drawio)",
+  "version": "1.0.0",
+  "publisher": "LuDraw",
+  "description": "Importa arquivos .drawio (XML aberto e documentado, com ou sem compressão) como formas, textos, frames e conectores editáveis. Não lê a área de transferência de outros programas.",
+  "i18n": {
+    "en": {
+      "name": "Open diagram formats (.drawio)",
+      "description": "Imports .drawio files (open, documented XML, compressed or not) as editable shapes, text, frames and connectors. Doesn't read other programs' clipboard."
+    }
+  },
+  "license": "MIT",
+  "kind": "script",
+  "permissions": ["files.import", "board.write"],
+  "provenance": { "originalWork": true, "thirdParty": [] },
+  "main": "main.js",
+  "contributes": {
+    "importers": [
+      {
+        "id": "drawio",
+        "label": "Diagrama .drawio",
+        "description": "Formas, textos, grupos e conectores de arquivos .drawio (formato XML aberto). Usa a primeira página do arquivo.",
+        "i18n": { "en": { "name": "Diagram .drawio", "description": "Shapes, text, groups and connectors from .drawio files (open XML format). Uses the file's first page." } },
+        "extensions": ["drawio"]
+      }
+    ]
+  }
+}

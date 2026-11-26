@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#194B32" />
+    <meta name="description" content="LuDraw — quadro branco infinito open-source, local-first." />
+    <title>LuDraw</title>
+    <!--
+      Fontes: autohospedadas desde o Chat 05.5 (Fontsource, só latin + latin-ext), carregadas por
+      src/styles/fonts.css a partir de src/main.tsx. Nenhuma requisição a servidores de fontes externos.
+    -->
+    <script>
+      // Aplica o tema salvo antes do primeiro paint para evitar "flash" de cor.
+      (function () {
+        try {
+          var raw = localStorage.getItem('ludraw:app');
+          var theme = raw ? (JSON.parse(raw).state || {}).theme : null;
+          if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          if (theme === 'dark') document.documentElement.classList.add('dark');
+          // Boot splash (abaixo) segue o mesmo tema; some no modo embed. Removido pela SplashScreen.
+          document.documentElement.setAttribute('data-od-boot', theme === 'dark' ? 'dark' : 'light');
+          if (/[?&]embed=1/.test(window.location.hash)) document.documentElement.setAttribute('data-od-boot', 'off');
+        } catch (e) {}
+      })();
+    </script>
+    <!--
+      Boot splash estático (Chat 03 · SPLASH_SPEC.md): logo completo no centro, antes do React,
+      para não haver flash branco. Mesma posição/tamanho da SplashScreen (132 px), que o remove
+      ao montar. As cores espelham os tokens (tokens.css ainda não carregou aqui):
+      canvas #F5F6F8 / #16161A (--od-canvas), marca #194B32 + #D0E4AE, sombra = --od-shadow-modal.
+    -->
+    <style>
+      #od-boot { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: #f5f6f8; }
+      #od-boot .od-boot-wrap { position: relative; display: grid; place-items: center; }
+      #od-boot .od-boot-glow { position: absolute; width: 180px; height: 180px; border-radius: 50%; background: #194b32; opacity: 0.1; filter: blur(55px); }
+      #od-boot .od-boot-tile { position: relative; width: 132px; height: 132px; border-radius: 26%; box-shadow: 0 0 0 1px rgba(20, 36, 26, 0.06), 0 24px 64px -12px rgba(20, 36, 26, 0.32); }
+      #od-boot svg { display: block; overflow: visible; }
+      html[data-od-boot='dark'] #od-boot { background: #16161a; }
+      html[data-od-boot='dark'] #od-boot .od-boot-glow { background: #d0e4ae; opacity: 0.12; }
+      html[data-od-boot='dark'] #od-boot .od-boot-tile { box-shadow: 0 0 0 1px #3a3a44, 0 28px 72px -12px rgba(0, 0, 0, 0.7); }
+      html[data-od-boot='off'] #od-boot { display: none; }
+      @media (prefers-color-scheme: dark) {
+        html:not([data-od-boot]) #od-boot { background: #16161a; }
+        html:not([data-od-boot]) #od-boot .od-boot-glow { background: #d0e4ae; opacity: 0.12; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="od-boot" aria-hidden="true">
+      <div class="od-boot-wrap">
+        <div class="od-boot-glow"></div>
+        <div class="od-boot-tile">
+          <svg viewBox="0 0 100 100" width="132" height="132" focusable="false">
+            <rect width="100" height="100" rx="26" fill="#194B32" />
+            <circle cx="24" cy="64" r="4" fill="#D0E4AE" />
+            <path d="M 24 64 C 35 35, 48 30, 56 44 C 63 56, 72 52, 76 39" fill="none" stroke="#D0E4AE" stroke-width="8" stroke-linecap="round" />
+            <circle cx="73.5" cy="27.5" r="7.8" fill="#D0E4AE" />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

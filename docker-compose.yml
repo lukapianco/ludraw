@@ -1,0 +1,172 @@
+# LuDraw — instalação com Docker Compose (Chat 09 · R3). Guia completo: docs/DOCKER.md · backup: docs/BACKUP.md
+#
+#   node scripts/docker-secrets.mjs        # 1) gera os segredos em deploy/secrets/ (uma vez; não mostra os valores)
+#   cp deploy/ludraw.env.example deploy/ludraw.env   # 2) opcional: endereço público, e-mail, SSO…
+#   docker compose up -d --build           # 3) banco → migração → app; o token do primeiro acesso sai no log:
+#   docker compose logs app                #    abra http://localhost:8080 e conclua o primeiro acesso
+#
+# Três serviços:
+#   db       PostgreSQL. Na primeira subida (volume vazio) cria os papéis de privilégio mínimo (deploy/postgres/).
+#            Só na rede interna: sem porta publicada e sem saída para a internet.
+#   migrate  roda as migrações com o papel ludraw_migrator e termina. O app só sobe depois dele (D4).
+#   app      o servidor (API + tempo real + o app web na mesma origem) com o papel ludraw_app (só DML).
+#   valkey   OPCIONAL (perfil "redis"): limites de tentativa e avisos compartilhados entre instâncias do app.
+#            Ligar: docker compose --profile redis up -d  +  LUDRAW_REDIS_URL_FILE=/run/secrets/redis_url no
+#            deploy/ludraw.env (docs/DOCKER.md, "Redis/Valkey").
+# Tudo que é sensível chega por arquivo (Docker secrets → variáveis *_FILE); nada de senha no ambiente.
+name: ludraw
+
+x-ludraw-image: &ludraw-image
+  image: ${LUDRAW_IMAGE:-ludraw:0.9.0}
+  build:
+    context: .
+    dockerfile: Dockerfile
+
+# o mesmo endurecimento para o app e a migração: raiz só leitura, nenhuma capability, sem ganho de privilégio
+x-ludraw-hardening: &ludraw-hardening
+  read_only: true
+  tmpfs:
+    - /tmp:size=64m,mode=1777
+  cap_drop: [ALL]
+  security_opt:
+    - no-new-privileges:true
+  init: true
+
+x-logging: &logging
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  db:
+    # fixado por digest; publicado há 7 dias ou mais (docs/PROVENANCE.md)
+    image: postgres:16.15-alpine3.24@sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ludraw
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets: [postgres_password, db_app_password, db_migrator_password]
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./deploy/postgres:/docker-entrypoint-initdb.d:ro
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+      - /var/run/postgresql:size=1m,uid=70,gid=70,mode=0775
+    # o entrypoint oficial troca para o usuário postgres (uid 70) e ajusta a pasta de dados: só estas capabilities
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    security_opt:
+      - no-new-privileges:true
+    shm_size: 128m
+    stop_grace_period: 30s
+    healthcheck:
+      # por TCP: durante a inicialização o Postgres só escuta no socket local, então "pronto" = papéis já criados
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "postgres", "-d", "ludraw"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    networks: [backend]
+    <<: *logging
+
+  migrate:
+    <<: [*ludraw-image, *ludraw-hardening, *logging]
+    command: ["node", "dist/cli.js", "db:migrate"]
+    restart: "no"
+    environment:
+      DATABASE_URL_FILE: /run/secrets/database_url
+      LUDRAW_MIGRATE_DATABASE_URL_FILE: /run/secrets/migrate_database_url
+    secrets: [database_url, migrate_database_url]
+    depends_on:
+      db:
+        condition: service_healthy
+    networks: [backend]
+
+  app:
+    <<: [*ludraw-image, *ludraw-hardening, *logging]
+    restart: unless-stopped
+    # configurações sem segredo (endereço público, e-mail, SSO…): copie deploy/ludraw.env.example
+    env_file:
+      - path: ./deploy/ludraw.env
+        required: false
+    environment:
+      DATABASE_URL_FILE: /run/secrets/database_url
+      LUDRAW_JWT_SECRET_FILE: /run/secrets/jwt_secret
+    # redis_url só é usado com LUDRAW_REDIS_URL_FILE no deploy/ludraw.env (perfil "redis")
+    secrets: [database_url, jwt_secret, redis_url]
+    volumes:
+      - assets:/data/assets
+    ports:
+      # só nesta máquina por padrão: na rede, ponha um proxy reverso com HTTPS na frente (docs/DOCKER.md)
+      - "${LUDRAW_BIND:-127.0.0.1}:${LUDRAW_PORT:-8080}:3001"
+    stop_grace_period: 20s
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+      # só quando o perfil "redis" está ligado (desligado, esta dependência é ignorada)
+      valkey:
+        condition: service_healthy
+        required: false
+    networks: [backend, edge]
+
+  valkey:
+    # OPCIONAL: só sobe com `docker compose --profile redis up -d`. Fixado por digest; publicado há 7 dias ou mais.
+    # Valkey (BSD-3-Clause) — o Redis 7.4+ mudou para licenças que o projeto não aceita (docs/PROVENANCE.md).
+    image: valkey/valkey:9.0.7-alpine3.24@sha256:2d04268dfa26ab31cfa3fdc538866e76438b2d00e41db41b8cb86d780ac5a416
+    profiles: [redis]
+    restart: unless-stopped
+    # senha pelo arquivo de ACL (Docker secret), nunca em argumento; só contagens com prazo — nada vai para o disco;
+    # memória cheia = recusa gravar (o app responde 503) em vez de apagar contagens e liberar tentativas
+    command: ["valkey-server", "--aclfile", "/run/secrets/valkey_acl", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "noeviction"]
+    user: "999:1000"
+    secrets: [valkey_acl]
+    read_only: true
+    tmpfs:
+      - /data:size=8m,uid=999,gid=1000,mode=0750
+      - /tmp:size=8m,mode=1777
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      # sem senha o Valkey responde NOAUTH — prova que está no ar sem expor a senha no comando
+      test: ["CMD-SHELL", "valkey-cli -h 127.0.0.1 ping 2>&1 | grep -qE 'PONG|NOAUTH'"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [backend]
+    <<: *logging
+
+networks:
+  # sem saída para a internet: só o app e a migração falam com o banco
+  backend:
+    internal: true
+  # porta publicada e saída do app (SMTP, provedor de SSO, "Baixar para o board")
+  edge: {}
+
+volumes:
+  db-data:
+  assets:
+
+secrets:
+  postgres_password:
+    file: ./deploy/secrets/postgres_password
+  db_app_password:
+    file: ./deploy/secrets/db_app_password
+  db_migrator_password:
+    file: ./deploy/secrets/db_migrator_password
+  database_url:
+    file: ./deploy/secrets/database_url
+  migrate_database_url:
+    file: ./deploy/secrets/migrate_database_url
+  jwt_secret:
+    file: ./deploy/secrets/jwt_secret
+  valkey_acl:
+    file: ./deploy/secrets/valkey_acl
+  redis_url:
+    file: ./deploy/secrets/redis_url

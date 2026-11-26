@@ -1,0 +1,2 @@
+ALTER TABLE "boards" ADD COLUMN "imported_from" jsonb;--> statement-breakpoint
+CREATE UNIQUE INDEX "boards_imported_unique" ON "boards" USING btree ("organization_id",("imported_from"->>'by'),("imported_from"->>'sourceId')) WHERE "boards"."imported_from" is not null;

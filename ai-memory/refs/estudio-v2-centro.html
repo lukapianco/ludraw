@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23194B32%22/%3E%3Cpath d=%22M15 42c6-14 12-20 18-18s4 10 10 10c4 0 6-4 7-8%22 fill=%22none%22 stroke=%22%23D0E4AE%22 stroke-width=%225%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3Ccircle cx=%2248%22 cy=%2218%22 r=%225%22 fill=%22%23D0E4AE%22/%3E%3C/svg%3E">
+<title>OpenDraw — Estúdio v2 · variante Centro (Ficha + Roda juntas no topo)</title>
+<!-- Referência visual estática. No app as fontes são autohospedadas (Fontsource); aqui o link é só para a prévia. -->
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fraunces:wght@600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ===== Tokens existentes (DESIGN_SYSTEM.md §2–§5). Nenhum token novo. ===== */
+:root{
+  --brand-100:#E4EED5;--brand-200:#D0E4AE;--brand-900:#194B32;--brand-950:#0F2E1F;
+  --od-canvas:#F5F6F8;--od-canvas-dot:#D1D5DB;--od-panel:#FFFFFF;--od-border:rgba(25,45,32,.09);--od-sunken:#F1F4EC;
+  --od-panel-hover:#F1F4EC;--od-panel-active:#E4EED5;
+  --od-text:#18211C;--od-text-muted:#4F5A53;--od-text-subtle:#7D877F;
+  --od-accent:#194B32;--od-accent-contrast:#D0E4AE;--od-accent-soft:#E4EED5;
+  --od-selection:#1F7A4C;--od-selection-fill:rgba(31,122,76,.10);
+  --od-success:#2F7D4F;--od-warning:#A66A12;--od-danger:#BC3F2C;
+  --sh-panel:0 1px 2px rgba(15,46,31,.06),0 4px 14px rgba(15,46,31,.07);
+  --sh-pop:0 2px 6px rgba(15,46,31,.08),0 12px 32px rgba(15,46,31,.14);
+  --ease:cubic-bezier(.22,1,.36,1);--spring:cubic-bezier(.34,1.36,.64,1);
+}
+.dark{
+  --od-canvas:#16161A;--od-canvas-dot:#2E2E38;--od-panel:#212126;--od-border:#32323A;--od-sunken:#1B1B20;
+  --od-panel-hover:#2A2A31;--od-panel-active:#2F3A2C;
+  --od-text:#ECEEE9;--od-text-muted:#AAB2AB;--od-text-subtle:#7C847E;
+  --od-accent:#D0E4AE;--od-accent-contrast:#12301F;--od-accent-soft:rgba(208,228,174,.13);
+  --od-selection:#9FD08A;--od-selection-fill:rgba(159,208,138,.12);
+  --od-success:#7FCB9B;--od-warning:#E3B567;--od-danger:#F08672;
+  --sh-panel:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35);
+  --sh-pop:0 2px 6px rgba(0,0,0,.45),0 12px 32px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Figtree,system-ui,sans-serif;font-size:14px;color:var(--od-text);background:var(--od-canvas);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.i .acc{fill:var(--od-accent-soft);stroke:currentColor}
+[data-active=true] svg.i .acc{fill:var(--od-accent-contrast)}
+.dark [data-active=true] svg.i .acc{fill:rgba(208,228,174,.35)}
+.kbd{font-family:"IBM Plex Mono",monospace;font-size:10.5px;padding:1px 5px;border-radius:5px;border:1px solid var(--od-border);border-bottom-width:2px;color:var(--od-text-subtle);background:var(--od-panel)}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+/* ===== Canvas ===== */
+.canvas{position:fixed;inset:0;background-image:radial-gradient(var(--od-canvas-dot) 1.2px,transparent 1.2px);background-size:22px 22px}
+
+/* ===== Módulo (peça base do Estúdio v2) ===== */
+.mod{position:absolute;z-index:40;display:flex;align-items:center;gap:2px;height:44px;padding:4px;border-radius:14px;background:var(--od-panel);border:1px solid var(--od-border);box-shadow:var(--sh-panel)}
+.mod .sep{width:1px;height:22px;background:var(--od-border);margin:0 4px}
+.ib{height:34px;min-width:34px;padding:0 8px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--od-text-muted);font-weight:600;font-size:13px;transition:background .12s,color .12s}
+.ib:hover{background:var(--od-panel-hover);color:var(--od-text)}
+.ib[aria-expanded=true]{background:var(--od-accent-soft);color:var(--od-accent)}
+.ib.primary{background:var(--od-accent);color:var(--od-accent-contrast);padding:0 12px}
+.ib.primary:hover{filter:brightness(1.1)}
+.count{min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--od-accent);color:var(--od-accent-contrast);font-size:10.5px;font-weight:800;display:grid;place-items:center}
+
+/* Ficha */
+.topo{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:40;display:flex;align-items:center;height:44px;padding:0 4px;border-radius:14px;background:var(--od-panel);border:1px solid var(--od-border);box-shadow:var(--sh-panel)}
+.topo .mod{position:relative;border:0;box-shadow:none;background:none;border-radius:0;padding:0;height:auto}
+.topo>.sep{width:1px;height:22px;background:var(--od-border);margin:0 6px}
+.ficha{padding-right:10px}
+.home{width:34px;height:34px;border-radius:10px;background:var(--brand-900);display:grid;place-items:center}
+.home svg{width:20px;height:20px}
+.title-btn{display:flex;flex-direction:column;align-items:flex-start;padding:2px 8px;border-radius:9px;line-height:1.15;max-width:280px}
+.title-btn:hover,.title-btn[aria-expanded=true]{background:var(--od-panel-hover)}
+.title-btn small{font-size:11px;color:var(--od-text-subtle);display:flex;align-items:center;gap:5px;font-weight:600}
+.title-btn small i{width:7px;height:7px;border-radius:2px;background:#3A8156}
+.title-btn b{font-size:14px;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.live{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;color:var(--od-text-subtle);margin-left:4px}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--od-success);box-shadow:0 0 0 3px color-mix(in srgb,var(--od-success) 18%,transparent)}
+
+/* Roda */
+
+.stack{display:flex;padding:0 4px}
+.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:10.5px;font-weight:800;color:#fff;box-shadow:0 0 0 2px var(--od-panel);margin-left:-8px}
+.av:first-child{margin-left:0}
+.av.more{background:var(--od-sunken);color:var(--od-text-muted)}
+.timer-chip{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--od-selection);font-weight:600}
+
+/* Vista e Tempo */
+.vista{left:14px;bottom:16px}
+.tempo{right:14px;bottom:16px}
+.zoom{min-width:52px;justify-content:center;font-variant-numeric:tabular-nums}
+
+/* ===== Dock (posição e forma mantidas; ícones próprios) ===== */
+.dock{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;display:flex;align-items:center;gap:2px;padding:5px 6px;border-radius:14px;background:var(--od-panel);border:1px solid var(--od-border);box-shadow:var(--sh-panel)}
+.dock .sep{width:1px;height:22px;background:var(--od-border);margin:0 4px}
+.quick{width:36px;height:36px;border-radius:10px;background:var(--brand-900);display:grid;place-items:center;margin-right:2px}
+.quick svg{width:22px;height:22px}
+.tool{position:relative;width:36px;height:36px;border-radius:9px;display:grid;place-items:center;color:var(--od-text-muted);transition:background .12s,color .12s}
+.tool:hover{background:var(--od-panel-hover);color:var(--od-text)}
+.tool[data-active=true]{background:var(--od-accent);color:var(--od-accent-contrast)}
+.dark .tool[data-active=true]{background:var(--od-accent-soft);color:var(--od-accent)}
+.tool.has-tray::after{content:"";position:absolute;right:4px;top:4px;width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.45}
+.tool[aria-expanded=true]{background:var(--od-panel-active);color:var(--od-text)}
+
+/* ===== Flutuantes ===== */
+.float{position:absolute;z-index:60;opacity:0;pointer-events:none;transform:translateY(6px) scale(.98);transition:opacity .16s var(--ease),transform .2s var(--ease)}
+.float.on{opacity:1;pointer-events:auto;transform:none}
+.pop{background:var(--od-panel);border:1px solid var(--od-border);box-shadow:var(--sh-pop);border-radius:16px}
+.ph{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}
+.ph h4{margin:0;font-size:13px;font-weight:700}
+.ph .sp{flex:1}
+.hint{font-size:11.5px;color:var(--od-text-subtle)}
+.cap{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--od-text-subtle);padding:10px 14px 6px}
+.row{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;margin:0 6px;border-radius:9px;color:var(--od-text);font-size:13px;width:calc(100% - 12px);text-align:left}
+.row:hover{background:var(--od-panel-hover)}
+.row svg.i{color:var(--od-text-muted);width:16px;height:16px}
+.row .sp{flex:1}
+.row.danger{color:var(--od-danger)}.row.danger svg.i{color:var(--od-danger)}
+.row[aria-disabled=true]{color:var(--od-text-subtle);cursor:not-allowed}
+.hr{height:1px;background:var(--od-border);margin:6px 0}
+.sw{width:30px;height:18px;border-radius:999px;background:var(--od-border);position:relative;flex:none}
+.sw::after{content:"";position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--od-panel);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .2s var(--spring)}
+.sw.on{background:var(--od-accent)}.sw.on::after{transform:translateX(12px);background:var(--od-accent-contrast)}
+.seg{display:flex;padding:3px;border-radius:9px;background:var(--od-sunken);gap:2px}
+.seg button{flex:1;height:26px;border-radius:7px;font-size:12px;font-weight:600;color:var(--od-text-muted)}
+.seg button[aria-pressed=true]{background:var(--od-panel);color:var(--od-text);box-shadow:var(--sh-panel)}
+
+/* Ficha do board */
+#ficha-pop{width:392px}
+.board-id{display:flex;gap:12px;padding:14px}
+.thumb{width:76px;height:52px;border-radius:9px;background:var(--od-canvas);border:1px solid var(--od-border);position:relative;overflow:hidden;flex:none}
+.thumb i{position:absolute;border-radius:2px}
+.board-id input{width:100%;font:inherit;font-size:15px;font-weight:700;border:1px solid transparent;border-radius:8px;padding:3px 6px;margin-left:-6px;background:transparent;color:var(--od-text)}
+.board-id input:hover{border-color:var(--od-border)}
+.place{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--od-text-muted);margin-top:4px}
+.place button{color:var(--od-selection);font-weight:700;font-size:12px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 14px 12px}
+.tile{display:flex;align-items:center;gap:9px;height:44px;padding:0 10px;border-radius:12px;background:var(--od-sunken);font-weight:600;font-size:13px;text-align:left}
+.tile:hover{background:var(--od-panel-active)}
+.tile svg.i{color:var(--od-accent);width:17px;height:17px}
+.dark .tile svg.i{color:var(--od-accent)}
+.ficha-foot{display:flex;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--od-border);font-size:11.5px;color:var(--od-text-subtle)}
+
+/* Facilitar */
+#facil-pop{width:380px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:4px 14px 14px}
+.fcard{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:12px;border-radius:14px;border:1px solid var(--od-border);text-align:left;min-height:86px;transition:border-color .12s,background .12s}
+.fcard:hover{border-color:color-mix(in srgb,var(--od-selection) 45%,transparent)}
+.fcard b{font-size:13px}
+.fcard small{font-size:11.5px;color:var(--od-text-subtle)}
+.fcard .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--od-sunken);color:var(--od-text-muted)}
+.fcard.ativo{background:var(--od-accent-soft);border-color:transparent}
+.fcard.ativo .ic{background:var(--od-accent);color:var(--od-accent-contrast)}
+.fcard.ativo small{color:var(--od-selection);font-weight:700}
+.fnote{display:flex;align-items:center;gap:6px;padding:0 14px 12px;font-size:11.5px;color:var(--od-text-subtle)}
+
+/* Eu */
+#me-pop{width:320px}
+.me{display:flex;align-items:center;gap:10px;padding:14px}
+.me .av{width:38px;height:38px;font-size:13px;margin:0}
+.me b{display:block}.me small{color:var(--od-text-subtle);font-size:12px}
+
+/* Exibir */
+#exibir-pop{left:14px;bottom:70px;width:320px}
+.optrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 14px;font-size:13px}
+.optrow small{display:block;color:var(--od-text-subtle);font-size:11.5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:4px 14px 14px}
+.chip{height:24px;padding:0 10px;border-radius:999px;font-size:11.5px;font-weight:700;color:#fff}
+.chip.off{background:var(--od-sunken)!important;color:var(--od-text-muted)}
+
+/* Roteiro */
+#roteiro-pop{left:14px;bottom:70px;width:300px}
+.slide{display:flex;align-items:center;gap:10px;padding:6px 14px}
+.slide .n{width:22px;height:22px;border-radius:7px;background:var(--od-sunken);font-size:11px;font-weight:800;display:grid;place-items:center;color:var(--od-text-muted)}
+.slide .mini{width:44px;height:28px;border-radius:5px;border:1px solid var(--od-border);background:var(--od-canvas)}
+
+/* Bússola */
+#bussola{left:14px;bottom:70px;width:200px;padding:8px}
+#bussola .map{height:110px;border-radius:10px;background:var(--od-canvas);position:relative}
+
+/* Comentários */
+#coment-pop{width:380px}
+.cm{display:flex;gap:10px;padding:10px 14px;border-top:1px solid var(--od-border)}
+.cm .av{margin:0;width:26px;height:26px}
+.cm p{margin:2px 0 0;font-size:13px;color:var(--od-text-muted)}
+
+/* ===== Menu do canvas (botão direito) ===== */
+#ctx{width:252px;padding-bottom:6px;max-height:calc(100vh - 16px);overflow:auto}
+.ctx-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px 6px;font-size:11.5px;color:var(--od-text-subtle)}
+.ctx-head b{color:var(--od-text-muted);font-weight:700}
+.quickrow{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:2px 8px 8px}
+.qa{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0 6px;border-radius:10px;font-size:10.5px;font-weight:600;color:var(--od-text-muted)}
+.qa:hover{background:var(--od-panel-hover);color:var(--od-text)}
+.qa svg.i{width:18px;height:18px}
+.sub{position:absolute;width:250px;padding:6px 0}
+
+/* ===== Bandejas do Dock ===== */
+.tray{position:absolute;bottom:70px;z-index:60;padding-bottom:10px}
+.tray .pop{position:relative}
+.tray .pop::after{content:"";position:absolute;left:var(--x,50%);bottom:-7px;width:14px;height:14px;margin-left:-7px;background:var(--od-panel);border-right:1px solid var(--od-border);border-bottom:1px solid var(--od-border);transform:rotate(45deg);border-bottom-right-radius:3px}
+.tfoot{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 14px;border-top:1px solid var(--od-border);font-size:11.5px;color:var(--od-text-subtle)}
+.tfoot button{color:var(--od-selection);font-weight:700;font-size:12px;display:flex;align-items:center;gap:6px}
+/* Formas */
+#tray-shapes .pop{width:330px}
+.lines{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:0 14px 6px}
+.lines button{height:36px;border-radius:9px;background:var(--od-sunken);display:grid;place-items:center;color:var(--od-text-muted)}
+.lines button:hover,.sgrid button:hover{background:var(--od-panel-active);color:var(--od-text)}
+.sgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:0 14px 8px}
+.sgrid button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0 5px;border-radius:10px;font-size:10px;color:var(--od-text-subtle);font-weight:600}
+.sgrid svg{width:24px;height:24px;stroke:var(--od-text-muted)}
+.ext-cap{display:flex;align-items:center;gap:6px}
+.ext-cap span{font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:999px;background:var(--od-accent-soft);color:var(--od-selection);letter-spacing:0;text-transform:none}
+/* Post-its */
+#tray-sticky .pop{width:318px}
+.notes{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;padding:0 14px 10px}
+.note{aspect-ratio:1;border-radius:6px;position:relative;box-shadow:0 1px 1px rgba(0,0,0,.08),0 3px 6px rgba(0,0,0,.08);transition:transform .14s var(--spring)}
+.note:hover{transform:translateY(-2px) rotate(-2deg)}
+.note.sel{outline:2px solid var(--od-selection);outline-offset:2px}
+.note::before{content:"";position:absolute;left:30%;right:30%;top:-3px;height:6px;border-radius:2px;background:rgba(255,255,255,.65)}
+.cname{font-family:Fraunces,serif;font-weight:700;font-size:15px}
+/* Frame */
+#tray-frame .pop{width:360px}
+.ratios{display:flex;align-items:flex-end;gap:8px;padding:2px 14px 10px}
+.ratio{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 0 7px;border-radius:12px;font-size:11px;font-weight:700;color:var(--od-text-muted)}
+.ratio:hover{background:var(--od-panel-hover)}
+.ratio[aria-pressed=true]{background:var(--od-accent-soft);color:var(--od-text)}
+.ratio i{display:block;border:1.75px solid currentColor;border-radius:3px}
+.ratio i.free{border-style:dashed}
+
+/* ===== Caixa de ferramentas ===== */
+#toolbox{left:50%;bottom:78px;width:600px;max-width:calc(100vw - 28px);margin-left:-300px}
+.search{display:flex;align-items:center;gap:10px;margin:14px 14px 4px;height:40px;padding:0 12px;border-radius:12px;background:var(--od-sunken);color:var(--od-text-subtle)}
+.search>span:not(.kbd){flex:1}
+.verbs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:6px 10px 10px}
+.verb h5{margin:8px 6px 6px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--od-text-subtle);display:flex;align-items:center;gap:6px}
+.verb h5 em{font-style:normal;font-family:Fraunces,serif;text-transform:none;letter-spacing:0;font-size:14px;color:var(--od-text)}
+.titem{display:flex;align-items:center;gap:9px;width:100%;padding:7px 6px;border-radius:10px;text-align:left;font-size:13px;font-weight:600}
+.titem:hover{background:var(--od-panel-hover)}
+.titem .pv{width:34px;height:26px;border-radius:6px;background:var(--od-sunken);flex:none;display:grid;place-items:center}
+.titem .pv svg{width:24px;height:18px}
+
+/* ===== Linha do tempo ===== */
+#timeline{left:50%;bottom:78px;width:620px;max-width:calc(100vw - 28px);margin-left:-310px;padding:10px 14px 12px}
+.tl-head{display:flex;align-items:center;gap:8px;font-size:12px}
+.tl-head .sp{flex:1}
+.track{position:relative;height:30px;margin-top:8px}
+.bars{position:absolute;left:0;right:0;bottom:12px;height:16px;display:flex;align-items:flex-end;gap:2px}
+.bars i{flex:1;background:var(--od-accent-soft);border-radius:2px 2px 0 0}
+.bars i.hot{background:color-mix(in srgb,var(--od-accent) 45%,transparent)}
+.ver{position:absolute;bottom:6px;width:9px;height:9px;margin-left:-4px;border-radius:50%;background:var(--od-panel);border:2px solid var(--od-accent)}
+.rail{position:absolute;left:0;right:0;bottom:9px;height:2px;background:var(--od-border)}
+input[type=range]{position:absolute;left:-7px;width:calc(100% + 14px);bottom:0;margin:0;height:24px;background:transparent;-webkit-appearance:none;appearance:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:22px;border-radius:7px;background:var(--od-accent);border:2px solid var(--od-panel);box-shadow:var(--sh-panel);margin-top:-10px}
+input[type=range]::-webkit-slider-runnable-track{height:2px}
+.tl-foot{display:flex;justify-content:space-between;font-size:11px;color:var(--od-text-subtle)}
+.past{position:absolute;left:50%;top:70px;z-index:45;transform:translate(-50%,-6px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:10px;padding:6px 8px 6px 14px;border-radius:999px;background:var(--brand-900);color:var(--brand-100);font-weight:600;font-size:13px;box-shadow:var(--sh-pop);transition:all .22s var(--ease)}
+.past.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.past button{height:26px;padding:0 10px;border-radius:999px;background:var(--brand-200);color:var(--brand-950);font-weight:700;font-size:12px}
+.dark .past{background:var(--brand-200);color:var(--brand-950)}.dark .past button{background:var(--brand-900);color:var(--brand-100)}
+
+/* ===== Mundo / conteúdo ===== */
+.world{position:absolute;left:50%;top:50%;width:900px;height:470px;transform:translate(-50%,-50%);transition:filter .3s}
+.world.pastview{filter:sepia(.25) saturate(.85)}
+.frame{position:absolute;left:0;top:0;width:600px;height:400px;background:var(--od-panel);border-radius:3px;box-shadow:0 0 0 1px rgba(20,36,26,.16),0 2px 8px rgba(20,36,26,.06)}
+.dark .frame{box-shadow:0 0 0 1px rgba(255,255,255,.18)}
+.fhead{position:absolute;left:0;top:-24px;font-size:13px;font-weight:600;color:var(--od-text-muted)}
+.step{position:absolute;left:28px;width:540px;height:74px;border-radius:12px;background:#ECF3E1;border:1px solid #D7E6C0;display:flex;align-items:center;gap:16px;padding:0 18px;color:#18211C}
+.step .num{width:38px;height:38px;border-radius:50%;background:#194B32;color:#D0E4AE;display:grid;place-items:center;font-weight:800}
+.step b{display:block;font-size:15px}.step small{font-size:12px;color:#4F5A53}
+.sticky{position:absolute;width:150px;height:110px;padding:12px;border-radius:3px;color:#1C1C1E;font-weight:600;font-size:14px;box-shadow:0 1px 1px rgba(0,0,0,.08),0 8px 14px rgba(0,0,0,.10);transition:opacity .25s}
+.gone{opacity:0!important}
+h1.big{position:absolute;left:28px;top:22px;margin:0;font-family:Fraunces,serif;font-size:34px;color:#194B32}
+p.sub1{position:absolute;left:28px;top:70px;margin:0;color:#4F5A53;font-size:13px}
+
+/* Presença — regra corrigida: uma caixa por pessoa, uma etiqueta */
+.rsel{position:absolute;border:2px solid var(--c);border-radius:2px;pointer-events:none}
+.rsel .tag{position:absolute;right:-2px;top:-20px;height:18px;padding:0 7px;border-radius:5px 5px 0 0;background:var(--c);color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center}
+.redit{position:absolute;border:2px solid var(--c);background:color-mix(in srgb,var(--c) 6%,transparent);border-radius:3px;pointer-events:none}
+.redit .ini{position:absolute;right:-9px;bottom:-9px;width:20px;height:20px;border-radius:50%;background:var(--c);color:#fff;font-size:9px;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 2px var(--od-panel)}
+.cur{position:absolute;pointer-events:none}
+.cur .nm{position:absolute;left:14px;top:16px;padding:2px 8px;border-radius:999px;color:#fff;font-size:11px;font-weight:700;white-space:nowrap}
+
+/* Telas menores: os módulos encolhem para os ícones, a Dock não muda */
+@media (max-width:1180px){.mod .lbl,.live{display:none}}
+@media (max-width:1040px){.vista .ib:not([data-open=bussola]):not([data-open=exibir-pop]),.vista .sep{display:none}.tempo .sep{display:none}.tempo [title^=Refazer]{display:none}#guide{top:auto;bottom:74px}}
+/* ===== v3: gavetas com seções ===== */
+.scroll{max-height:calc(100vh - 150px);overflow:auto;padding-top:2px}
+.sec{padding:4px 0 6px;border-top:1px solid var(--od-border)}
+.sec:first-child{border-top:0}
+.sec .cap{padding:10px 14px 4px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:34px;padding:4px 14px;font-size:13px;text-align:left}
+.opt:hover{background:var(--od-panel-hover)}
+.opt .l{display:flex;align-items:center;gap:10px}
+.opt .l svg.i{width:16px;height:16px;color:var(--od-text-muted)}
+.opt small{display:block;font-size:11.5px;color:var(--od-text-subtle)}
+.opt .kbd{margin-left:6px}
+.btn-sm{height:28px;padding:0 10px;border-radius:8px;font-size:12px;font-weight:600;color:var(--od-text-muted);display:inline-flex;align-items:center;gap:5px}
+.btn-sm:hover{background:var(--od-panel-hover);color:var(--od-text)}
+.btn-sm[aria-pressed=true]{background:var(--od-accent-soft);color:var(--od-text)}
+.btn-sm.soft{background:var(--od-sunken)}
+/* Conversas */
+.thread{margin:0 10px 8px;padding:10px 12px;border-radius:12px;background:var(--od-panel);box-shadow:0 0 0 1px var(--od-border);transition:box-shadow .12s}
+.thread:hover{box-shadow:0 0 0 1.5px var(--od-selection)}
+.thread .top{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.thread .top b{font-weight:700}.thread .top .sp{flex:1}
+.thread p{margin:6px 0 8px 32px;font-size:13px;line-height:1.45;color:var(--od-text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.thread p .men{background:var(--od-accent-soft);border-radius:4px;padding:0 3px;font-weight:600}
+.thread .meta{display:flex;align-items:center;gap:6px;margin-left:32px}
+.thread .meta .sp{flex:1}
+.thread .where{font-size:11.5px;color:var(--od-text-subtle);display:flex;align-items:center;gap:4px}
+.thread.resolved p{text-decoration:line-through;color:var(--od-text-subtle)}
+.pinmini{width:24px;height:24px;border-radius:50% 50% 50% 4px;display:grid;place-items:center;color:#fff;font-size:9.5px;font-weight:800;flex:none;box-shadow:0 0 0 2px var(--od-panel)}
+/* Caixa de ferramentas (DS) */
+.tb-input{display:flex;align-items:center;gap:10px;margin:14px 14px 6px;height:38px;padding:0 12px;border-radius:10px;background:var(--od-panel);border:1px solid var(--od-border);box-shadow:0 0 0 3px var(--od-selection-fill);border-color:var(--od-selection);color:var(--od-text-subtle);font-size:13.5px}
+.tb-input>span:not(.kbd){flex:1}
+.recent{display:flex;align-items:center;gap:6px;padding:4px 14px 8px;flex-wrap:wrap}
+.recent>small{font-size:11.5px;color:var(--od-text-subtle);margin-right:2px}
+.tb-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;padding:0 8px 8px}
+.tb-sec .cap{padding:10px 6px 4px}
+.tb-item{display:flex;align-items:center;gap:10px;width:100%;padding:6px;border-radius:10px;text-align:left}
+.tb-item:hover{background:var(--od-panel-hover)}
+.tb-item .ico{width:34px;height:34px;border-radius:9px;background:var(--od-sunken);display:grid;place-items:center;color:var(--od-accent);flex:none}
+.dark .tb-item .ico{color:var(--od-accent)}
+.tb-item .ico svg{width:18px;height:18px}
+.tb-item b{display:block;font-size:13px;font-weight:600}
+.tb-item small{display:block;font-size:11.5px;color:var(--od-text-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-item .tag{margin-left:auto;font-size:9.5px;font-weight:800;padding:1px 6px;border-radius:999px;background:var(--od-accent-soft);color:var(--od-selection)}
+/* Ficha: 4 colunas */
+.tiles4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 14px 10px}
+.tile4{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px 8px;border-radius:12px;background:var(--od-sunken);font-size:11.5px;font-weight:600;text-align:center;line-height:1.2}
+.tile4:hover{background:var(--od-panel-active)}
+.tile4 svg.i{color:var(--od-accent);width:18px;height:18px}
+.details{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;padding:10px 14px 12px;font-size:12px;border-top:1px solid var(--od-border)}
+.details dt{color:var(--od-text-subtle)}.details dd{margin:0;color:var(--od-text)}
+.emogrid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;padding:0 10px 10px}
+.emo{height:34px;border-radius:8px;font-size:20px}
+.emo:hover{background:var(--od-panel-hover);transform:scale(1.12)}
+/* Guia da proposta */
+#guide{position:absolute;right:14px;top:18px;z-index:41;height:30px;padding:0 12px;border-radius:999px;border:1px dashed var(--od-text-subtle);background:var(--od-panel);font-size:12px;font-weight:700;color:var(--od-text-muted);display:flex;align-items:center;gap:6px}
+.pin{position:absolute;z-index:70;width:22px;height:22px;border-radius:50%;background:#E0457B;color:#fff;font-size:11px;font-weight:800;display:none;place-items:center;box-shadow:0 0 0 2px var(--od-panel)}
+body.g .pin{display:grid}
+#legend{right:14px;top:56px;width:560px;padding:12px 16px;z-index:65}
+#legend .li{display:flex;gap:10px;margin:6px 0;font-size:12.5px;color:var(--od-text-muted);line-height:1.4}
+#legend .li span{flex:none;width:20px;height:20px;border-radius:50%;background:#E0457B;color:#fff;font-weight:800;font-size:11px;display:grid;place-items:center}
+#legend .li b{color:var(--od-text)}
+#legend h5{margin:2px 0 8px;font-family:Fraunces,serif;font-size:16px}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas"></div>
+
+<!-- ===================== Conteúdo do board ===================== -->
+<main class="world" id="world">
+  <div class="frame">
+    <div class="fhead">Comece por aqui</div>
+    <h1 class="big">Comece por aqui</h1>
+    <p class="sub1">Cinco passos curtos para pegar o jeito.</p>
+    <div class="step" style="top:110px"><div class="num">1</div><div><b>Crie um post-it</b><small>Escolha o post-it na Dock ou tecle N.</small></div></div>
+    <div class="step" style="top:196px"><div class="num">2</div><div><b>Escreva e formate</b><small>Duplo clique para escrever.</small></div></div>
+    <div class="step" data-t="70" style="top:282px"><div class="num">3</div><div><b>Ligue as ideias</b><small>Arraste um ponto até outra forma.</small></div></div>
+  </div>
+  <div class="sticky" data-t="40" style="left:660px;top:40px;background:#FBED7C">Ideia para a retro</div>
+  <div class="sticky" data-t="85" style="left:700px;top:200px;background:#88E0F6">Testes lentos no CI</div>
+
+  <!-- Erika selecionou o frame: UMA caixa e UMA etiqueta (os filhos não ganham contorno próprio) -->
+  <div class="rsel" style="--c:#7C4DDB;left:-6px;top:-6px;width:612px;height:412px"><span class="tag">Erika</span></div>
+  <!-- Rafael está editando um post-it: contorno + selo de iniciais -->
+  <div class="redit" style="--c:#2C64A8;left:696px;top:196px;width:158px;height:118px"><span class="ini">RA</span></div>
+  <div class="cur" style="left:840px;top:300px"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M2 2l5 13 2-5.5L15 7z" fill="#2C64A8" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg><span class="nm" style="background:#2C64A8">Rafael</span></div>
+  <div class="cur" style="left:590px;top:410px"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M2 2l5 13 2-5.5L15 7z" fill="#7C4DDB" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg><span class="nm" style="background:#7C4DDB">Erika</span></div>
+</main>
+
+<div class="past" id="past"><svg class="i" data-i="hourglass" style="width:16px;height:16px"></svg><span id="pastTxt">Vendo o board às 11:29 — somente leitura</span><button id="backNow">Voltar ao agora</button></div>
+
+<button id="guide"><svg class="i" data-i="info" style="width:14px;height:14px"></svg>Guia da proposta</button>
+
+<!-- ===================== Módulo FICHA (topo esquerdo) ===================== -->
+<div class="topo" id="topo">
+<div class="mod ficha" id="m-ficha">
+  <button class="home" title="Voltar à Mesa"><svg viewBox="0 0 64 64"><path d="M15 42c6-14 12-20 18-18s4 10 10 10c4 0 6-4 7-8" fill="none" stroke="#D0E4AE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="48" cy="18" r="5" fill="#D0E4AE"/></svg></button>
+  <button class="title-btn" data-open="ficha-pop" aria-expanded="false">
+    <small><i></i>Produto · Sprint 14</small>
+    <b>Comece por aqui <svg class="i" data-i="down" style="width:14px;height:14px"></svg></b>
+  </button>
+  <span class="live"><i></i>Ao vivo</span>
+  <span class="pin" style="left:-12px;top:-14px">1</span>
+</div>
+<div class="sep"></div>
+
+<!-- ===================== Módulo RODA (topo direito) ===================== -->
+<div class="mod roda" id="m-roda">
+  <div class="stack" title="Clique numa pessoa para seguir">
+    <span class="av" style="background:#7C4DDB">ER</span><span class="av" style="background:#2C64A8">RA</span><span class="av more">+2</span>
+  </div>
+  <div class="sep"></div>
+  <button class="ib" data-open="facil-pop" aria-expanded="false" title="Facilitar"><svg class="i" data-i="baton"></svg><span class="lbl">Facilitar</span><span class="timer-chip">04:12</span></button>
+  <button class="ib" data-open="coment-pop" aria-expanded="false" title="Comentários (C)"><svg class="i" data-i="comment"></svg><span class="count">3</span></button>
+  <button class="ib" title="Apresentar a partir do primeiro frame (Ctrl Alt P)"><svg class="i" data-i="play"></svg><span class="lbl">Apresentar</span></button>
+  <button class="ib primary" title="Compartilhar"><svg class="i" data-i="share"></svg><span class="lbl">Compartilhar</span></button>
+  <button class="ib" data-open="me-pop" aria-expanded="false" style="padding:0 3px" title="Você"><span class="av" style="background:#194B32;margin:0">LU</span></button>
+  <span class="pin" style="right:-12px;top:-14px">2</span>
+</div>
+</div>
+
+<!-- ===================== Módulo VISTA (base esquerda) ===================== -->
+<div class="mod vista" id="m-vista">
+  <button class="ib" data-open="bussola" aria-expanded="false" title="Bússola"><svg class="i" data-i="compass"></svg></button>
+  <div class="sep"></div>
+  <button class="ib" title="Afastar (−)"><svg class="i" data-i="minus"></svg></button>
+  <button class="ib zoom" title="Ajustar à tela (Shift 1)">85%</button>
+  <button class="ib" title="Aproximar (+)"><svg class="i" data-i="plus"></svg></button>
+  <div class="sep"></div>
+  <button class="ib" title="Encontrar no board (Ctrl F)"><svg class="i" data-i="search"></svg></button>
+  <button class="ib" data-open="exibir-pop" aria-expanded="false" title="Exibir"><svg class="i" data-i="eye"></svg></button>
+  <button class="ib" data-open="roteiro-pop" aria-expanded="false" title="Roteiro e apresentação"><svg class="i" data-i="roteiro"></svg></button>
+  <span class="pin" style="left:-8px;top:-8px">3</span>
+</div>
+
+<!-- ===================== Módulo TEMPO (base direita) ===================== -->
+<div class="mod tempo" id="m-tempo">
+  <button class="ib" title="Desfazer (Ctrl Z)"><svg class="i" data-i="undo"></svg></button>
+  <button class="ib" title="Refazer (Ctrl Shift Z)"><svg class="i" data-i="redo"></svg></button>
+  <div class="sep"></div>
+  <button class="ib" data-open="timeline" aria-expanded="false" title="Linha do tempo"><svg class="i" data-i="hourglass"></svg><span class="lbl">Tempo</span></button>
+  <span class="pin" style="right:-8px;top:-8px">4</span>
+</div>
+
+<!-- ===================== DOCK (posição mantida) ===================== -->
+<div class="dock" id="dock" role="toolbar">
+  <button class="quick" title="Inserção rápida"><svg viewBox="0 0 64 64"><path d="M15 42c6-14 12-20 18-18s4 10 10 10c4 0 6-4 7-8" fill="none" stroke="#D0E4AE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="48" cy="18" r="5" fill="#D0E4AE"/></svg></button>
+  <button class="tool" title="Mão (H, Espaço)"><svg class="i" data-i="od-hand"></svg></button>
+  <button class="tool" data-active="true" title="Selecionar (V)"><svg class="i" data-i="od-select"></svg></button>
+  <button class="tool" title="Laço (Q)"><svg class="i" data-i="od-lasso"></svg></button>
+  <div class="sep"></div>
+  <button class="tool has-tray" data-tray="tray-sticky" title="Post-it (N)"><svg class="i" data-i="od-sticky"></svg></button>
+  <button class="tool" title="Texto (T)"><svg class="i" data-i="od-text"></svg></button>
+  <button class="tool has-tray" data-tray="tray-shapes" title="Formas (S)"><svg class="i" data-i="od-shapes"></svg></button>
+  <button class="tool" title="Conector (L)"><svg class="i" data-i="od-connector"></svg></button>
+  <button class="tool has-tray" title="Pena (P)"><svg class="i" data-i="od-pen"></svg></button>
+  <div class="sep"></div>
+  <button class="tool has-tray" data-tray="tray-frame" title="Frame (F)"><svg class="i" data-i="od-frame"></svg></button>
+  <button class="tool" title="Imagem"><svg class="i" data-i="od-image"></svg></button>
+  <button class="tool has-tray" data-tray="tray-emoji" title="Emojis e adesivos (E)"><svg class="i" data-i="od-sticker"></svg></button>
+  <button class="tool" title="Comentário (C)"><svg class="i" data-i="od-comment"></svg></button>
+  <div class="sep"></div>
+  <button class="tool" data-tray="toolbox" title="Caixa de ferramentas (/)"><svg class="i" data-i="od-toolbox"></svg></button>
+  <span class="pin" style="left:50%;top:-12px">5</span>
+</div>
+
+<!-- ===================== Flutuantes ===================== -->
+
+<!-- Ficha do board -->
+<section class="float pop" id="ficha-pop">
+  <div class="board-id">
+    <div class="thumb"><i style="left:6px;top:6px;width:38px;height:30px;background:#ECF3E1"></i><i style="left:48px;top:8px;width:14px;height:12px;background:#FBED7C"></i><i style="left:52px;top:26px;width:14px;height:12px;background:#88E0F6"></i></div>
+    <div style="flex:1;min-width:0">
+      <input value="Comece por aqui" aria-label="Renomear o board (duplo clique no nome também renomeia)">
+      <div class="place"><svg class="i" data-i="folder" style="width:14px;height:14px"></svg>Produto › Sprint 14 · <button>Mover para…</button></div>
+    </div>
+    <button class="ib" title="Marcar como favorito" style="color:#E0A21B"><svg class="i" data-i="star" style="fill:#E0A21B"></svg></button>
+  </div>
+  <div class="tiles4">
+    <button class="tile4"><svg class="i" data-i="plus"></svg>Novo board</button>
+    <button class="tile4"><svg class="i" data-i="copy"></svg>Duplicar</button>
+    <button class="tile4"><svg class="i" data-i="download"></svg>Exportar…</button>
+    <button class="tile4"><svg class="i" data-i="upload"></svg>Importar…</button>
+    <button class="tile4"><svg class="i" data-i="template"></svg>Salvar como modelo</button>
+    <button class="tile4"><svg class="i" data-i="hourglass"></svg>Histórico</button>
+    <button class="tile4"><svg class="i" data-i="paint"></svg>Cor de fundo</button>
+    <button class="tile4"><svg class="i" data-i="tag"></svg>Tags do board</button>
+  </div>
+  <dl class="details">
+    <dt>Dono</dt><dd>Luka</dd><dt>Criado</dt><dd>3 nov. 2026</dd><dt>Editado</dt><dd>há 2 min por Rafael</dd><dt>Tamanho</dt><dd>128 objetos · 1,4 MB</dd>
+  </dl>
+  <button class="row danger" style="margin:0 6px 8px"><svg class="i" data-i="trash"></svg>Mover para a lixeira</button>
+</section>
+
+<!-- Facilitar -->
+<section class="float pop" id="facil-pop">
+  <div class="ph"><h4>Facilitar a sessão</h4><span class="sp"></span><span class="hint">Você é facilitador</span></div>
+  <div class="fgrid">
+    <button class="fcard ativo"><span class="ic"><svg class="i" data-i="timer"></svg></span><b>Cronômetro</b><small>Contando · 04:12</small></button>
+    <button class="fcard"><span class="ic"><svg class="i" data-i="dots"></svg></span><b>Votação</b><small>Pontos nos objetos</small></button>
+    <button class="fcard"><span class="ic"><svg class="i" data-i="poll"></svg></span><b>Enquete</b><small>Perguntas e respostas</small></button>
+    <button class="fcard"><span class="ic"><svg class="i" data-i="eyeoff"></svg></span><b>Modo Privado</b><small>Notas ocultas até revelar</small></button>
+    <button class="fcard"><span class="ic"><svg class="i" data-i="users"></svg></span><b>Conduzir a tela</b><small>Trazer todos até você</small></button>
+    <button class="fcard"><span class="ic"><svg class="i" data-i="scan"></svg></span><b>Ver como…</b><small>Simular outro papel</small></button>
+  </div>
+  <div class="fnote"><svg class="i" data-i="info" style="width:13px;height:13px"></svg>Quem não pode facilitar vê os cartões desabilitados com o motivo.</div>
+</section>
+
+<!-- Comentários -->
+<section class="float pop" id="coment-pop">
+  <div class="ph"><h4>Conversas</h4><span class="hint">3 abertas</span><span class="sp"></span><button class="btn-sm soft"><svg class="i" data-i="plus" style="width:13px;height:13px"></svg>Nova</button></div>
+  <div style="display:flex;align-items:center;gap:4px;padding:0 14px 10px">
+    <button class="btn-sm" aria-pressed="true">Abertas</button><button class="btn-sm">Resolvidas</button><button class="btn-sm">Todas</button>
+    <span style="flex:1"></span><button class="btn-sm" title="Só as que mencionam você">@ Menções</button>
+  </div>
+  <div class="scroll" style="max-height:340px">
+  <div class="thread">
+    <div class="top"><span class="pinmini" style="background:#7C4DDB">ER</span><b>Erika</b><span class="hint">há 3 min</span><span class="sp"></span>
+      <button class="ib" style="height:26px;min-width:26px" title="Resolver"><svg class="i" data-i="check" style="width:15px;height:15px"></svg></button></div>
+    <p>Esse passo 3 poderia ter um exemplo de conector ligado a uma forma.</p>
+    <div class="meta"><span class="where"><svg class="i" data-i="od-frame" style="width:12px;height:12px"></svg>Comece por aqui</span><span class="hint">· 2 respostas</span><span class="sp"></span>
+      <button class="btn-sm soft" title="Levar a tela até o comentário"><svg class="i" data-i="locate" style="width:13px;height:13px"></svg>Ir até</button></div>
+  </div>
+  <div class="thread">
+    <div class="top"><span class="pinmini" style="background:#2C64A8">RA</span><b>Rafael</b><span class="hint">há 10 min</span><span class="sp"></span>
+      <button class="ib" style="height:26px;min-width:26px" title="Resolver"><svg class="i" data-i="check" style="width:15px;height:15px"></svg></button></div>
+    <p><span class="men">@Luka</span> revisa o texto do post-it azul antes da reunião?</p>
+    <div class="meta"><span class="where"><svg class="i" data-i="od-sticky" style="width:12px;height:12px"></svg>Testes lentos no CI</span><span class="sp"></span>
+      <button class="btn-sm soft" title="Levar a tela até o comentário"><svg class="i" data-i="locate" style="width:13px;height:13px"></svg>Ir até</button></div>
+  </div>
+  <div class="thread">
+    <div class="top"><span class="pinmini" style="background:#194B32">LU</span><b>Luka</b><span class="hint">ontem</span><span class="sp"></span>
+      <button class="ib" style="height:26px;min-width:26px" title="Resolver"><svg class="i" data-i="check" style="width:15px;height:15px"></svg></button></div>
+    <p>Mover o fluxo para outro frame.</p>
+    <div class="meta"><span class="where"><svg class="i" data-i="pin" style="width:12px;height:12px"></svg>No canvas</span><span class="sp"></span>
+      <button class="btn-sm soft" title="Levar a tela até o comentário"><svg class="i" data-i="locate" style="width:13px;height:13px"></svg>Ir até</button></div>
+  </div>
+  </div>
+  <button class="opt" style="border-top:1px solid var(--od-border);padding:10px 14px"><span class="l"><span>Seguir todas as conversas<small>receber aviso de respostas mesmo sem menção</small></span></span><span class="sw on"></span></button>
+</section>
+
+<!-- Você -->
+<section class="float pop" id="me-pop">
+  <div class="me"><span class="av" style="background:#194B32">LU</span><div><b>Luka</b><small>Editor · facilitador neste board</small></div></div>
+  <div class="scroll">
+  <div class="sec"><div class="cap">Aparência</div>
+    <button class="opt" id="themeRow"><span class="l"><svg class="i" data-i="moon"></svg>Tema escuro</span><span class="sw" id="themeSw"></span></button>
+  </div>
+  <div class="sec"><div class="cap">Edição</div>
+    <div class="opt"><span class="l"><svg class="i" data-i="mouse"></svg>Navegar com</span><div class="seg" style="width:150px"><button aria-pressed="true">Mouse</button><button>Trackpad</button></div></div>
+    <button class="opt"><span class="l"><svg class="i" data-i="hoversel"></svg><span>Selecionar ao passar por cima<small>sem precisar clicar</small></span></span><span class="sw on"></span></button>
+  </div>
+  <div class="sec"><div class="cap">Acessibilidade</div>
+    <button class="opt"><span class="l"><svg class="i" data-i="target"></svg>Seleção precisa</span><span class="sw on"></span></button>
+    <button class="opt"><span class="l"><svg class="i" data-i="wave"></svg>Reduzir movimento</span><span class="sw "></span></button>
+    <button class="opt"><span class="l"><svg class="i" data-i="keyboard"></svg>Atalhos de uma tecla</span><span class="sw on"></span></button>
+  </div>
+  <div class="sec"><div class="cap">Avisos</div>
+    <button class="opt"><span class="l"><svg class="i" data-i="bell"></svg>Não perturbe</span><span class="sw "></span></button>
+    <button class="opt"><span class="l"><svg class="i" data-i="desktop"></svg><span>Abrir sempre no app para desktop<small>só aparece quando o app está instalado</small></span></span><span class="sw "></span></button>
+  </div>
+  <div class="sec">
+    <button class="row" style="margin-top:4px"><svg class="i" data-i="keyboard"></svg>Atalhos e ajuda<span class="sp"></span><span class="kbd">?</span></button>
+    <button class="row"><svg class="i" data-i="settings"></svg>Configurações do perfil</button>
+  </div>
+  </div>
+</section>
+
+<!-- Exibir -->
+<section class="float pop" id="exibir-pop">
+  <div class="ph"><h4>Exibir</h4><span class="sp"></span><button class="btn-sm soft" title="Tela inteira">Tela inteira <span class="kbd">F11</span></button></div>
+  <div class="scroll">
+  <div class="sec"><div class="cap">Grade e encaixe</div>
+    <div class="opt"><span class="l"><svg class="i" data-i="grid"></svg>Grade <span class="kbd">G</span></span><div class="seg" style="width:160px"><button aria-pressed="true">Pontos</button><button>Linhas</button><button>Nada</button></div></div>
+    <button class="opt"><span class="l">Encaixar na grade</span><span class="sw "></span></button>
+    <button class="opt"><span class="l"><span>Encaixar em objetos<small>guias de alinhamento</small></span></span><span class="sw on"></span></button>
+    <button class="opt"><span class="l">Medidas do objeto</span><span class="sw "></span></button>
+    <button class="opt"><span class="l">Sugerir tamanho igual aos vizinhos</span><span class="sw on"></span></button>
+    <button class="opt"><span class="l">Medidas do board (régua de projeto)</span><span class="sw "></span></button>
+  </div>
+  <div class="sec"><div class="cap">No board</div>
+    <button class="opt"><span class="l">Comentários <span class="kbd">Shift C</span></span><span class="sw on"></span></button>
+    <button class="opt"><span class="l">Conectores</span><span class="sw on"></span></button>
+    <button class="opt"><span class="l">Barras de rolagem</span><span class="sw "></span></button>
+  </div>
+  <div class="sec"><div class="cap">Pessoas</div>
+    <button class="opt"><span class="l">Cursores de quem está aqui</span><span class="sw on"></span></button>
+    <button class="opt"><span class="l">Movimento suave dos cursores</span><span class="sw on"></span></button>
+  </div>
+  <div class="sec"><div class="cap">Módulos da tela</div>
+    <button class="opt"><span class="l">Bússola sempre aberta</span><span class="sw "></span></button>
+    <button class="opt"><span class="l">Módulo Tempo (desfazer, refazer, linha do tempo)</span><span class="sw on"></span></button>
+  </div>
+  <div class="sec"><div class="cap">Destacar por tag</div>
+    <div class="chips"><button class="chip" style="background:#3A8156">time</button><button class="chip off">prática</button><button class="chip off">risco</button></div>
+  </div>
+  </div>
+</section>
+
+<!-- Roteiro -->
+<section class="float pop" id="roteiro-pop">
+  <div class="ph"><h4>Roteiro</h4><span class="sp"></span><span class="hint">3 frames · arraste para reordenar</span></div>
+  <div class="slide"><span class="n">1</span><span class="mini"></span><span style="flex:1">Comece por aqui</span><button class="ib" title="Apresentar a partir daqui" style="height:28px;min-width:28px"><svg class="i" data-i="play" style="width:13px;height:13px"></svg></button></div>
+  <div class="slide"><span class="n">2</span><span class="mini"></span><span style="flex:1">Exemplo de fluxo</span><button class="ib" title="Apresentar a partir daqui" style="height:28px;min-width:28px"><svg class="i" data-i="play" style="width:13px;height:13px"></svg></button></div>
+  <div class="slide"><span class="n">3</span><span class="mini"></span><span style="flex:1">Próximos passos</span><button class="ib" title="Apresentar a partir daqui" style="height:28px;min-width:28px"><svg class="i" data-i="play" style="width:13px;height:13px"></svg></button></div>
+  <div class="hr"></div>
+  <button class="row"><svg class="i" data-i="home"></svg>Ir para a vista inicial</button>
+  <button class="row"><svg class="i" data-i="pin"></svg>Usar esta vista como inicial</button>
+  <div style="height:6px"></div>
+</section>
+
+<section class="float pop" id="bussola"><div class="map"></div></section>
+
+<!-- Menu do canvas -->
+<section class="float pop" id="ctx" role="menu">
+  <div class="ctx-head"><b>Neste ponto</b><span class="mono" id="coords">x 1204 · y −88</span></div>
+  <div class="quickrow">
+    <button class="qa" title="Ctrl V"><svg class="i" data-i="paste"></svg>Colar</button>
+    <button class="qa" title="N"><svg class="i" data-i="od-sticky"></svg>Post-it</button>
+    <button class="qa" title="T"><svg class="i" data-i="od-text"></svg>Texto</button>
+    <button class="qa" title="F"><svg class="i" data-i="od-frame"></svg>Frame</button>
+    <button class="qa" title="C"><svg class="i" data-i="od-comment"></svg>Conversa</button>
+  </div>
+  <div class="hr" style="margin-top:0"></div>
+  <button class="row" data-sub="sub-inserir"><svg class="i" data-i="plus"></svg>Inserir aqui<span class="sp"></span><svg class="i" data-i="right" style="width:14px;height:14px"></svg></button>
+  <button class="row"><svg class="i" data-i="selall"></svg>Selecionar tudo<span class="sp"></span><span class="kbd">Ctrl A</span></button>
+  <button class="row"><svg class="i" data-i="unlock"></svg>Desbloquear todos<span class="sp"></span><span class="hint">3 objetos</span></button>
+  <div class="hr"></div>
+  <button class="row" data-sub="sub-vista"><svg class="i" data-i="home"></svg>Vista inicial<span class="sp"></span><svg class="i" data-i="right" style="width:14px;height:14px"></svg></button>
+  <button class="row" data-sub="sub-grade"><svg class="i" data-i="grid"></svg>Grade e encaixe<span class="sp"></span><svg class="i" data-i="right" style="width:14px;height:14px"></svg></button>
+  <button class="row" data-sub="sub-nav"><svg class="i" data-i="mouse"></svg>Navegar com<span class="sp"></span><span class="hint">Mouse</span><svg class="i" data-i="right" style="width:14px;height:14px"></svg></button>
+  <button class="row"><svg class="i" data-i="fit"></svg>Mostrar tudo<span class="sp"></span><span class="kbd">Alt 1</span></button>
+  <div class="ctx-foot" style="padding:6px 12px 2px;font-size:11px;color:var(--od-text-subtle)">"Desbloquear todos" só aparece quando há algo bloqueado.</div>
+</section>
+<section class="float pop sub" id="sub-vista">
+  <button class="row">Definir neste ponto</button><button class="row">Usar a vista atual</button><button class="row">Ir para a vista inicial</button>
+</section>
+<section class="float pop sub" id="sub-inserir">
+  <button class="row"><svg class="i" data-i="od-image"></svg>Imagem…</button>
+  <button class="row"><svg class="i" data-i="upload"></svg>Arquivo (planilha, SVG…)…</button>
+  <button class="row"><svg class="i" data-i="template"></svg>Modelo…</button>
+  <div class="hr"></div>
+  <button class="row"><svg class="i" data-i="kanban"></svg>Kanban</button>
+  <button class="row"><svg class="i" data-i="grid"></svg>Tabela</button>
+  <button class="row"><svg class="i" data-i="mind"></svg>Mapa mental</button>
+  <button class="row"><svg class="i" data-i="od-shapes"></svg>Frame com a seleção<span class="sp"></span><span class="hint">com seleção</span></button>
+</section>
+<section class="float pop sub" id="sub-nav">
+  <button class="row">Mouse<span class="sp"></span><svg class="i" data-i="check" style="width:14px;height:14px"></svg></button>
+  <button class="row">Trackpad</button>
+</section>
+<section class="float pop sub" id="sub-grade">
+  <button class="row">Mostrar grade<span class="sp"></span><span class="kbd">G</span><span class="sw on"></span></button>
+  <button class="row">Estilo: pontos · linhas<span class="sp"></span><svg class="i" data-i="right" style="width:14px;height:14px"></svg></button>
+  <button class="row">Encaixar na grade<span class="sp"></span><span class="sw "></span></button>
+  <button class="row">Encaixar em objetos<span class="sp"></span><span class="sw on"></span></button>
+  <button class="row">Medidas do objeto<span class="sp"></span><span class="sw "></span></button>
+  <button class="row">Sugerir tamanho<span class="sp"></span><span class="sw on"></span></button>
+  <button class="row">Comentários no board<span class="sp"></span><span class="kbd">Shift C</span></button>
+</section>
+
+<!-- Bandeja: Formas -->
+<div class="float tray" id="tray-shapes"><div class="pop">
+  <div class="ph"><h4>Formas</h4><span class="sp"></span><span class="kbd">S</span></div>
+  <div class="cap" style="padding-top:2px">Linhas</div>
+  <div class="lines">
+    <button title="Linha (L)"><svg class="i" viewBox="0 0 24 24"><path d="M4 18L20 6"/></svg></button>
+    <button title="Seta"><svg class="i" viewBox="0 0 24 24"><path d="M4 18L19 7M13 6.5h6.5V13"/></svg></button>
+    <button title="Cotovelo"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h8v12h8M16.5 14.5L20 18l-3.5 3.5"/></svg></button>
+    <button title="Curva"><svg class="i" viewBox="0 0 24 24"><path d="M4 18C8 4 16 20 20 6"/></svg></button>
+  </div>
+  <div class="cap">Básicas</div>
+  <div class="sgrid">
+    <button><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/></svg>Retângulo</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75"><ellipse cx="12" cy="12" rx="8.5" ry="7"/></svg>Oval</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75"><path d="M12 3l9 9-9 9-9-9z"/></svg>Losango</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75"><path d="M12 4l9 16H3z"/></svg>Triângulo</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75"><rect x="3" y="7" width="18" height="10" rx="5"/></svg>Cápsula</button>
+  </div>
+  <div class="cap ext-cap">Fluxograma <span>extensão</span></div>
+  <div class="sgrid">
+    <button><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75"><rect x="3" y="7" width="18" height="10" rx="5"/></svg>Início</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75"><path d="M3.5 6h17v10c-4 3-6-2-8.5 0s-5 3-8.5 0z"/></svg>Documento</button>
+    <button><svg viewBox="0 0 24 24" fill="none" stroke-width="1.75"><ellipse cx="12" cy="6" rx="7.5" ry="2.5"/><path d="M4.5 6v12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5V6"/></svg>Banco</button>
+  </div>
+  <div class="tfoot"><span>Arraste para desenhar · clique para o tamanho padrão</span><button><svg class="i" data-i="code" style="width:14px;height:14px"></svg>Diagrama por texto</button></div>
+</div></div>
+
+<!-- Bandeja: Post-its -->
+<div class="float tray" id="tray-sticky"><div class="pop">
+  <div class="ph"><h4>Post-it</h4><span class="cname" id="cname">Canário</span><span class="sp"></span><span class="kbd">N</span></div>
+  <div class="notes" id="notes"></div>
+  <div style="padding:0 14px 12px"><div class="seg"><button aria-pressed="true">Um por vez</button><button>Em bloco (grade)</button></div></div>
+  <div class="tfoot"><span>Passe o mouse para ver o nome da cor</span><span class="kbd">Tab</span></div>
+</div></div>
+
+<!-- Bandeja: Frame -->
+<div class="float tray" id="tray-frame"><div class="pop">
+  <div class="ph"><h4>Frame</h4><span class="sp"></span><span class="kbd">F</span></div>
+  <div class="ratios">
+    <button class="ratio" aria-pressed="true"><i class="free" style="width:30px;height:22px"></i>Livre</button>
+    <button class="ratio"><i style="width:34px;height:19px"></i>16:9</button>
+    <button class="ratio"><i style="width:28px;height:21px"></i>4:3</button>
+    <button class="ratio"><i style="width:18px;height:25px"></i>A4</button>
+    <button class="ratio"><i style="width:13px;height:27px;border-radius:4px"></i>Celular</button>
+  </div>
+  <div class="hr" style="margin:0"></div>
+  <button class="row" style="margin-top:6px"><svg class="i" data-i="play"></svg>Apresentar os frames</button>
+  <button class="row"><svg class="i" data-i="proto"></svg>Protótipo navegável</button>
+  <div class="tfoot"><span>Arraste no board para desenhar</span><span>Roteiro na Vista ↙</span></div>
+</div></div>
+
+<div class="float tray" id="tray-emoji"><div class="pop" style="width:330px">
+  <div class="ph"><h4>Emojis e adesivos</h4><span class="sp"></span><span class="kbd">E</span></div>
+  <div style="padding:0 14px 8px"><div class="tb-input" style="margin:0;height:34px;box-shadow:none;border-color:var(--od-border)"><svg class="i" data-i="search"></svg><span>Buscar emoji…</span></div></div>
+  <div style="display:flex;gap:4px;padding:0 14px 8px"><button class="btn-sm" aria-pressed="true">Emojis</button><button class="btn-sm">Adesivos</button><button class="btn-sm">Das extensões</button></div>
+  <div class="emogrid"><button class="emo">😀</button><button class="emo">😂</button><button class="emo">😍</button><button class="emo">🤔</button><button class="emo">😮</button><button class="emo">😢</button><button class="emo">👍</button><button class="emo">👎</button><button class="emo">👏</button><button class="emo">🙌</button><button class="emo">❤️</button><button class="emo">🔥</button><button class="emo">💡</button><button class="emo">✅</button><button class="emo">❌</button><button class="emo">⭐</button><button class="emo">🎉</button><button class="emo">🚀</button><button class="emo">⚠️</button><button class="emo">❓</button><button class="emo">📌</button><button class="emo">🎯</button><button class="emo">💬</button><button class="emo">👀</button></div>
+  <div class="tfoot"><span>Clique para colocar no centro · arraste para o lugar</span><span>Reagir a um post-it: Barra de ações</span></div>
+</div></div>
+<!-- Caixa de ferramentas -->
+<section class="float pop" id="toolbox">
+  <div class="tb-input"><svg class="i" data-i="search"></svg><span>Buscar ferramentas, modelos e extensões…</span><span class="kbd">/</span></div>
+  <div class="recent" style="justify-content:space-between"><div class="seg" id="tbseg" style="width:360px"><button aria-pressed="true" data-f="all">Tudo</button><button data-f="core">Do OpenDraw</button><button data-f="ext">Extensões · 4</button></div></div>
+  <div class="recent" data-core><small>Recentes</small><button class="btn-sm soft">Kanban</button><button class="btn-sm soft">Diagrama por texto</button><button class="btn-sm soft">Modelos</button></div>
+  <div class="tb-grid">
+   <div class="tb-sec" data-core><div class="cap">Organizar</div><button class="tb-item"><span class="ico"><svg class="i" data-i="kanban"></svg></span><span style="min-width:0"><b>Kanban</b><small>Colunas e cartões com prazo</small></span></button><button class="tb-item"><span class="ico"><svg class="i" data-i="grid"></svg></span><span style="min-width:0"><b>Tabela</b><small>Linhas e colunas editáveis</small></span></button><button class="tb-item"><span class="ico"><svg class="i" data-i="timeline"></svg></span><span style="min-width:0"><b>Cronograma</b><small>Etapas numa linha do tempo</small></span></button></div>
+   <div class="tb-sec" data-core><div class="cap">Diagramar</div><button class="tb-item"><span class="ico"><svg class="i" data-i="mind"></svg></span><span style="min-width:0"><b>Mapa mental</b><small>Ideias em ramos</small></span></button><button class="tb-item"><span class="ico"><svg class="i" data-i="code"></svg></span><span style="min-width:0"><b>Diagrama por texto</b><small>Escreva e gere o desenho</small></span></button><button class="tb-item"><span class="ico"><svg class="i" data-i="od-shapes"></svg></span><span style="min-width:0"><b>Fluxograma</b><small>Formas de processo</small></span><span class="tag">extensão</span></button></div>
+   <div class="tb-sec" data-core><div class="cap">Apresentar</div><button class="tb-item"><span class="ico"><svg class="i" data-i="play"></svg></span><span style="min-width:0"><b>Slides</b><small>Frames em sequência</small></span></button><button class="tb-item"><span class="ico"><svg class="i" data-i="proto"></svg></span><span style="min-width:0"><b>Protótipo</b><small>Telas com navegação</small></span></button><button class="tb-item"><span class="ico"><svg class="i" data-i="doc"></svg></span><span style="min-width:0"><b>Documento</b><small>Texto longo no board</small></span></button></div>
+   <div class="tb-sec" data-core><div class="cap">Trazer e levar</div><button class="tb-item"><span class="ico"><svg class="i" data-i="template"></svg></span><span style="min-width:0"><b>Modelos</b><small>Comece de uma estrutura</small></span></button><button class="tb-item"><span class="ico"><svg class="i" data-i="upload"></svg></span><span style="min-width:0"><b>Importar</b><small>Planilha, SVG, .excalidraw</small></span></button><button class="tb-item"><span class="ico"><svg class="i" data-i="download"></svg></span><span style="min-width:0"><b>Exportar</b><small>PNG, PDF, SVG, CSV</small></span></button></div>
+  </div>
+   <div class="tb-sec" data-ext style="grid-column:1/-1;border-top:1px solid var(--od-border);margin-top:4px"><div class="cap" style="display:flex;justify-content:space-between;align-items:center">Das extensões ativas<button class="btn-sm" style="text-transform:none;letter-spacing:0">Gerenciar extensões</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 10px">
+     <button class="tb-item"><span class="ico"><svg class="i" data-i="puzzle"></svg></span><span style="min-width:0"><b>Cartão de história</b><small>Modelos Scrum · elemento</small></span><span class="tag">extensão</span></button>
+     <button class="tb-item"><span class="ico"><svg class="i" data-i="puzzle"></svg></span><span style="min-width:0"><b>Contar palavras</b><small>Contador de palavras · comando</small></span><span class="tag">extensão</span></button>
+     <button class="tb-item"><span class="ico"><svg class="i" data-i="puzzle"></svg></span><span style="min-width:0"><b>Painel do contador</b><small>Contador de palavras · painel</small></span><span class="tag">extensão</span></button>
+     <button class="tb-item"><span class="ico"><svg class="i" data-i="puzzle"></svg></span><span style="min-width:0"><b>Importar .drawio</b><small>Formato .drawio · importador</small></span><span class="tag">extensão</span></button>
+    </div>
+   </div>
+  
+  <div class="tfoot"><span>Agrupado pelo que você quer fazer · Enter insere no centro da tela</span><span class="kbd">Esc</span></div>
+</section>
+
+<!-- Linha do tempo -->
+<section class="float pop" id="timeline">
+  <div class="tl-head"><svg class="i" data-i="hourglass" style="width:16px;height:16px;color:var(--od-selection)"></svg><b>Linha do tempo</b><span id="tlNow" class="hint">Agora · 14:32</span><span class="sp"></span><span class="hint">7 versões · 142 eventos</span></div>
+  <div class="track" id="track"><div class="bars" id="bars"></div><div class="rail"></div><input type="range" id="scrub" min="0" max="100" value="100" aria-label="Voltar no tempo"></div>
+  <div class="tl-foot"><span>09:00</span><span>10:30</span><span>12:00</span><span>13:30</span><span>14:32</span></div>
+</section>
+
+<!-- Guia -->
+<section class="float pop" id="legend">
+  <h5>Estúdio v2 · variante Centro</h5>
+  <div class="li"><span>↔</span><div><b>Barra única no centro do topo</b> — Ficha e Roda na mesma peça, separadas por um divisor; os cantos ficam livres para o canvas e cada gaveta abre logo abaixo do botão que a chamou. <b>Apresentar</b> fica na própria barra.</div></div>
+  <div class="li"><span>1</span><div><b>Ficha</b> — identidade do board (Mesa, lugar, nome, ao vivo). Clicar no nome abre a ficha com tudo que é do board: versões, exportar, importar, duplicar, modelo, ajustes, lixeira.</div></div>
+  <div class="li"><span>2</span><div><b>Roda</b> — as pessoas da sessão: quem está aqui, <b>Facilitar</b> (cartões, não submenus), conversas, Compartilhar e o seu menu pessoal (tema, preferências, acessibilidade, atalhos).</div></div>
+  <div class="li"><span>3</span><div><b>Vista</b> — como você olha o board: bússola, zoom, Exibir (grade, encaixe, tags) e Roteiro (frames, vista inicial, apresentar).</div></div>
+  <div class="li"><span>4</span><div><b>Tempo</b> — desfazer, refazer e a linha do tempo das versões, juntos.</div></div>
+  <div class="li"><span>5</span><div><b>Dock</b> — mesma posição. Mão antes de Selecionar, ícones próprios, bandejas presas ao botão e a Caixa de ferramentas agrupada por verbo.</div></div>
+  <div class="li"><span>✓</span><div>Sem menu ⋯ e sem painel lateral: <b>cada módulo abre a sua própria gaveta, no próprio canto</b>. Botão direito no canvas: experimente.</div></div>
+</section>
+
+<script>
+const P={
+ down:'<path d="M6 9l6 6 6-6"/>',right:'<path d="M9 6l6 6-6 6"/>',plus:'<path d="M12 5v14M5 12h14"/>',minus:'<path d="M5 12h14"/>',
+ info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',share:'<circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 11l7.6-4M8.2 13l7.6 4"/>',
+ comment:'<path d="M4.5 19.5v-8a7 7 0 1 1 7 7h-7z"/>',compass:'<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+ eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
+ eyeoff:'<path d="M4 4l16 16"/><path d="M9.5 6a9 9 0 0 1 2.5-.5c6 0 9.5 6.5 9.5 6.5a16 16 0 0 1-3 3.7M6.3 8A16 16 0 0 0 2.5 12S6 18.5 12 18.5a9 9 0 0 0 3-.5"/>',
+ roteiro:'<rect x="3.5" y="4" width="11" height="8" rx="1.5"/><rect x="9.5" y="12" width="11" height="8" rx="1.5"/><path d="M13.5 15l3 1.5-3 1.5z"/>',
+ undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',redo:'<path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/>',
+ hourglass:'<path d="M7 3.5h10M7 20.5h10M8 3.5c0 4.5 8 4 8 8.5s-8 4-8 8.5M16 3.5c0 4.5-8 4-8 8.5s8 4 8 8.5"/><path class="acc" d="M9.6 18.6c.8-1.4 4-1.4 4.8 0z"/>',
+ baton:'<path d="M4 20L14.5 9.5"/><circle class="acc" cx="15.8" cy="8.2" r="2"/><path d="M18.5 3.5c1 .6 1.6 1.2 2 2M20.5 9.5c.4 0 .8.1 1 .3M14.5 2.5c0 .3.1.7.3 1"/>',
+ folder:'<path d="M3.5 7.5v10a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6.5l-2-2.5H5.5a2 2 0 0 0-2 2z"/>',
+ star:'<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/>',
+ download:'<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4.5 19.5h15"/>',upload:'<path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M4.5 19.5h15"/>',
+ copy:'<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2h-7.5a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/>',
+ template:'<rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9h17M9 9v11.5"/>',
+ sliders:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+ trash:'<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5"/>',
+ timer:'<circle cx="12" cy="13.5" r="7"/><path d="M12 10v3.5l2.5 1.5M10 3h4"/>',dots:'<circle cx="7" cy="8" r="2.3"/><circle cx="16" cy="7" r="2.3"/><circle cx="11" cy="16" r="2.3"/>',
+ poll:'<path d="M5 19.5V11M12 19.5V5M19 19.5v-6"/>',users:'<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8"/><path d="M15.5 5.2a3 3 0 0 1 0 5.6M17.5 14.6c1.6.6 2.7 2.1 3 4.4"/>',
+ scan:'<path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><circle cx="12" cy="12" r="2.5"/>',
+ moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>',access:'<circle cx="12" cy="4.8" r="1.8"/><path d="M5 8.5l7 1.5 7-1.5M12 10v4.5M9 21l3-6.5 3 6.5"/>',
+ keyboard:'<rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+ settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>',
+ play:'<path d="M8 5l11 7-11 7z"/>',home:'<path d="M4 11l8-6.5 8 6.5M6 9.5v10h12v-10"/>',pin:'<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.2"/>',
+ paste:'<rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9 4.5V3h6v1.5M9 10h6M9 14h4"/>',grid:'<path d="M4 9h16M4 15h16M9 4v16M15 4v16"/>',fit:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+ search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',code:'<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>',proto:'<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10.5 17.5h3"/>',
+ /* ===== Ícones próprios do OpenDraw ("traço da pena") ===== */
+ paint:'<path d="M5 13l7-7 6 6-7 7z"/><path d="M12 6l-2-2"/><path class="acc" d="M19 15c1 1.5 1.5 2.3 1.5 3a1.5 1.5 0 0 1-3 0c0-.7.5-1.5 1.5-3z"/>',
+ tag:'<path d="M3.5 12V4.5H11l9.5 9.5-7.5 7.5z"/><circle cx="7.8" cy="8.3" r="1.3"/>',
+ mouse:'<rect x="6.5" y="3" width="11" height="18" rx="5.5"/><path d="M12 7v3"/>',
+ hoversel:'<path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/><path d="M12 12l8 3.5-3.4 1.1-1.1 3.4z"/>',
+ target:'<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
+ wave:'<path d="M3 12h3l2-5 4 10 3-7 2 2h4"/>',bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5h4"/>',
+ desktop:'<rect x="3" y="4.5" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16.5V20"/>',
+ check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',locate:'<circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.8"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/>',
+ selall:'<path d="M4 7V5.5A1.5 1.5 0 0 1 5.5 4H7M11 4h2M17 4h1.5A1.5 1.5 0 0 1 20 5.5V7M20 11v2M20 17v1.5a1.5 1.5 0 0 1-1.5 1.5H17M13 20h-2M7 20H5.5A1.5 1.5 0 0 1 4 18.5V17M4 13v-2"/><rect class="acc" x="8" y="8" width="8" height="8" rx="1.5"/>',
+ unlock:'<rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/>',
+ kanban:'<rect x="3.5" y="4" width="5" height="16" rx="1.5"/><rect x="9.5" y="4" width="5" height="11" rx="1.5"/><rect x="15.5" y="4" width="5" height="13" rx="1.5"/>',
+ mind:'<circle cx="12" cy="12" r="3"/><path d="M15 12h5M4.5 6.5L9.6 10M4.5 17.5L9.6 14"/><circle cx="20.5" cy="12" r="1"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="18" r="1"/>',
+ timeline:'<path d="M3 12h18"/><rect x="4" y="6" width="7" height="3.5" rx="1"/><rect x="12" y="14.5" width="8" height="3.5" rx="1"/>',
+ doc:'<path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/>',
+ puzzle:'<path d="M9 4h6v3.5a2 2 0 1 1 0 4V15h-3.5a2 2 0 1 0-4 0H4V9h3.5a2 2 0 1 0 0-4z" transform="translate(1 2)"/>',
+ 'od-select':'<path d="M5.5 4.5L18 10.6l-5.4 1.8-2 5.4z"/><path d="M15.5 20.5h5v-5"/>',
+ 'od-hand':'<path d="M8 20c-2-1.5-4-4-4-6.5 0-1 1-1.6 1.9-1l1.6 1.2V6.5a1.5 1.5 0 0 1 3 0V11M10.5 10V4.8a1.5 1.5 0 0 1 3 0V10M13.5 10V6a1.5 1.5 0 0 1 3 0v4.5M16.5 10.5V8.5a1.5 1.5 0 0 1 3 0V14c0 3.5-2.5 6-6 6H8"/>',
+ 'od-lasso':'<path d="M6.6 14.1C4.4 13.1 3 11.4 3 9.5 3 6.5 7 4 12 4s9 2.5 9 5.5S17 15 12 15c-1 0-2-.1-2.9-.3" stroke-dasharray="3.2 2.4"/><path d="M8.3 14.4c-.6 2.4.4 4.3 2.4 5.6"/><circle class="acc" cx="11.3" cy="20.2" r="1.3"/>',
+ 'od-sticky':'<rect x="4.5" y="6.5" width="15" height="14" rx="1.6"/><rect class="acc" x="9" y="3.8" width="6" height="4.4" rx=".9" transform="rotate(-6 12 6)"/>',
+ 'od-text':'<path d="M5 6.5V5h11v1.5M10.5 5v14M8 19h5"/><path d="M18.5 10v10"/>',
+ 'od-shapes':'<circle cx="9" cy="14.5" r="5.5"/><path class="acc" d="M15 3.5l6 10.5H9z"/>',
+ 'od-connector':'<circle class="acc" cx="5.5" cy="17.5" r="2.4"/><circle cx="18.5" cy="6.5" r="2.4"/><path d="M7.7 16.3c4.6-1.2 3-8 8.6-8.9"/>',
+ 'od-pen':'<path d="M12 3l5.2 7.3L12 21l-5.2-10.7z"/><path d="M12 12.5V17"/><circle class="acc" cx="12" cy="10.3" r="1.5"/>',
+ 'od-frame':'<path d="M7.5 3v4.5H3M16.5 3v4.5H21M7.5 21v-4.5H3M16.5 21v-4.5H21"/><rect class="acc" x="9.5" y="9.5" width="5" height="5" rx="1" stroke="none"/>',
+ 'od-image':'<rect x="4" y="3" width="16" height="18" rx="1.6"/><path d="M7 6.5h10v8.5H7z"/><circle class="acc" cx="14.5" cy="9" r="1.3"/>',
+ 'od-sticker':'<path d="M20 13.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7.5"/><path class="acc" d="M13.5 20v-4.5a2 2 0 0 1 2-2H20z"/><path d="M9 10h.01M15 10h.01M9.5 14c.8.7 1.6 1 2.5 1"/>',
+ 'od-comment':'<path d="M4.5 19.5v-8a7 7 0 1 1 7 7h-7z"/><path d="M9 11.5h5M9 14.5h3"/>',
+ 'od-toolbox':'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><path d="M17 13.5v7M13.5 17h7"/>'
+};
+document.querySelectorAll('svg[data-i]').forEach(s=>{s.setAttribute('viewBox','0 0 24 24');s.innerHTML=P[s.dataset.i]||'';s.classList.add('i')});
+
+const floats=()=>document.querySelectorAll('.float.on');
+function closeAll(keep){floats().forEach(f=>{if(!keep||!keep.includes(f.id))f.classList.remove('on')});document.querySelectorAll('[aria-expanded=true]').forEach(b=>{if(!keep||!keep.includes(b.dataset.open||b.dataset.tray))b.setAttribute('aria-expanded','false')})}
+
+/* Módulos */
+const TOP=['ficha-pop','facil-pop','coment-pop','me-pop'];
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();const el=document.getElementById(b.dataset.open);const on=!el.classList.contains('on');closeAll();
+  if(!on)return;el.classList.add('on');b.setAttribute('aria-expanded','true');
+  if(TOP.includes(el.id)){const r=b.getBoundingClientRect(),m=b.closest('.mod').getBoundingClientRect(),w=el.offsetWidth;let x=r.left+r.width/2-w/2;x=Math.max(10,Math.min(innerWidth-w-10,x));el.style.left=x+'px';el.style.top=(m.bottom+8)+'px'}
+}));
+
+/* Bandejas do Dock */
+document.querySelectorAll('[data-tray]').forEach(b=>b.addEventListener('click',e=>{
+  e.stopPropagation();const el=document.getElementById(b.dataset.tray);const on=!el.classList.contains('on');closeAll();
+  if(!on)return;el.classList.add('on');b.setAttribute('aria-expanded','true');
+  if(el.classList.contains('tray')){const r=b.getBoundingClientRect(),w=el.querySelector('.pop').offsetWidth;let left=r.left+r.width/2-w/2;left=Math.max(10,Math.min(innerWidth-w-10,left));el.style.left=left+'px';el.querySelector('.pop').style.setProperty('--x',(r.left+r.width/2-left)+'px')}
+}));
+document.querySelectorAll('.dock .tool').forEach(t=>t.addEventListener('click',()=>{if(t.dataset.tray==='toolbox')return;document.querySelectorAll('.dock .tool').forEach(x=>x.dataset.active='false');t.dataset.active='true'}));
+
+/* Menu do canvas */
+const ctx=document.getElementById('ctx');
+document.getElementById('canvas').addEventListener('contextmenu',openCtx);document.getElementById('world').addEventListener('contextmenu',openCtx);
+function openCtx(e){e.preventDefault();closeAll();ctx.classList.add('on');const w=ctx.offsetWidth,h=ctx.offsetHeight;ctx.style.left=Math.min(e.clientX,innerWidth-w-8)+'px';ctx.style.top=Math.min(e.clientY,innerHeight-h-8)+'px';document.getElementById('coords').textContent='x '+(e.clientX*2-1400)+' · y '+(e.clientY*2-900).toString().replace('-','−')}
+document.querySelectorAll('[data-sub]').forEach(r=>r.addEventListener('mouseenter',()=>{document.querySelectorAll('.sub').forEach(s=>s.classList.remove('on'));const s=document.getElementById(r.dataset.sub),rr=r.getBoundingClientRect();s.classList.add('on');let x=rr.right+6;if(x+250>innerWidth)x=rr.left-256;s.style.left=x+'px';s.style.top=Math.min(rr.top-6,innerHeight-s.offsetHeight-8)+'px'}));
+document.querySelectorAll('#ctx .row:not([data-sub])').forEach(r=>r.addEventListener('mouseenter',()=>document.querySelectorAll('.sub').forEach(s=>s.classList.remove('on'))));
+document.addEventListener('click',e=>{if(!e.target.closest('.float'))closeAll()});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+
+/* Post-its */
+const NOTES=[['Rosa-quartzo','#FFC2C8'],['Coral','#FFB6A3'],['Pêssego','#FFDDC5'],['Damasco','#FFCF7E'],['Canário','#FBED7C'],['Lima','#CEF092'],['Hortelã','#BCF8C2'],['Jade','#9EEACF'],['Água-marinha','#AAF7F3'],['Celeste','#88E0F6'],['Bruma','#C4E7FE'],['Hortênsia','#AACAFF'],['Pervinca','#D6D9FF'],['Lavanda','#DBBFFE'],['Orquídea','#FAC7F8'],['Algodão-doce','#FFB9D9']];
+const notes=document.getElementById('notes'),cname=document.getElementById('cname');
+NOTES.forEach(([n,h],i)=>{const b=document.createElement('button');b.className='note'+(i===4?' sel':'');b.style.background=h;b.title=n;b.setAttribute('aria-label',n);
+b.onmouseenter=()=>cname.textContent=n;b.onmouseleave=()=>cname.textContent=notes.querySelector('.sel').title;b.onclick=e=>{e.stopPropagation();notes.querySelectorAll('.note').forEach(x=>x.classList.remove('sel'));b.classList.add('sel')};notes.appendChild(b)});
+
+/* Linha do tempo */
+const hv=[3,5,4,7,6,9,5,4,8,10,6,5,9,12,8,6,7,11,13,9,6,8,12,14,10,7,9,13,15,11,8,10,14,16,12,9,11,15,17,13];
+const bars=document.getElementById('bars');hv.forEach(h=>{const b=document.createElement('i');b.style.height=(h/17*100)+'%';if(h>12)b.className='hot';bars.appendChild(b)});
+[10,24,38,52,66,80,94].forEach(p=>{const v=document.createElement('span');v.className='ver';v.style.left=p+'%';document.getElementById('track').appendChild(v)});
+const scrub=document.getElementById('scrub'),world=document.getElementById('world'),past=document.getElementById('past');
+const fmt=v=>{const m=9*60+Math.round(v/100*332);return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
+function upd(){const v=+scrub.value,p=v<100;world.classList.toggle('pastview',p);past.classList.toggle('on',p);document.getElementById('tlNow').textContent=p?'Às '+fmt(v):'Agora · 14:32';document.getElementById('pastTxt').textContent='Vendo o board às '+fmt(v)+' — somente leitura';document.querySelectorAll('[data-t]').forEach(el=>el.classList.toggle('gone',+el.dataset.t>v))}
+scrub.oninput=upd;document.getElementById('backNow').onclick=e=>{e.stopPropagation();scrub.value=100;upd()};
+
+document.querySelectorAll('#tbseg button').forEach(b=>b.onclick=e=>{e.stopPropagation();document.querySelectorAll('#tbseg button').forEach(x=>x.setAttribute('aria-pressed',x===b));const f=b.dataset.f;document.querySelectorAll('#toolbox [data-core]').forEach(el=>el.style.display=f==='ext'?'none':'');document.querySelectorAll('#toolbox [data-ext]').forEach(el=>el.style.display=f==='core'?'none':'')});
+/* Tema e guia */
+document.getElementById('themeRow').onclick=e=>{e.stopPropagation();document.documentElement.classList.toggle('dark');document.getElementById('themeSw').classList.toggle('on')};
+document.getElementById('guide').onclick=e=>{e.stopPropagation();document.body.classList.toggle('g');const l=document.getElementById('legend');const on=!l.classList.contains('on');closeAll();if(on)l.classList.add('on')};
+</script>
+</body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23194B32%22/%3E%3Cpath d=%22M15 42c6-14 12-20 18-18s4 10 10 10c4 0 6-4 7-8%22 fill=%22none%22 stroke=%22%23D0E4AE%22 stroke-width=%225%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3Ccircle cx=%2248%22 cy=%2218%22 r=%225%22 fill=%22%23D0E4AE%22/%3E%3C/svg%3E">
+<title>OpenDraw — Estúdio v2 · Cinta do objeto (barra de contexto)</title>
+<!-- Referência visual estática. No app as fontes são autohospedadas (Fontsource); aqui o link é só para a prévia. -->
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Fraunces:wght@600;700&family=IBM+Plex+Mono:wght@500&family=Lora:wght@500&family=Caveat:wght@600&family=Inter:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ===== Tokens existentes (DESIGN_SYSTEM.md §2–§5). Nenhum token novo. ===== */
+:root{
+  --brand-100:#E4EED5;--brand-200:#D0E4AE;--brand-900:#194B32;--brand-950:#0F2E1F;
+  --od-canvas:#F5F6F8;--od-canvas-dot:#D1D5DB;--od-panel:#FFFFFF;--od-border:rgba(25,45,32,.09);--od-sunken:#F1F4EC;
+  --od-panel-hover:#F1F4EC;--od-panel-active:#E4EED5;
+  --od-text:#18211C;--od-text-muted:#4F5A53;--od-text-subtle:#7D877F;
+  --od-accent:#194B32;--od-accent-contrast:#D0E4AE;--od-accent-soft:#E4EED5;
+  --od-selection:#1F7A4C;--od-selection-fill:rgba(31,122,76,.10);
+  --od-success:#2F7D4F;--od-warning:#A66A12;--od-danger:#BC3F2C;
+  --sh-panel:0 1px 2px rgba(15,46,31,.06),0 4px 14px rgba(15,46,31,.07);
+  --sh-pop:0 2px 6px rgba(15,46,31,.08),0 12px 32px rgba(15,46,31,.14);
+  --ease:cubic-bezier(.22,1,.36,1);--spring:cubic-bezier(.34,1.36,.64,1);
+}
+.dark{
+  --od-canvas:#16161A;--od-canvas-dot:#2E2E38;--od-panel:#212126;--od-border:#32323A;--od-sunken:#1B1B20;
+  --od-panel-hover:#2A2A31;--od-panel-active:#2F3A2C;
+  --od-text:#ECEEE9;--od-text-muted:#AAB2AB;--od-text-subtle:#7C847E;
+  --od-accent:#D0E4AE;--od-accent-contrast:#12301F;--od-accent-soft:rgba(208,228,174,.13);
+  --od-selection:#9FD08A;--od-selection-fill:rgba(159,208,138,.12);
+  --od-success:#7FCB9B;--od-warning:#E3B567;--od-danger:#F08672;
+  --sh-panel:0 1px 2px rgba(0,0,0,.4),0 4px 14px rgba(0,0,0,.35);
+  --sh-pop:0 2px 6px rgba(0,0,0,.45),0 12px 32px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Figtree,system-ui,sans-serif;font-size:14px;color:var(--od-text);background:var(--od-canvas);overflow:hidden;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.i .acc{fill:var(--od-accent-soft);stroke:currentColor}
+[data-active=true] svg.i .acc{fill:var(--od-accent-contrast)}
+.dark [data-active=true] svg.i .acc{fill:rgba(208,228,174,.35)}
+.kbd{font-family:"IBM Plex Mono",monospace;font-size:10.5px;padding:1px 5px;border-radius:5px;border:1px solid var(--od-border);border-bottom-width:2px;color:var(--od-text-subtle);background:var(--od-panel)}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+
+.canvas{position:fixed;inset:0;background-image:radial-gradient(var(--od-canvas-dot) 1.2px,transparent 1.2px);background-size:22px 22px}
+
+.ib{height:34px;min-width:34px;padding:0 8px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--od-text-muted);font-weight:600;font-size:13px;transition:background .12s,color .12s}
+.ib:hover{background:var(--od-panel-hover);color:var(--od-text)}
+.ib[aria-expanded=true]{background:var(--od-accent-soft);color:var(--od-accent)}
+.cinta .ib svg.i{width:18px;height:18px}
+/* ===== Objetos de exemplo no board ===== */
+.obj{position:absolute;left:calc(50% + 150px);top:21%;transform:translateX(-50%)}
+.selbox{position:absolute;inset:-6px;border:2px solid var(--od-selection);border-radius:3px;pointer-events:none}
+.selbox .h{position:absolute;width:11px;height:11px;border-radius:50%;background:#fff;border:1.5px solid var(--od-selection)}
+.selbox .h.tl{left:-6px;top:-6px}.selbox .h.tr{right:-6px;top:-6px}.selbox .h.bl{left:-6px;bottom:-6px}.selbox .h.br{right:-6px;bottom:-6px}
+.selbox .m{position:absolute;width:16px;height:6px;border-radius:3px;background:#fff;border:1.5px solid var(--od-selection)}
+.selbox .m.t{left:50%;top:-5px;margin-left:-8px}.selbox .m.b{left:50%;bottom:-5px;margin-left:-8px}
+.texto{font-family:Fraunces,serif;font-weight:700;font-size:56px;line-height:1.1;color:#9FB89B;white-space:nowrap;padding:0 6px}
+.dark .texto{color:#B5CBAF}
+.note{width:210px;padding:12px 14px;border-radius:12px;background:#EAF3DD;color:#173F2A;box-shadow:0 2px 6px rgba(15,46,31,.12);font-size:13px;line-height:1.35}
+.note b{display:block;font-size:15px;margin-bottom:3px}
+.dark .note{background:#DDEBC8}
+.circle{width:74px;height:74px;border-radius:50%;background:#194B32;color:#D0E4AE;display:grid;place-items:center;font-weight:800;font-size:26px}
+.keyb{width:44px;height:44px;border-radius:10px;border:2px solid #194B32;color:#194B32;background:#fff;display:grid;place-items:center;font-weight:800}
+.frame{width:560px;height:300px;border:1.5px solid color-mix(in srgb,var(--od-text) 22%,transparent);border-radius:6px;background:color-mix(in srgb,var(--od-panel) 55%,transparent);position:relative}
+.frame .ft{position:absolute;left:0;top:-24px;font-size:12.5px;font-weight:700;color:var(--od-text-muted);display:flex;gap:6px;align-items:center}
+.frame .n1,.frame .n2{position:absolute;border-radius:10px;padding:10px 12px;font-size:12px;box-shadow:0 2px 6px rgba(15,46,31,.12)}
+.frame .n1{left:28px;top:34px;width:180px;background:#FBED7C;color:#4A3F00}
+.frame .n2{left:240px;top:90px;width:200px;background:#C4E7FE;color:#0E3550}
+.lockbadge{position:absolute;right:8px;top:8px;width:26px;height:26px;border-radius:8px;background:var(--od-panel);border:1px solid var(--od-border);display:none;place-items:center;color:var(--od-text-muted);box-shadow:var(--sh-panel)}
+.locked .lockbadge{display:grid}
+svg.conn{position:absolute;overflow:visible}
+
+/* ===== Cinta do objeto ===== */
+.cinta{position:absolute;z-index:50;display:flex;align-items:center;gap:2px;height:44px;padding:4px;border-radius:14px;background:var(--od-panel);border:1px solid var(--od-border);box-shadow:var(--sh-panel);white-space:nowrap;transition:opacity .15s}
+.cinta::before{content:"";position:absolute;top:-6px;left:var(--nx,50%);width:10px;height:10px;margin-left:-5px;background:var(--od-panel);border-left:1px solid var(--od-border);border-top:1px solid var(--od-border);transform:rotate(45deg);border-radius:2px 0 0 0}
+.cinta .sep{width:1px;height:22px;background:var(--od-border);margin:0 4px;flex:none}
+.id{height:34px;padding:0 9px 0 10px;border-radius:10px;background:var(--od-accent-soft);color:var(--od-accent);display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:13px;margin-right:4px;max-width:190px}
+.id span.t{overflow:hidden;text-overflow:ellipsis}
+.id:hover{filter:brightness(.97)}
+.id[aria-expanded=true]{background:var(--od-panel-active)}
+.id .num{min-width:18px;height:18px;border-radius:999px;background:var(--od-accent);color:var(--od-accent-contrast);font-size:10.5px;font-weight:800;display:grid;place-items:center;padding:0 5px}
+.id svg.i{width:17px;height:17px}
+.chip{height:34px;padding:0 10px;border-radius:9px;background:var(--od-sunken);display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--od-text);max-width:200px}
+.chip:hover{background:var(--od-panel-hover)}
+.chip[aria-expanded=true]{background:var(--od-panel-active)}
+.chip .aa{font-size:15px;line-height:1;color:var(--od-text-muted)}
+.chip .fn{overflow:hidden;text-overflow:ellipsis;max-width:96px}
+.chip .num{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--od-text-muted)}
+.chip svg.i{color:var(--od-text-muted);width:16px;height:16px}
+.sw-c{width:20px;height:20px;border-radius:50%;border:2px solid var(--od-panel);box-shadow:0 0 0 1.5px var(--od-text-subtle);display:block}
+.bold{font-weight:800;font-size:15px}
+.acolor{font-weight:800;font-size:15px;position:relative;line-height:1}
+.acolor::after{content:"";position:absolute;left:-1px;right:-1px;bottom:-4px;height:3px;border-radius:2px;background:var(--bar,#194B32)}
+.cinta .ib[data-on=true]{background:var(--od-accent-soft);color:var(--od-accent)}
+.cinta .ib[aria-disabled=true]{opacity:.38;pointer-events:none}
+.cinta.dim .chip,.cinta.dim .id:not(.keep){opacity:.45;pointer-events:none}
+/* bloqueio com anel de 2 s */
+.lockbtn{position:relative}
+.lockbtn .ring{position:absolute;inset:1px;border-radius:9px;background:conic-gradient(var(--od-accent) calc(var(--p,0)*1%),transparent 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 calc(100% - 2px));pointer-events:none}
+.lockbtn[data-locked=true]{background:var(--od-accent);color:var(--od-accent-contrast)}
+.dark .lockbtn[data-locked=true]{background:var(--od-accent-soft);color:var(--od-accent)}
+.dica{position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);padding:5px 9px;border-radius:8px;background:var(--od-text);color:var(--od-panel);font-size:11.5px;font-weight:600;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s}
+.lockbtn:hover .dica,.lockbtn:focus-visible .dica{opacity:1}
+.ib.apresentar{background:var(--od-accent);color:var(--od-accent-contrast);padding:0 12px}
+.dark .ib.apresentar{background:var(--od-accent-soft);color:var(--od-accent)}
+
+/* ===== Gavetas da cinta ===== */
+.pop{background:var(--od-panel);border:1px solid var(--od-border);box-shadow:var(--sh-pop);border-radius:16px}
+.float{position:absolute;z-index:70;opacity:0;pointer-events:none;transform:translateY(6px) scale(.98);transition:opacity .16s var(--ease),transform .2s var(--ease);overflow:auto}
+.float.on{opacity:1;pointer-events:auto;transform:none}
+.ph{display:flex;align-items:center;gap:8px;padding:12px 14px 8px}.ph h4{margin:0;font-size:13px;font-weight:700}.ph .sp{flex:1}
+.hint{font-size:11.5px;color:var(--od-text-subtle)}
+.cap{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--od-text-subtle);padding:10px 14px 6px}
+.pad{padding:0 14px 10px}
+.foot{display:flex;justify-content:space-between;gap:10px;padding:9px 14px;border-top:1px solid var(--od-border);font-size:11.5px;color:var(--od-text-subtle)}
+.row{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;margin:0 6px;border-radius:9px;color:var(--od-text);font-size:13px;width:calc(100% - 12px);text-align:left}
+.row:hover{background:var(--od-panel-hover)}
+.row svg.i{color:var(--od-text-muted);width:16px;height:16px}
+.row .sp{flex:1}.row .n{font-size:11.5px;color:var(--od-text-subtle);font-weight:700}
+.row.danger{color:var(--od-danger)}.row.danger svg.i{color:var(--od-danger)}
+.row .ck{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--od-text-subtle);display:grid;place-items:center;flex:none}
+.row[aria-checked=true] .ck{background:var(--od-accent);border-color:var(--od-accent);color:var(--od-accent-contrast)}
+.row .ck svg.i{width:11px;height:11px;stroke-width:3;opacity:0;color:var(--od-accent-contrast)}.row[aria-checked=true] .ck svg.i{opacity:1}
+.hr{height:1px;background:var(--od-border);margin:6px 0}
+.seg{display:flex;padding:3px;border-radius:9px;background:var(--od-sunken);gap:2px}
+.seg button{flex:1;height:28px;border-radius:7px;font-size:12px;font-weight:600;color:var(--od-text-muted);display:grid;place-items:center}
+.seg button[aria-pressed=true]{background:var(--od-panel);color:var(--od-text);box-shadow:var(--sh-panel)}
+.seg button svg.i{width:16px;height:16px}
+.field{height:34px;border:1px solid var(--od-border);border-radius:9px;background:var(--od-panel);display:flex;align-items:center;gap:8px;padding:0 10px;color:var(--od-text-subtle);font-size:13px}
+.field:focus-within{box-shadow:0 0 0 3px var(--od-selection-fill);border-color:var(--od-selection)}
+.field input{border:0;outline:0;background:none;font:inherit;color:var(--od-text);width:100%}
+.fonts{max-height:128px;overflow:auto;margin:4px 0 0}
+.fonts button{display:flex;align-items:center;justify-content:space-between;width:100%;height:32px;padding:0 10px;border-radius:8px;font-size:16px}
+.fonts button:hover{background:var(--od-panel-hover)}
+.fonts button[aria-checked=true]{background:var(--od-accent-soft);color:var(--od-accent)}
+.fonts small{font:600 10.5px Figtree;color:var(--od-text-subtle)}
+.step{display:flex;align-items:center;gap:6px}
+.step .v{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:14px;height:34px;border:1px solid var(--od-border);border-radius:9px;display:grid;place-items:center}
+.step button{width:34px;height:34px;border-radius:9px;background:var(--od-sunken);display:grid;place-items:center}
+.step button:hover{background:var(--od-panel-hover)}
+.presets{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.presets button{height:26px;padding:0 9px;border-radius:7px;background:var(--od-sunken);font:600 12px "IBM Plex Mono",monospace;color:var(--od-text-muted)}
+.presets button[aria-pressed=true]{background:var(--od-accent);color:var(--od-accent-contrast)}
+.swatches{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+.swatches button{aspect-ratio:1;border-radius:8px;border:1.5px solid var(--od-border)}
+.swatches button[aria-pressed=true]{outline:2px solid var(--od-selection);outline-offset:1px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lbl{font-size:12px;font-weight:700;color:var(--od-text-muted);margin:2px 0 6px}
+.sw{width:30px;height:18px;border-radius:999px;background:var(--od-border);position:relative;flex:none}
+.sw::after{content:"";position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--od-panel);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .2s var(--spring)}
+.sw.on{background:var(--od-accent)}.sw.on::after{transform:translateX(12px);background:var(--od-accent-contrast)}
+input[type=range]{width:100%;accent-color:var(--od-accent)}
+.linepv{display:block;width:100%;height:20px}
+
+/* ===== Notas do desenho (não fazem parte do app) ===== */
+.guide{position:fixed;left:14px;top:14px;width:316px;z-index:90;padding:14px;border-radius:16px}
+.guide h3{margin:0 0 2px;font-size:14px}
+.guide p{margin:0 0 10px;font-size:12px;color:var(--od-text-muted);line-height:1.4}
+.guide ol{margin:10px 0 0;padding-left:18px;font-size:12px;color:var(--od-text-muted);line-height:1.45}
+.guide li{margin-bottom:4px}.guide li b{color:var(--od-text)}
+.states{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.states button{height:30px;border-radius:8px;background:var(--od-sunken);font-size:12px;font-weight:700;color:var(--od-text-muted)}
+.states button[aria-pressed=true]{background:var(--od-accent);color:var(--od-accent-contrast)}
+.dark .states button[aria-pressed=true]{background:var(--od-accent-soft);color:var(--od-accent)}
+.themebtn{margin-top:10px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--od-text-muted);width:100%}
+.themebtn .sw{margin-left:auto}
+@media (max-width:760px){.guide{display:none}}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas"></div>
+<div id="stage"></div>
+<div id="cinta" class="cinta" role="toolbar" aria-label="Ações do objeto"></div>
+<div id="drawer" class="float pop" role="dialog"></div>
+
+<aside class="guide pop">
+  <h3>Cinta do objeto</h3>
+  <p>Barra que aparece sob o que está selecionado. Troque o estado abaixo e clique nos botões para abrir as gavetas.</p>
+  <div class="states" id="states"></div>
+  <button class="themebtn" id="themeBtn"><svg class="i" data-i="moon"></svg>Tema escuro<span class="sw" id="themeSw"></span></button>
+  <ol>
+    <li><b>Presa ao objeto</b> pela lingueta; mesma peça do topo (44 px, raio 14).</li>
+    <li><b>Segmento de identidade</b> à esquerda: tipo e nome do que está selecionado; abre "converter em…" ou "filtrar a seleção".</li>
+    <li><b>Fonte, tamanho, alinhamento e lista</b> num chip que abre a gaveta Estilo (13 controles viram 9).</li>
+    <li><b>Menu do objeto</b> (⋯) abre o mesmo menu do botão direito, sem cópia.</li>
+    <li><b>Bloqueio</b> com anel de 2 s (mouse e teclado) e dica curta; travado, o resto esmaece.</li>
+    <li><b>Frame:</b> Apresentar com rótulo, nome editável no segmento.</li>
+  </ol>
+</aside>
+
+<script>
+const P={
+ down:'<path d="M6 9l6 6 6-6"/>',right:'<path d="M9 6l6 6-6 6"/>',plus:'<path d="M12 5v14M5 12h14"/>',minus:'<path d="M5 12h14"/>',
+ info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8h.01"/>',share:'<circle cx="6" cy="12" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="18" cy="18" r="2.4"/><path d="M8.2 11l7.6-4M8.2 13l7.6 4"/>',
+ comment:'<path d="M4.5 19.5v-8a7 7 0 1 1 7 7h-7z"/>',compass:'<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+ eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
+ eyeoff:'<path d="M4 4l16 16"/><path d="M9.5 6a9 9 0 0 1 2.5-.5c6 0 9.5 6.5 9.5 6.5a16 16 0 0 1-3 3.7M6.3 8A16 16 0 0 0 2.5 12S6 18.5 12 18.5a9 9 0 0 0 3-.5"/>',
+ roteiro:'<rect x="3.5" y="4" width="11" height="8" rx="1.5"/><rect x="9.5" y="12" width="11" height="8" rx="1.5"/><path d="M13.5 15l3 1.5-3 1.5z"/>',
+ undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',redo:'<path d="M15 14l5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/>',
+ hourglass:'<path d="M7 3.5h10M7 20.5h10M8 3.5c0 4.5 8 4 8 8.5s-8 4-8 8.5M16 3.5c0 4.5-8 4-8 8.5s8 4 8 8.5"/><path class="acc" d="M9.6 18.6c.8-1.4 4-1.4 4.8 0z"/>',
+ baton:'<path d="M4 20L14.5 9.5"/><circle class="acc" cx="15.8" cy="8.2" r="2"/><path d="M18.5 3.5c1 .6 1.6 1.2 2 2M20.5 9.5c.4 0 .8.1 1 .3M14.5 2.5c0 .3.1.7.3 1"/>',
+ folder:'<path d="M3.5 7.5v10a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6.5l-2-2.5H5.5a2 2 0 0 0-2 2z"/>',
+ star:'<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/>',
+ download:'<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4.5 19.5h15"/>',upload:'<path d="M12 15V4M7.5 8.5L12 4l4.5 4.5M4.5 19.5h15"/>',
+ copy:'<rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2h-7.5a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/>',
+ template:'<rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9h17M9 9v11.5"/>',
+ sliders:'<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+ trash:'<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5"/>',
+ timer:'<circle cx="12" cy="13.5" r="7"/><path d="M12 10v3.5l2.5 1.5M10 3h4"/>',dots:'<circle cx="7" cy="8" r="2.3"/><circle cx="16" cy="7" r="2.3"/><circle cx="11" cy="16" r="2.3"/>',
+ poll:'<path d="M5 19.5V11M12 19.5V5M19 19.5v-6"/>',users:'<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.8 5.5-4.8s4.9 1.8 5.5 4.8"/><path d="M15.5 5.2a3 3 0 0 1 0 5.6M17.5 14.6c1.6.6 2.7 2.1 3 4.4"/>',
+ scan:'<path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><circle cx="12" cy="12" r="2.5"/>',
+ moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/>',access:'<circle cx="12" cy="4.8" r="1.8"/><path d="M5 8.5l7 1.5 7-1.5M12 10v4.5M9 21l3-6.5 3 6.5"/>',
+ keyboard:'<rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+ settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>',
+ play:'<path d="M8 5l11 7-11 7z"/>',home:'<path d="M4 11l8-6.5 8 6.5M6 9.5v10h12v-10"/>',pin:'<path d="M12 21s-6.5-6.2-6.5-11a6.5 6.5 0 0 1 13 0c0 4.8-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.2"/>',
+ paste:'<rect x="5.5" y="4.5" width="13" height="16" rx="2"/><path d="M9 4.5V3h6v1.5M9 10h6M9 14h4"/>',grid:'<path d="M4 9h16M4 15h16M9 4v16M15 4v16"/>',fit:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+ search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>',code:'<path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/>',proto:'<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M10.5 17.5h3"/>',
+ /* ===== Ícones próprios do OpenDraw ("traço da pena") ===== */
+ paint:'<path d="M5 13l7-7 6 6-7 7z"/><path d="M12 6l-2-2"/><path class="acc" d="M19 15c1 1.5 1.5 2.3 1.5 3a1.5 1.5 0 0 1-3 0c0-.7.5-1.5 1.5-3z"/>',
+ tag:'<path d="M3.5 12V4.5H11l9.5 9.5-7.5 7.5z"/><circle cx="7.8" cy="8.3" r="1.3"/>',
+ mouse:'<rect x="6.5" y="3" width="11" height="18" rx="5.5"/><path d="M12 7v3"/>',
+ hoversel:'<path d="M4 9V5.5A1.5 1.5 0 0 1 5.5 4H9M15 4h3.5A1.5 1.5 0 0 1 20 5.5V9M9 20H5.5A1.5 1.5 0 0 1 4 18.5V15"/><path d="M12 12l8 3.5-3.4 1.1-1.1 3.4z"/>',
+ target:'<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
+ wave:'<path d="M3 12h3l2-5 4 10 3-7 2 2h4"/>',bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5h4"/>',
+ desktop:'<rect x="3" y="4.5" width="18" height="12" rx="1.5"/><path d="M9 20h6M12 16.5V20"/>',
+ check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',locate:'<circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.8"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/>',
+ selall:'<path d="M4 7V5.5A1.5 1.5 0 0 1 5.5 4H7M11 4h2M17 4h1.5A1.5 1.5 0 0 1 20 5.5V7M20 11v2M20 17v1.5a1.5 1.5 0 0 1-1.5 1.5H17M13 20h-2M7 20H5.5A1.5 1.5 0 0 1 4 18.5V17M4 13v-2"/><rect class="acc" x="8" y="8" width="8" height="8" rx="1.5"/>',
+ unlock:'<rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2"/>',
+ kanban:'<rect x="3.5" y="4" width="5" height="16" rx="1.5"/><rect x="9.5" y="4" width="5" height="11" rx="1.5"/><rect x="15.5" y="4" width="5" height="13" rx="1.5"/>',
+ mind:'<circle cx="12" cy="12" r="3"/><path d="M15 12h5M4.5 6.5L9.6 10M4.5 17.5L9.6 14"/><circle cx="20.5" cy="12" r="1"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="18" r="1"/>',
+ timeline:'<path d="M3 12h18"/><rect x="4" y="6" width="7" height="3.5" rx="1"/><rect x="12" y="14.5" width="8" height="3.5" rx="1"/>',
+ doc:'<path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/>',
+ puzzle:'<path d="M9 4h6v3.5a2 2 0 1 1 0 4V15h-3.5a2 2 0 1 0-4 0H4V9h3.5a2 2 0 1 0 0-4z" transform="translate(1 2)"/>',
+ 'od-select':'<path d="M5.5 4.5L18 10.6l-5.4 1.8-2 5.4z"/><path d="M15.5 20.5h5v-5"/>',
+ 'od-hand':'<path d="M8 20c-2-1.5-4-4-4-6.5 0-1 1-1.6 1.9-1l1.6 1.2V6.5a1.5 1.5 0 0 1 3 0V11M10.5 10V4.8a1.5 1.5 0 0 1 3 0V10M13.5 10V6a1.5 1.5 0 0 1 3 0v4.5M16.5 10.5V8.5a1.5 1.5 0 0 1 3 0V14c0 3.5-2.5 6-6 6H8"/>',
+ 'od-lasso':'<path d="M6.6 14.1C4.4 13.1 3 11.4 3 9.5 3 6.5 7 4 12 4s9 2.5 9 5.5S17 15 12 15c-1 0-2-.1-2.9-.3" stroke-dasharray="3.2 2.4"/><path d="M8.3 14.4c-.6 2.4.4 4.3 2.4 5.6"/><circle class="acc" cx="11.3" cy="20.2" r="1.3"/>',
+ 'od-sticky':'<rect x="4.5" y="6.5" width="15" height="14" rx="1.6"/><rect class="acc" x="9" y="3.8" width="6" height="4.4" rx=".9" transform="rotate(-6 12 6)"/>',
+ 'od-text':'<path d="M5 6.5V5h11v1.5M10.5 5v14M8 19h5"/><path d="M18.5 10v10"/>',
+ 'od-shapes':'<circle cx="9" cy="14.5" r="5.5"/><path class="acc" d="M15 3.5l6 10.5H9z"/>',
+ 'od-connector':'<circle class="acc" cx="5.5" cy="17.5" r="2.4"/><circle cx="18.5" cy="6.5" r="2.4"/><path d="M7.7 16.3c4.6-1.2 3-8 8.6-8.9"/>',
+ 'od-pen':'<path d="M12 3l5.2 7.3L12 21l-5.2-10.7z"/><path d="M12 12.5V17"/><circle class="acc" cx="12" cy="10.3" r="1.5"/>',
+ 'od-frame':'<path d="M7.5 3v4.5H3M16.5 3v4.5H21M7.5 21v-4.5H3M16.5 21v-4.5H21"/><rect class="acc" x="9.5" y="9.5" width="5" height="5" rx="1" stroke="none"/>',
+ 'od-image':'<rect x="4" y="3" width="16" height="18" rx="1.6"/><path d="M7 6.5h10v8.5H7z"/><circle class="acc" cx="14.5" cy="9" r="1.3"/>',
+ 'od-sticker':'<path d="M20 13.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7.5"/><path class="acc" d="M13.5 20v-4.5a2 2 0 0 1 2-2H20z"/><path d="M9 10h.01M15 10h.01M9.5 14c.8.7 1.6 1 2.5 1"/>',
+ 'od-comment':'<path d="M4.5 19.5v-8a7 7 0 1 1 7 7h-7z"/><path d="M9 11.5h5M9 14.5h3"/>',
+ 'od-toolbox':'<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><path d="M17 13.5v7M13.5 17h7"/>'
+};
+Object.assign(P,{
+ lock:'<rect x="5" y="11" width="14" height="9.5" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+ more:'<circle cx="5.5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="18.5" cy="12" r="1.6" fill="currentColor"/>',
+ link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+ private:'<path d="M12 3.5l7 2.5v5.5c0 4.3-3 7.7-7 9-4-1.3-7-4.7-7-9V6z"/><circle class="acc" cx="12" cy="11.5" r="2.3"/>',
+ swap:'<path d="M4 8h13M13.5 4.5L17 8l-3.5 3.5M20 16H7M10.5 12.5L7 16l3.5 3.5"/>',
+ pencil:'<path d="M4 20l1-4L16 5l3 3L8 19z"/>',
+ ratio:'<rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 10V9h1M16 14v1h-1"/>',
+ label:'<rect x="3.5" y="7" width="17" height="10" rx="2"/><path d="M8 12h8"/>',
+ line:'<path d="M4 18L20 6"/>',elbow:'<path d="M4 18h8V6h8"/>',curve:'<path d="M4 18c8 0 4-12 16-12"/>',
+ back:'<path d="M14 6l-6 6 6 6"/>',front:'<path d="M10 6l6 6-6 6"/>',
+ layers:'<path d="M12 4l8.5 4.5L12 13 3.5 8.5z"/><path d="M3.5 12.5L12 17l8.5-4.5M3.5 16.5L12 21l8.5-4.5"/>',
+ trash2:'<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 12.5h9l1-12.5"/>',
+ clean:'<path d="M5 19l9-9 5 5-4 4z"/><path d="M14 10l3-5"/>',
+ brush:'<path d="M5 13l7-7 6 6-7 7z"/><path d="M12 6l-2-2"/>',
+ export:'<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4.5 19.5h15"/>',
+ shapes2:'<circle cx="9" cy="14.5" r="5.5"/><path d="M15 3.5l6 10.5H9z"/>',
+ quote:'<path d="M5 6h14v9H9l-4 4z"/>'
+});
+const I=(n,c)=>'<svg class="i'+(c?' '+c:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(P[n]||'')+'</svg>';
+function ico(root){(root||document).querySelectorAll('svg.i[data-i]').forEach(s=>{if(!s.getAttribute('viewBox'))s.setAttribute('viewBox','0 0 24 24');s.innerHTML=P[s.dataset.i]||''})}
+const $=id=>document.getElementById(id);
+const COLORS=['#FFFFFF','#FBED7C','#CEF092','#9EEACF','#88E0F6','#AACAFF','#FFC2C8','#194B32'];
+
+/* ===== Estados ===== */
+const S={
+ texto:{label:'Texto',nome:'Texto',stage:()=>'<div class="obj" id="o"><div class="texto">Comece por aqui</div><div class="selbox"><i class="h tl"></i><i class="h tr"></i><i class="h bl"></i><i class="h br"></i><i class="m t"></i><i class="m b"></i></div></div>',
+  bar:()=>[
+   idSeg('od-text','Texto','conv'),
+   '<button class="chip" data-d="estilo" aria-haspopup="dialog" aria-label="Estilo do texto: Fraunces, 56"><span class="aa" style="font-family:Fraunces;font-weight:700">Aa</span><span class="fn">Fraunces</span><span class="num">56</span>'+I('down')+'</button>',
+   '<button class="ib" aria-label="Negrito" data-on="true" title="Negrito  Ctrl B"><span class="bold">B</span></button>',
+   '<button class="ib" aria-label="Cor do texto" data-d="cor" title="Cor do texto"><span class="acolor" style="--bar:#9FB89B">A</span></button>',
+   '<button class="ib" aria-label="Link" title="Link  Ctrl K">'+I('link')+'</button>',
+   '<i class="sep"></i>',comum()].join('')},
+ varios:{label:'Vários objetos',nome:'5 objetos',stage:()=>'<div class="obj" id="o" style="display:flex;gap:18px;align-items:center;padding:6px"><div class="circle">1</div><div class="note"><b>Crie um post-it</b>Escolha o post-it na Dock ou tecle N e clique em qualquer ponto.</div><div class="keyb">N</div><div class="selbox"><i class="h tl"></i><i class="h tr"></i><i class="h bl"></i><i class="h br"></i><i class="m t"></i><i class="m b"></i></div></div>',
+  bar:()=>[
+   '<button class="id" data-d="filtro" aria-haspopup="dialog" aria-label="Filtrar a seleção: 5 objetos">'+I('od-select')+'<span class="t">Seleção</span><span class="num">5</span>'+I('down')+'</button>',
+   '<button class="chip" data-d="estilo" aria-haspopup="dialog" aria-label="Estilo: texto misto"><span class="aa" style="font-weight:700">Aa</span><span class="fn">Misto</span><span class="num">16</span>'+I('down')+'</button>',
+   '<button class="ib" aria-label="Negrito" title="Negrito  Ctrl B"><span class="bold">B</span></button>',
+   '<button class="ib" aria-label="Cor" data-d="cor" title="Cor"><span class="sw-c" style="background:#EAF3DD"></span></button>',
+   '<button class="ib" aria-label="Link" title="Link  Ctrl K">'+I('link')+'</button>',
+   '<i class="sep"></i>',comum()].join('')},
+ conector:{label:'Conector',nome:'Conector',stage:()=>'<div class="obj" id="o" style="width:420px;height:150px;transform:translateX(-50%)"><div style="position:absolute;left:0;top:0;width:60px;height:60px;border-radius:12px;background:#fff;box-shadow:0 2px 6px rgba(15,46,31,.15)"></div><svg class="conn" width="420" height="150" viewBox="0 0 420 150"><path d="M62 30H170V90H350" fill="none" stroke="var(--od-selection)" stroke-width="2.5" stroke-linejoin="round"/><path d="M350 90l-9-5.5v11z" fill="var(--od-selection)"/><circle cx="62" cy="30" r="6.5" fill="#fff" stroke="var(--od-selection)" stroke-width="2"/><circle cx="350" cy="90" r="6.5" fill="#fff" stroke="var(--od-selection)" stroke-width="2"/><circle cx="116" cy="30" r="5" fill="#fff" stroke="var(--od-selection)" stroke-width="2"/><circle cx="170" cy="60" r="5" fill="#fff" stroke="var(--od-selection)" stroke-width="2"/><circle cx="260" cy="90" r="5" fill="#fff" stroke="var(--od-selection)" stroke-width="2"/></svg><div class="selbox" style="inset:14px 56px 40px 56px;border-style:dashed;border-width:1.5px;opacity:.0"></div></div>',
+  bar:()=>[
+   '<span class="id" role="group" aria-label="Conector">'+I('od-connector')+'<span class="t">Conector</span></span>',
+   '<button class="chip" data-d="traco" aria-haspopup="dialog" aria-label="Traço: 2 px, ortogonal"><svg width="30" height="14" viewBox="0 0 30 14" aria-hidden="true"><path d="M1 12h10V2h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="num">2 px</span>'+I('down')+'</button>',
+   '<button class="chip" data-d="pontas" aria-haspopup="dialog" aria-label="Pontas: início nenhuma, fim seta"><svg width="34" height="14" viewBox="0 0 34 14" aria-hidden="true"><path d="M2 7h30M26 2l6 5-6 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+I('down')+'</button>',
+   '<button class="ib" aria-label="Inverter o sentido" title="Inverter o sentido">'+I('swap')+'</button>',
+   '<button class="ib" aria-label="Cor da linha" data-d="cor" title="Cor da linha"><span class="sw-c" style="background:var(--od-selection)"></span></button>',
+   '<button class="ib" aria-label="Texto sobre a linha" title="Texto sobre a linha">'+I('label')+'</button>',
+   '<i class="sep"></i>',comum(true)].join('')},
+ frame:{label:'Frame',nome:'Planejamento',stage:()=>'<div class="obj" id="o"><div class="frame"><div class="ft">Planejamento</div><div class="n1"><b>Metas</b><br>Fechar o escopo da semana.</div><div class="n2"><b>Riscos</b><br>Dependência do servidor.</div><div class="lockbadge">'+I('lock')+'</div></div><div class="selbox" style="inset:-4px"><i class="h tl"></i><i class="h tr"></i><i class="h bl"></i><i class="h br"></i><i class="m t"></i><i class="m b"></i></div></div>',
+  bar:locked=>[
+   '<button class="id keep" data-d="renomear" aria-label="Nome do frame: Planejamento (clique para renomear)">'+I('od-frame')+'<span class="t">Planejamento</span>'+(locked?I('lock'):I('pencil'))+'</button>',
+   '<button class="chip" data-d="prop" aria-haspopup="dialog" aria-label="Proporção: livre">'+I('ratio')+'<span class="fn">Livre</span>'+I('down')+'</button>',
+   '<button class="ib" aria-label="Cor de fundo" data-d="cor" title="Cor de fundo"><span class="sw-c" style="background:#fff"></span></button>',
+   '<button class="ib" aria-label="Conteúdo visível" data-on="true" title="Conteúdo visível">'+I('eye')+'</button>',
+   '<button class="ib" aria-label="Exportar o frame" title="Exportar o frame  (PDF, PNG)">'+I('download')+'</button>',
+   '<button class="ib apresentar" aria-label="Apresentar a partir deste frame" title="Apresentar a partir daqui">'+I('play')+'<span>Apresentar</span></button>',
+   '<i class="sep"></i>',comum()].join('')}
+};
+function idSeg(icon,label,d){return '<button class="id" data-d="'+d+'" aria-haspopup="menu" aria-label="'+label+': converter em…">'+I(icon)+'<span class="t">'+label+'</span>'+I('down')+'</button>'}
+function comum(noPriv){return '<button class="ib" aria-label="Comentar" title="Comentar">'+I('od-comment')+'</button>'+
+ '<button class="ib" aria-label="Privado: só eu vejo" data-d="privado" title="Privado: só eu vejo">'+I('private')+'</button>'+
+ '<button class="ib lockbtn" id="lockbtn" aria-label="Bloquear" data-locked="false">'+I('lock')+'<span class="ring"></span><span class="dica" id="dica">Bloquear</span></button>'+
+ '<button class="ib" aria-label="Menu do objeto" aria-haspopup="menu" data-d="menu" title="Menu do objeto">'+I('more')+'</button>'}
+
+/* ===== Gavetas ===== */
+const D={
+ estilo:()=>'<div class="ph"><h4>Estilo do texto</h4><span class="sp"></span><span class="hint">Ctrl B · I · U</span></div>'+
+  '<div class="pad"><label class="field">'+I('search')+'<input placeholder="Buscar fonte (40)" aria-label="Buscar fonte"></label>'+
+  '<div class="fonts" role="listbox"><button role="option" aria-checked="true" style="font-family:Fraunces;font-weight:700">Fraunces<small>Serifa · recente</small></button><button style="font-family:Figtree">Figtree<small>Sem serifa</small></button><button style="font-family:Inter">Inter<small>Sem serifa</small></button><button style="font-family:Lora">Lora<small>Serifa</small></button><button style="font-family:Caveat;font-size:19px">Caveat<small>Manuscrita</small></button><button style="font-family:\'IBM Plex Mono\'">IBM Plex Mono<small>Mono</small></button></div></div>'+
+  '<div class="cap">Tamanho</div><div class="pad"><div class="step"><button aria-label="Diminuir">'+I('minus')+'</button><div class="v">56</div><button aria-label="Aumentar">'+I('plus')+'</button></div><div class="presets"><button>12</button><button>16</button><button>24</button><button>32</button><button aria-pressed="true">56</button><button>72</button></div></div>'+
+  '<div class="cap">Estilo e posição</div><div class="pad"><div class="two"><div class="seg" role="group" aria-label="Estilo"><button aria-pressed="true" aria-label="Negrito"><b>B</b></button><button aria-label="Itálico"><i style="font-family:serif">I</i></button><button aria-label="Sublinhado"><u>U</u></button><button aria-label="Tachado"><s>S</s></button></div><div class="seg" role="group" aria-label="Lista"><button aria-label="Sem lista">'+I('minus')+'</button><button aria-label="Marcadores"><svg class="i" viewBox="0 0 24 24"><path d="M9 7h11M9 12h11M9 17h11"/><circle cx="4.8" cy="7" r="1" fill="currentColor"/><circle cx="4.8" cy="12" r="1" fill="currentColor"/><circle cx="4.8" cy="17" r="1" fill="currentColor"/></svg></button></div></div>'+
+  '<div class="seg" style="margin-top:8px" role="group" aria-label="Alinhamento"><button aria-pressed="true" aria-label="Esquerda"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h13"/></svg></button><button aria-label="Centro"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M7 12h10M5.5 17h13"/></svg></button><button aria-label="Direita"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M10 12h10M7 17h13"/></svg></button></div></div>'+
+  '<div class="foot"><span>Fonte, tamanho e posição num só lugar</span><span class="mono">Esc fecha</span></div>',
+ cor:()=>'<div class="ph"><h4>Cor</h4><span class="sp"></span></div><div class="pad"><div class="lbl">Cor</div><div class="swatches">'+COLORS.map((c,i)=>'<button aria-label="Cor '+(i+1)+'" style="background:'+c+'" aria-pressed="'+(i===1)+'"></button>').join('')+'</div></div><div class="foot"><span>Mesmas cores do Dock</span></div>',
+ filtro:()=>'<div class="ph"><h4>Filtrar a seleção</h4><span class="sp"></span><span class="hint">5 objetos</span></div>'+
+  [['od-text','Textos','2',true],['od-shapes','Formas','2',true],['od-sticky','Post-its','1',true]].map(r=>'<button class="row" role="checkbox" aria-checked="'+r[3]+'"><span class="ck">'+I('check')+'</span>'+I(r[0])+r[1]+'<span class="sp"></span><span class="n">'+r[2]+'</span></button>').join('')+
+  '<div class="hr"></div><button class="row">'+I('od-select')+'Selecionar só os marcados</button><button class="row">'+I('od-frame')+'Frame com a seleção</button><div class="foot"><span>A barra só mostra o que vale para todos</span></div>',
+ conv:()=>'<div class="ph"><h4>Converter em…</h4><span class="sp"></span></div>'+
+  [['od-sticky','Post-it'],['od-shapes','Forma'],['od-text','Texto'],['od-frame','Frame']].map(r=>'<button class="row">'+I(r[0])+r[1]+'</button>').join('')+'<div class="foot"><span>Mantém o conteúdo e o estilo possíveis</span></div>',
+ traco:()=>'<div class="ph"><h4>Traço</h4><span class="sp"></span></div><div class="pad"><div class="lbl">Espessura</div><div style="display:flex;align-items:center;gap:10px"><input type="range" min="1" max="12" value="2" aria-label="Espessura"><span class="mono" style="font-weight:600;min-width:34px;text-align:right">2 px</span></div>'+
+  '<div class="lbl" style="margin-top:12px">Forma</div><div class="seg" role="group" aria-label="Forma"><button aria-label="Reta">'+I('line')+'</button><button aria-pressed="true" aria-label="Ortogonal">'+I('elbow')+'</button><button aria-label="Curva">'+I('curve')+'</button></div>'+
+  '<div class="lbl" style="margin-top:12px">Estilo da linha</div><div class="seg" role="group" aria-label="Estilo da linha"><button aria-pressed="true" aria-label="Sólida"><svg class="linepv" viewBox="0 0 40 20"><path d="M4 10h32" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button><button aria-label="Tracejada"><svg class="linepv" viewBox="0 0 40 20"><path d="M4 10h32" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="6 5"/></svg></button><button aria-label="Pontilhada"><svg class="linepv" viewBox="0 0 40 20"><path d="M4 10h32" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="0.1 5"/></svg></button></div></div>'+
+  '<div class="hr"></div><button class="row"><span class="sp">Ajustar percurso automaticamente</span><span class="sw"></span></button><button class="row"><span class="sp">Saltos de linha</span><span class="sw on"></span></button><div class="foot"><span>Segue as chaves de hoje</span><span class="mono">Esc</span></div>',
+ pontas:()=>'<div class="ph"><h4>Pontas</h4><span class="sp"></span></div><div class="pad"><div class="lbl">Início</div><div class="seg" role="group" aria-label="Ponta do início"><button aria-pressed="true">Nenhuma</button><button>Seta</button><button>Círculo</button><button>Losango</button></div><div class="lbl" style="margin-top:12px">Fim</div><div class="seg" role="group" aria-label="Ponta do fim"><button>Nenhuma</button><button aria-pressed="true">Seta</button><button>Círculo</button><button>Losango</button></div></div><div class="foot"><span>Botão ⇄ ao lado inverte o sentido</span></div>',
+ prop:()=>'<div class="ph"><h4>Proporção</h4><span class="sp"></span></div>'+['Livre','16:9','4:3','1:1','A4'].map((r,i)=>'<button class="row">'+I('ratio')+r+'<span class="sp"></span>'+(i===0?I('check'):'')+'</button>').join('')+'<div class="foot"><span>Só vale ao redimensionar</span></div>',
+ renomear:()=>'<div class="ph"><h4>Nome do frame</h4><span class="sp"></span></div><div class="pad"><label class="field"><input value="Planejamento" aria-label="Nome do frame"></label></div><div class="foot"><span>Enter confirma · Esc cancela</span></div>',
+ privado:()=>'<div class="ph"><h4>Privado</h4><span class="sp"></span></div><div class="pad" style="font-size:12.5px;color:var(--od-text-muted);line-height:1.45">Só você vê este objeto até tornar público. Quem tem acesso ao board não recebe o conteúdo.</div><button class="row">'+I('private')+'<span class="sp">Tornar privado</span></button><div class="foot"><span>Mesma regra do Modo Privado de hoje</span></div>',
+ menu:()=>'<div class="ph"><div><h4>Texto · “Comece por aqui”</h4></div><span class="sp"></span><span class="hint">botão direito</span></div>'+
+  '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:2px 8px 8px">'+[['copy','Copiar'],['od-sticky','Duplicar'],['lock','Bloquear'],['layers','Frente'],['trash2','Excluir']].map(r=>'<button class="ib" style="flex-direction:column;height:50px;gap:3px;font-size:10.5px;border-radius:10px;'+(r[0]==='trash2'?'color:var(--od-danger)':'')+'">'+I(r[0])+r[1]+'</button>').join('')+'</div><div class="hr"></div>'+
+  [['pencil','Editar','Renomear · Limpar · Copiar/Colar estilo'],['copy','Copiar como','Imagem · Link do objeto'],['grid','Organizar',''],['lock','Bloqueio','Padrão · Protegido · Fundo'],['od-frame','Frame e modelo','Frame com a seleção · Salvar como modelo'],['export','Exportar e info','CSV · Info']].map(r=>'<button class="row" title="'+r[2]+'">'+I(r[0])+r[1]+'<span class="sp"></span>'+I('right')+'</button>').join('')+
+  '<div class="foot"><span>Mesmo componente do botão direito (§5.2)</span></div>'
+};
+Object.assign(S.varios,{});
+let cur='texto',locked=false,openKey=null;
+
+function renderStates(){$('states').innerHTML=Object.keys(S).map(k=>'<button aria-pressed="'+(k===cur&&!(k==='frame'&&locked))+'" data-s="'+k+'">'+S[k].label+'</button>').join('')+'<button aria-pressed="'+(cur==='frame'&&locked)+'" data-s="frame-lock">Frame travado</button>';
+ $('states').querySelectorAll('button').forEach(b=>b.onclick=e=>{e.stopPropagation();const s=b.dataset.s;if(s==='frame-lock'){cur='frame';locked=true}else{cur=s;locked=false}closeD();draw()})}
+function draw(){
+  const st=S[cur];$('stage').innerHTML=st.stage();$('stage').firstChild.classList.toggle('locked',locked);
+  const c=$('cinta');c.innerHTML=st.bar(locked);c.classList.toggle('dim',locked);ico(c);ico($('stage'));
+  const lb=$('lockbtn');lb.dataset.locked=locked;lb.setAttribute('aria-label',locked?'Destravar (segure 2 segundos)':'Bloquear');$('dica').textContent=locked?'Segure 2 s para destravar':'Bloquear';
+  if(locked){c.querySelectorAll('.ib:not(.lockbtn),.chip').forEach(x=>x.setAttribute('aria-disabled','true'))}
+  bindBar();place();renderStates();
+}
+function place(){
+  const o=$('o'),c=$('cinta');if(!o)return;const r=(o.querySelector('.selbox')||o).getBoundingClientRect();
+  const w=c.offsetWidth,cx=r.left+r.width/2;let l=Math.round(cx-w/2);l=Math.max(12,Math.min(innerWidth-w-12,l));
+  c.style.left=l+'px';c.style.top=Math.round(r.bottom+18)+'px';c.style.setProperty('--nx',Math.round(cx-l)+'px');
+}
+function closeD(){$('drawer').classList.remove('on');openKey=null;document.querySelectorAll('#cinta [aria-expanded]').forEach(b=>b.setAttribute('aria-expanded','false'))}
+function openD(btn){
+  const k=btn.dataset.d;if(openKey===k){closeD();return}
+  closeD();if(!D[k])return;openKey=k;const d=$('drawer');d.innerHTML=D[k]();ico(d);
+  d.style.width=({estilo:'340px',menu:'320px',traco:'300px',filtro:'290px'}[k]||'272px');
+  const cr=$('cinta').getBoundingClientRect(),br=btn.getBoundingClientRect();let l=br.left;l=Math.max(12,Math.min(innerWidth-parseInt(d.style.width)-12,l));
+  d.style.left=l+'px';d.style.top=(cr.bottom+8)+'px';d.style.maxHeight='calc(100vh - '+(cr.bottom+8+12)+'px)';d.classList.add('on');btn.setAttribute('aria-expanded','true');
+  d.querySelectorAll('.seg button').forEach(b=>b.onclick=e=>{e.stopPropagation();b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+  d.querySelectorAll('.swatches button').forEach(b=>b.onclick=e=>{e.stopPropagation();d.querySelectorAll('.swatches button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+  d.querySelectorAll('.presets button').forEach(b=>b.onclick=e=>{e.stopPropagation();d.querySelectorAll('.presets button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+  d.querySelectorAll('.sw').forEach(s=>s.closest('.row')&&(s.closest('.row').onclick=e=>{e.stopPropagation();s.classList.toggle('on')}));
+  d.querySelectorAll('.row[role=checkbox]').forEach(r=>r.onclick=e=>{e.stopPropagation();r.setAttribute('aria-checked',r.getAttribute('aria-checked')!=='true')});
+}
+function bindBar(){
+  $('cinta').querySelectorAll('[data-d]').forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.getAttribute('aria-disabled')==='true')return;openD(b)});
+  /* bloqueio: clique trava; destravar = segurar 2 s (anel) */
+  const lb=$('lockbtn');let raf=null,t0=0;
+  const stop=()=>{cancelAnimationFrame(raf);raf=null;lb.style.setProperty('--p',0)};
+  lb.onpointerdown=e=>{e.stopPropagation();if(!locked)return;t0=performance.now();const tick=()=>{const p=Math.min(100,(performance.now()-t0)/20);lb.style.setProperty('--p',p);if(p>=100){stop();locked=false;closeD();draw()}else raf=requestAnimationFrame(tick)};raf=requestAnimationFrame(tick)};
+  lb.onpointerup=lb.onpointerleave=stop;
+  lb.onclick=e=>{e.stopPropagation();if(!locked){locked=true;closeD();draw()}};
+  /* teclado: setas percorrem a cinta; Home/End */
+  const items=()=>[...$('cinta').querySelectorAll('button')];
+  $('cinta').onkeydown=e=>{const it=items(),i=it.indexOf(document.activeElement);if(i<0)return;if(e.key==='ArrowRight'){it[(i+1)%it.length].focus();e.preventDefault()}if(e.key==='ArrowLeft'){it[(i-1+it.length)%it.length].focus();e.preventDefault()}if(e.key==='Home'){it[0].focus()}if(e.key==='End'){it[it.length-1].focus()}};
+  if(locked){let kt=0,kr=null;const ks=()=>{cancelAnimationFrame(kr);kr=null;lb.style.setProperty('--p',0)};
+    lb.onkeydown=e=>{if((e.key==='Enter'||e.key===' ')&&!kr){e.preventDefault();kt=performance.now();const tick=()=>{const p=Math.min(100,(performance.now()-kt)/20);lb.style.setProperty('--p',p);if(p>=100){ks();locked=false;closeD();draw()}else kr=requestAnimationFrame(tick)};kr=requestAnimationFrame(tick)}};
+    lb.onkeyup=ks;lb.onblur=ks}
+}
+document.addEventListener('click',e=>{if(!e.target.closest('#drawer')&&!e.target.closest('#cinta'))closeD()});
+addEventListener('keydown',e=>{if(e.key==='Escape'){const k=openKey;closeD();if(k){const b=document.querySelector('#cinta [data-d="'+k+'"]');b&&b.focus()}}});
+addEventListener('resize',()=>{place();closeD()});
+$('themeBtn').onclick=e=>{e.stopPropagation();document.documentElement.classList.toggle('dark');$('themeSw').classList.toggle('on')};
+ico(document);
+const q=new URLSearchParams(location.search);if(q.get('s')){const s=q.get('s');if(s==='frame-lock'){cur='frame';locked=true}else cur=s}
+if(q.get('dark')){document.documentElement.classList.add('dark');$('themeSw').classList.add('on')}
+document.fonts&&document.fonts.ready.then(place);
+draw();
+if(q.get('d')){const b=document.querySelector('#cinta [data-d="'+q.get('d')+'"]');b&&openD(b)}
+</script>
+</body>
+</html>

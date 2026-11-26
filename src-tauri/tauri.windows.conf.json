@@ -1,0 +1,18 @@
+{
+  "bundle": {
+    "resources": {
+      "../LICENSE": "LICENSE.txt",
+      "../THIRD_PARTY_NOTICES.txt": "THIRD_PARTY_NOTICES-app.txt",
+      "THIRD_PARTY_NOTICES.txt": "THIRD_PARTY_NOTICES-desktop.txt"
+    },
+    "windows": {
+      "webviewInstallMode": { "type": "downloadBootstrapper", "silent": true },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["English", "PortugueseBR"],
+        "displayLanguageSelector": false,
+        "compression": "zlib"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "apiVersion": 1,
+  "id": "dev.ludraw.formas-fluxograma",
+  "name": "Formas de fluxograma",
+  "version": "1.0.0",
+  "publisher": "LuDraw",
+  "description": "Terminador, decisão, processo, documento e banco de dados — geometria genérica desenhada do zero.",
+  "i18n": {
+    "en": {
+      "name": "Flowchart shapes",
+      "description": "Terminator, decision, process, document and database — generic geometry drawn from scratch."
+    }
+  },
+  "license": "MIT",
+  "kind": "pack",
+  "permissions": [],
+  "provenance": { "originalWork": true, "thirdParty": [] },
+  "contributes": {
+    "shapes": [
+      {
+        "id": "terminador",
+        "name": "Terminador",
+        "i18n": { "en": { "name": "Terminator" } },
+        "viewBox": { "width": 160, "height": 64 },
+        "path": "M32 0 L128 0 C145.67 0 160 14.33 160 32 C160 49.67 145.67 64 128 64 L32 64 C14.33 64 0 49.67 0 32 C0 14.33 14.33 0 32 0 Z",
+        "textInsets": { "top": 0.12, "right": 0.16, "bottom": 0.12, "left": 0.16 },
+        "defaultSize": { "width": 200, "height": 80 }
+      },
+      {
+        "id": "decisao",
+        "name": "Decisão",
+        "i18n": { "en": { "name": "Decision" } },
+        "viewBox": { "width": 120, "height": 80 },
+        "path": "M60 0 L120 40 L60 80 L0 40 Z",
+        "textInsets": { "top": 0.25, "right": 0.25, "bottom": 0.25, "left": 0.25 },
+        "defaultSize": { "width": 200, "height": 130 }
+      },
+      {
+        "id": "processo",
+        "name": "Processo",
+        "i18n": { "en": { "name": "Process" } },
+        "viewBox": { "width": 160, "height": 80 },
+        "path": "M0 0 L160 0 L160 80 L0 80 Z",
+        "textInsets": { "top": 0.1, "right": 0.06, "bottom": 0.1, "left": 0.06 },
+        "defaultSize": { "width": 200, "height": 100 }
+      },
+      {
+        "id": "documento",
+        "name": "Documento",
+        "i18n": { "en": { "name": "Document" } },
+        "viewBox": { "width": 160, "height": 96 },
+        "path": "M0 0 L160 0 L160 80 C126 70 104 92 72 90 C44 88 24 78 0 84 Z",
+        "textInsets": { "top": 0.1, "right": 0.06, "bottom": 0.22, "left": 0.06 },
+        "defaultSize": { "width": 200, "height": 120 }
+      },
+      {
+        "id": "banco-de-dados",
+        "name": "Banco de dados",
+        "i18n": { "en": { "name": "Database" } },
+        "viewBox": { "width": 100, "height": 120 },
+        "path": "M0 12 C0 5.37 22.39 0 50 0 C77.61 0 100 5.37 100 12 L100 108 C100 114.63 77.61 120 50 120 C22.39 120 0 114.63 0 108 Z",
+        "decoration": "M0 12 C0 18.63 22.39 24 50 24 C77.61 24 100 18.63 100 12",
+        "textInsets": { "top": 0.26, "right": 0.08, "bottom": 0.1, "left": 0.08 },
+        "defaultSize": { "width": 140, "height": 160 }
+      }
+    ]
+  }
+}

@@ -1,0 +1,621 @@
+{
+  "$comment": "Configuração de `npm run audit:legal` (scripts/audit-clean-room.mjs). Regras de origem em ai-memory/CLEAN_ROOM.md. Isto não é parecer jurídico. Escopos: 'ui' = src/, public/, index.html, package.json + (Chat 07) server/src, server/package.json, server/.env.example, server/drizzle.config.ts, server/docker-compose.dev.yml · 'docs' = docs/ e README.md + (Chat 08.6 · O-11) README.en.md, CHANGELOG.md, CONTRIBUTING.md, SECURITY.md e .github/; 'ui' ganhou também scripts/, server/test/ e server/scripts/ (o código dos próprios auditores, que lista os termos de propósito, fica de fora). ai-memory/ continua fora: os arquivos versionados de lá (CLEAN_ROOM.md e refs/) são conferidos por SHA-256 (PROVENANCE §4.1). Severidades: block (bloqueia, código de saída 1) · warn (aviso, revisar) · off.",
+  "scan": {
+    "ui": [
+      "src",
+      "public",
+      "index.html",
+      "package.json",
+      "server/src",
+      "server/package.json",
+      "server/.env.example",
+      "server/drizzle.config.ts",
+      "server/docker-compose.dev.yml",
+      "scripts",
+      "server/test",
+      "server/scripts",
+      "src-tauri"
+    ],
+    "docs": [
+      "docs",
+      "README.md",
+      "README.en.md",
+      "CHANGELOG.md",
+      "CONTRIBUTING.md",
+      "SECURITY.md",
+      ".github"
+    ],
+    "neverScan": [
+      "ai-memory",
+      "node_modules",
+      "dist",
+      ".git",
+      "src-tauri/target",
+      "src-tauri/generated",
+      "src-tauri/gen",
+      "src-tauri/permissions",
+      "src-tauri/crates.json",
+      "src-tauri/Cargo.lock",
+      "src-tauri/THIRD_PARTY_NOTICES.txt",
+      "src-tauri/licenses",
+      "server/node_modules",
+      "server/dist",
+      "scripts/audit-terms.json",
+      "scripts/audit-clean-room.mjs",
+      "scripts/audit-i18n-allow.json"
+    ],
+    "textExtensions": [
+      ".ts",
+      ".tsx",
+      ".js",
+      ".jsx",
+      ".mjs",
+      ".cjs",
+      ".css",
+      ".html",
+      ".md",
+      ".json",
+      ".svg",
+      ".txt",
+      ".webmanifest",
+      ".example",
+      ".yml",
+      ".rs",
+      ".toml"
+    ],
+    "maxLineLength": 800
+  },
+  "terms": [
+    {
+      "id": "miro",
+      "pattern": "\\bmiro\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto concorrente (CLEAN_ROOM R4/R8)."
+    },
+    {
+      "id": "openmiro",
+      "pattern": "open-?miro",
+      "flags": "i",
+      "ui": "block",
+      "docs": "block",
+      "description": "Codinome antigo derivado de marca de terceiro — não deve aparecer em nada público."
+    },
+    {
+      "id": "figjam",
+      "pattern": "\\bfig-?jam\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto concorrente."
+    },
+    {
+      "id": "figma",
+      "pattern": "\\bfigma\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto concorrente."
+    },
+    {
+      "id": "lucid",
+      "pattern": "\\blucid(chart|spark)?\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto concorrente (não confundir com lucide-react, que não casa por causa do \\b)."
+    },
+    {
+      "id": "whimsical",
+      "pattern": "\\bwhimsical\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto concorrente."
+    },
+    {
+      "id": "mural",
+      "pattern": "\\bmural\\b",
+      "flags": "i",
+      "ui": "warn",
+      "docs": "warn",
+      "description": "Nome de produto concorrente — mas também palavra comum em pt-BR ('mural'); revisar o contexto."
+    },
+    {
+      "id": "tldraw",
+      "pattern": "\\btldraw\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Projeto de terceiros com licença própria (não MIT para uso comercial do SDK)."
+    },
+    {
+      "id": "jamboard",
+      "pattern": "\\bjamboard\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto de terceiros."
+    },
+    {
+      "id": "klaxoon",
+      "pattern": "\\bklaxoon\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto de terceiros."
+    },
+    {
+      "id": "conceptboard",
+      "pattern": "\\bconceptboard\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto de terceiros."
+    },
+    {
+      "id": "canva",
+      "pattern": "\\bcanva\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de produto de terceiros."
+    },
+    {
+      "id": "xmind",
+      "pattern": "\\b(xmind|mindmeister|mindnode)\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Produtos de mapa mental de terceiros (relevante para a Rodada A do Chat 03)."
+    },
+    {
+      "id": "drawio",
+      "pattern": "\\b(draw\\.io|diagrams\\.net)\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Produto de diagramas de terceiros."
+    },
+    {
+      "id": "excalidraw",
+      "pattern": "\\bexcalidraw\\b",
+      "flags": "i",
+      "ui": "warn",
+      "docs": "off",
+      "description": "Formato aberto (MIT) permitido como importação; na UI só como nome de formato (`.excalidraw`), nunca como marca/logo."
+    },
+    {
+      "id": "competitor-domain",
+      "pattern": "\\b(miro\\.com|figma\\.com|lucid\\.app|lucidchart\\.com|whimsical\\.com|mural\\.co|canva\\.com|klaxoon\\.com|conceptboard\\.com|tldraw\\.com)\\b",
+      "flags": "i",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Domínio de concorrente (CLEAN_ROOM R5: nada de chamadas a serviços de terceiros)."
+    },
+    {
+      "id": "isProtected",
+      "pattern": "\\bisProtected\\b",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Nome de flag de proteção de conteúdo de terceiros — indício de decodificar/contornar formato proprietário (R6/R7)."
+    },
+    {
+      "id": "copyright",
+      "pattern": "copyright|\\(c\\)\\s*\\d{4}|©",
+      "flags": "i",
+      "ui": "warn",
+      "docs": "warn",
+      "description": "Cabeçalho de copyright: pode indicar trecho copiado de terceiros. O do projeto fica só em LICENSE."
+    },
+    {
+      "id": "licensed-under",
+      "pattern": "licensed under",
+      "flags": "i",
+      "ui": "warn",
+      "docs": "warn",
+      "description": "Cabeçalho de licença dentro de arquivo: possível trecho de terceiros."
+    },
+    {
+      "id": "license-marker",
+      "pattern": "@license|@preserve|/\\*!",
+      "ui": "warn",
+      "docs": "off",
+      "description": "Comentário de licença preservado por minificadores: possível código de terceiros colado."
+    },
+    {
+      "id": "spdx-foreign",
+      "pattern": "SPDX-License-Identifier:\\s*(?!MIT\\b)[\\w.+-]+",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Identificador SPDX que não é o MIT do projeto."
+    },
+    {
+      "id": "sourcemap",
+      "pattern": "sourceMappingURL",
+      "ui": "block",
+      "docs": "warn",
+      "description": "Referência a source map: indício de bundle/arquivo gerado colado no repositório (R3)."
+    }
+  ],
+  "exceptions": [
+    {
+      "file": "docs/PROVENANCE.md",
+      "term": "*",
+      "reason": "Registro de origem: precisa citar fatos (ex.: prints de produto de terceiros usados no Chat 01, formato .excalidraw) para ser transparente. Menção descritiva permitida (CLEAN_ROOM R8)."
+    },
+    {
+      "file": "docs/AUDIT_REPORT.md",
+      "term": "*",
+      "reason": "Relatório gerado por este script: repete os termos encontrados."
+    },
+    {
+      "file": "package.json",
+      "term": "copyright",
+      "reason": "Campo de metadados do próprio projeto, se existir."
+    },
+    {
+      "file": "src/utils/excalidrawImport.ts",
+      "term": "excalidraw",
+      "reason": "Chat 05: implementação do importador do formato aberto .excalidraw (JSON de projeto MIT, permitido pelo CLEAN_ROOM §2.3/§6). O nome aparece só como identificador técnico do formato (extensão, tipo do JSON, nomes de função/arquivo) — sem marca, logo ou texto de interface do projeto de origem."
+    },
+    {
+      "file": "src/extensions/core.ts",
+      "term": "excalidraw",
+      "reason": "Chat 05: implementação do importador do formato aberto .excalidraw (JSON de projeto MIT, permitido pelo CLEAN_ROOM §2.3/§6). O nome aparece só como identificador técnico do formato (extensão, tipo do JSON, nomes de função/arquivo) — sem marca, logo ou texto de interface do projeto de origem."
+    },
+    {
+      "file": "src/utils/clipboard.ts",
+      "term": "excalidraw",
+      "reason": "Chat 05: implementação do importador do formato aberto .excalidraw (JSON de projeto MIT, permitido pelo CLEAN_ROOM §2.3/§6). O nome aparece só como identificador técnico do formato (extensão, tipo do JSON, nomes de função/arquivo) — sem marca, logo ou texto de interface do projeto de origem."
+    },
+    {
+      "file": "src/utils/text.ts",
+      "term": "excalidraw",
+      "reason": "Chat 05: implementação do importador do formato aberto .excalidraw (JSON de projeto MIT, permitido pelo CLEAN_ROOM §2.3/§6). O nome aparece só como identificador técnico do formato (extensão, tipo do JSON, nomes de função/arquivo) — sem marca, logo ou texto de interface do projeto de origem."
+    },
+    {
+      "file": "src/hooks/useKeyboardShortcuts.ts",
+      "term": "excalidraw",
+      "reason": "Chat 05: implementação do importador do formato aberto .excalidraw (JSON de projeto MIT, permitido pelo CLEAN_ROOM §2.3/§6). O nome aparece só como identificador técnico do formato (extensão, tipo do JSON, nomes de função/arquivo) — sem marca, logo ou texto de interface do projeto de origem."
+    },
+    {
+      "file": "src/extensions/builtin/",
+      "term": "copyright",
+      "reason": "Chat 06.5: cada extensão oficial embutida é um pacote completo e traz uma cópia do LICENSE MIT do próprio projeto (exigência do formato .ludraw-ext). É a licença do LuDraw, não trecho de terceiros."
+    },
+    {
+      "file": "src/extensions/schema.ts",
+      "term": "excalidraw",
+      "reason": "Chat 06.5 · B: a extensão de arquivo .excalidraw aparece só na lista CORE_IMPORT_EXTENSIONS, que IMPEDE uma extensão de tomar um formato que o núcleo já importa (formato aberto, CLEAN_ROOM §2.3/§6). Identificador técnico, sem marca nem texto de interface."
+    },
+    {
+      "file": "scripts/lib/notices.mjs",
+      "term": "copyright",
+      "reason": "Chat 08.6 · O-02: modelos dos textos padrão MIT/ISC usados nos avisos de terceiros quando um pacote não traz o arquivo de licença; o titular é o autor declarado no package.json do pacote."
+    },
+    {
+      "file": "src-tauri/tauri.linux.conf.json",
+      "term": "copyright",
+      "reason": "Chat 09.1 · R8: `usr/share/doc/ludraw/copyright` é o caminho que a política do Debian exige para a licença do pacote (lá vai o LICENSE do LuDraw). Não é cabeçalho de copyright copiado."
+    },
+    {
+      "file": "scripts/test-desktop.mjs",
+      "term": "copyright",
+      "reason": "Chat 09.1 · R8: `usr/share/doc/ludraw/copyright` é o caminho que a política do Debian exige para a licença do pacote (lá vai o LICENSE do LuDraw). Não é cabeçalho de copyright copiado."
+    },
+    {
+      "file": "scripts/test-desktop-package.mjs",
+      "term": "copyright",
+      "reason": "Chat 09.1 · R8: `usr/share/doc/ludraw/copyright` é o caminho que a política do Debian exige para a licença do pacote (lá vai o LICENSE do LuDraw). Não é cabeçalho de copyright copiado."
+    },
+    {
+      "file": "scripts/lib/desktopNotices.mjs",
+      "term": "copyright",
+      "reason": "Chat 09.1 · R8: gerador dos avisos de terceiros do desktop; a palavra aparece só nos nomes dos arquivos de licença procurados e no texto bilíngue do cabeçalho. Os textos de terceiros ficam em src-tauri/licenses/ (origem no PROVENANCE §3.8) e no arquivo gerado, fora da varredura de termos."
+    },
+    {
+      "file": "scripts/test-extensions.mjs",
+      "term": "asset-ref",
+      "reason": "Chat 08.6 · O-11: <image href=\"x.png\"> é entrada de teste do sanitizador de SVG (deve ser recusado), não referência a asset nem a pacote."
+    }
+  ],
+  "expectedDomains": {
+    "www.w3.org": "namespace XML/SVG (não é requisição de rede)",
+    "github.com": "links de documentação/repositório (sem chamadas de API)",
+    "*.example.com": "domínio reservado para exemplos (RFC 2606) em .env.example e mensagens de configuração — não é requisição",
+    "*.test": "domínio reservado para testes (RFC 2606) nas fixtures de scripts/ — nenhuma requisição real (Chat 08.6 · O-11)",
+    "*.localhost": "origens locais do programa desktop (tauri.localhost, ipc.localhost; RFC 6761: nunca sai do computador) e casos de recusa nos testes (Chat 09.1)",
+    "*.invalid": "domínio reservado que nunca resolve (RFC 2606), só em teste (Chat 09.1)",
+    "schemas.openxmlformats.org": "namespace XML da planilha de teste em scripts/test-desktop-app.mjs (não é requisição de rede; Chat 09.1)"
+  },
+  "licenses": {
+    "allowed": [
+      "MIT",
+      "ISC",
+      "BSD-2-Clause",
+      "BSD-3-Clause",
+      "Apache-2.0",
+      "0BSD",
+      "CC0-1.0",
+      "Unlicense",
+      "OFL-1.1",
+      "Zlib"
+    ],
+    "approval": [
+      "LGPL",
+      "MPL",
+      "CC-BY",
+      "CC-BY-SA"
+    ],
+    "blocked": [
+      "GPL",
+      "AGPL",
+      "SSPL",
+      "BUSL",
+      "UNLICENSED"
+    ],
+    "packageApprovals": [
+      {
+        "package": "caniuse-lite",
+        "license": "CC-BY-4.0",
+        "reason": "base de dados de compatibilidade de navegadores usada só no build (autoprefixer/browserslist); não vai para o bundle. Atribuição CC BY 4.0 registrada em docs/PROVENANCE.md §3.2.",
+        "approvedBy": "usuário (05/11/2026)"
+      },
+      {
+        "package": "nodemailer",
+        "license": "MIT-0",
+        "reason": "envio opcional de e-mail por SMTP no servidor (Chat 08.5); MIT sem a cláusula de aviso, sem dependências. Aprovação só para este pacote (CLEAN_ROOM.md §8); a MIT-0 não entrou na lista geral.",
+        "approvedBy": "usuário (12/11/2026)"
+      }
+    ],
+    "crateApprovals": [
+      {
+        "crate": "cssparser@0.37.0",
+        "license": "MPL-2.0",
+        "reason": "Chat 09.1: dependência do Tauri; só na compilação, não vai no executável. Usada sem nenhuma modificação do código.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "cssparser-macros@0.7.1",
+        "license": "MPL-2.0",
+        "reason": "Chat 09.1: dependência do Tauri; só na compilação, não vai no executável. Usada sem nenhuma modificação do código.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "dtoa-short@0.3.5",
+        "license": "MPL-2.0",
+        "reason": "Chat 09.1: dependência do Tauri; só na compilação, não vai no executável. Usada sem nenhuma modificação do código.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "icu_collections@2.4.0",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "icu_locale_core@2.4.0",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "icu_normalizer@2.4.0",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "icu_normalizer_data@2.4.0",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "icu_properties@2.4.0",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "icu_properties_data@2.4.0",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "icu_provider@2.4.0",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "litemap@0.8.3",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "option-ext@0.2.0",
+        "license": "MPL-2.0",
+        "reason": "Chat 09.1: dependência do Tauri; vai no executável. Usada sem nenhuma modificação do código.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "potential_utf@0.1.6",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "selectors@0.38.0",
+        "license": "MPL-2.0",
+        "reason": "Chat 09.1: dependência do Tauri; só na compilação, não vai no executável. Usada sem nenhuma modificação do código.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "target-lexicon@0.12.16",
+        "license": "Apache-2.0 WITH LLVM-exception",
+        "reason": "Chat 09.1: compilação do GTK no Linux; só na compilação, não vai no executável (conferido com cargo tree).",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "tinystr@0.8.5",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "unicode-ident@1.0.27",
+        "license": "(MIT OR Apache-2.0) AND Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); só na compilação, não vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "writeable@0.6.4",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "yoke@0.8.4",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "yoke-derive@0.8.4",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); só na compilação, não vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "zerofrom@0.1.8",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "zerofrom-derive@0.1.8",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); só na compilação, não vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "zerotrie@0.2.5",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "zerovec@0.11.9",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      },
+      {
+        "crate": "zerovec-derive@0.11.7",
+        "license": "Unicode-3.0",
+        "reason": "Chat 09.1: dados e tabelas Unicode (nomes internacionais de domínio / identificadores); só na compilação, não vai no executável.",
+        "approvedBy": "usuário (25/11/2026)"
+      }
+    ]
+  },
+  "assets": {
+    "extensions": [
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".gif",
+      ".webp",
+      ".avif",
+      ".svg",
+      ".ico",
+      ".woff",
+      ".woff2",
+      ".ttf",
+      ".otf",
+      ".eot",
+      ".mp3",
+      ".wav",
+      ".ogg",
+      ".m4a",
+      ".mp4",
+      ".webm"
+    ],
+    "inventoryDirs": [
+      "public",
+      "docs",
+      "src",
+      "src-tauri"
+    ],
+    "doNotPublish": [
+      {
+        "path": "docs/screenshots/",
+        "reason": "Capturas do layout do Chat 01 (feito com prints de produto de terceiros como referência). Não publicar; refazer no Chat 09 ou apagar (decisão do usuário). Chat 09: só as capturas novas listadas em allow (origem no PROVENANCE) estão liberadas; qualquer outro arquivo aqui volta a gerar aviso.",
+        "allow": [
+          "docs/screenshots/board-claro.png",
+          "docs/screenshots/board-escuro.png"
+        ]
+      }
+    ]
+  },
+  "manualReview": [
+    {
+      "item": "Nome do recurso “Modo Privado” (PrivateModeMenu, banners, Design System)",
+      "risk": "médio",
+      "note": "É a tradução literal do nome de um recurso equivalente de um concorrente. O CLAUDE.md já usa “Criação cega”. Sugestões: “Criação cega”, “Notas ocultas”, “Escrita às cegas”.",
+      "decision": "aberto — decisão do usuário adiada (Chat 08.6, 15/11/2026: não renomear por ora; PROVENANCE §9 item 5)"
+    },
+    {
+      "item": "Nomes planejados “Follow-me” / “Trazer todos até mim” (CLAUDE.md, permissão followMe.lead; UI só no Chat 08)",
+      "risk": "médio",
+      "note": "Coincidiam com nomes de recursos de concorrente. O recurso ganhou nome próprio, mas a entrada do Activity Log board.activity.followMeStarted ainda diz “{actor} trouxe todos até a própria tela” / “{actor} brought everyone to their view”, próxima de “Bring everyone to me”. Achado na revisão do Chat 08.6 · C; não renomeado (aguarda decisão do usuário).",
+      "decision": "aberto em parte — nome do recurso resolvido no Chat 08 (09/11/2026: “Conduzir a tela”, “Parar de conduzir”, “{nome} está conduzindo”; id interno followMe.lead mantido); falta decidir a frase do Activity Log"
+    },
+    {
+      "item": "Paleta de post-its STICKY_COLORS (utils/factory.ts)",
+      "risk": "médio",
+      "note": "Definida no Chat 01 com prints de terceiros como referência; substituída por paleta própria (matizes a cada 22,5°, claridade pastel, contraste conferido).",
+      "decision": "resolvido (05/11/2026, decisão do usuário; feito no Chat 05.5): 16 cores definidas do zero em OKLCH — PROVENANCE §4 e §9 item 3"
+    },
+    {
+      "item": "Barra de ações e menu de contexto (conteúdo/ordem dos itens vindos do Chat 01)",
+      "risk": "baixo–médio",
+      "note": "Chat 08.2: a barra de ações virou a Cinta do objeto (STUDIO_V2_SPEC §5, ordem própria: identidade · chips · grupo fixo). Falta revisar a ordem dos itens do menu de contexto, herdada do Chat 01.",
+      "decision": "aberto — revisão de look and feel no Chat 09"
+    },
+    {
+      "item": "Atalhos de 1 tecla (V, H, N, T, R, O, S, P, E, L, F, C)",
+      "risk": "baixo",
+      "note": "Funcionais e comuns entre quadros brancos; função é referência permitida. Manter.",
+      "decision": "aberto — sugestão: manter (sem decisão registrada do usuário)"
+    },
+    {
+      "item": "Termos “Frames”, “Smart guides”, “Saltos de linha”, “Modo Apresentação”, “Brainwriting”, “Kanban”, “Mapa mental”",
+      "risk": "baixo",
+      "note": "Termos genéricos de mercado/métodos. Manter; evitar copiar microcopy de terceiros nas descrições.",
+      "decision": "aberto — sugestão: manter (sem decisão registrada do usuário)"
+    },
+    {
+      "item": "Template “Business Model Canvas” (Chat 04)",
+      "risk": "médio",
+      "note": "Modelo de terceiros com licença própria (CC BY-SA). Não usado: o núcleo traz uma estrutura genérica com nome e textos próprios, sem atribuição necessária.",
+      "decision": "resolvido (Chat 04, decisão escrita do usuário): versão genérica própria “Modelo de Negócio em 9 blocos”, sem nome, arte, layout nem textos do original — PROVENANCE §4"
+    },
+    {
+      "item": "Ícones",
+      "risk": "baixo",
+      "note": "lucide-react (ISC) para genéricos + ícones próprios “traço da pena” (src/components/icons/od/, Chat 08.2) feitos a partir das referências do projeto, agora versionadas em ai-memory/refs/ com SHA-256 no PROVENANCE. Comparação automática dos 78 traçados próprios com os 3.497 do lucide: só 2 linhas retas triviais coincidem.",
+      "decision": "resolvido (revisto no Chat 08.6, 15/11/2026)"
+    },
+    {
+      "item": "Logo da splash × LogoMark",
+      "risk": "nenhum",
+      "note": "Ambos são autoria do usuário; a splash usa o desenho da referência (curva levemente diferente).",
+      "decision": "ok (sem risco)"
+    }
+  ]
+}

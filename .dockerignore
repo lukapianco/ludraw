@@ -1,0 +1,32 @@
+# LuDraw — contexto do build da imagem (Chat 09 · R3). LISTA DE PERMISSÃO: tudo fica de fora, menos o que o
+# Dockerfile copia. Assim .env, ai-memory/, server/data/, .playwright-mcp/, .git, node_modules, dist locais,
+# backups e segredos (deploy/secrets/) nunca chegam ao daemon do Docker nem à imagem.
+*
+
+!package.json
+!package-lock.json
+!index.html
+!vite.config.ts
+!tsconfig.json
+!tsconfig.node.json
+!postcss.config.js
+!tailwind.config.js
+!THIRD_PARTY_NOTICES.txt
+!LICENSE
+!public/
+!src/
+
+!server/package.json
+!server/package-lock.json
+!server/tsconfig.json
+!server/scripts/build.mjs
+!server/src/
+!server/drizzle/
+!server/THIRD_PARTY_NOTICES.txt
+
+# mesmo dentro das pastas permitidas
+**/.env
+**/.env.*
+**/*.map
+**/node_modules
+**/.DS_Store

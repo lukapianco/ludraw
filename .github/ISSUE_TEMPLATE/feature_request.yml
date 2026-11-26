@@ -1,0 +1,52 @@
+name: Sugerir uma função
+description: Uma ideia para o LuDraw.
+title: "[Ideia] "
+labels: ["ideia"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Descreva **o problema que você quer resolver** e a função que imagina. Confira antes o catálogo em `docs/FEATURES.md` (pode já existir ou estar planejada).
+        Por causa das regras de sala limpa, **não envie prints, textos ou fluxos copiados de outros produtos como especificação de aparência** — descreva a necessidade com suas palavras.
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qual problema isso resolve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: Como você imagina a função?
+      description: "Passos de uso, quem usa, onde ficaria na interface."
+    validations:
+      required: true
+  - type: dropdown
+    id: categoria
+    attributes:
+      label: Categoria
+      options:
+        - Board e navegação
+        - Objetos
+        - Conectores
+        - Diagramas
+        - Facilitação
+        - Colaboração
+        - Governança
+        - Importar
+        - Exportar
+        - Mesa (dashboard)
+        - Sistema
+        - Acessibilidade
+        - Extensões
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas que você considerou
+  - type: checkboxes
+    id: formatos
+    attributes:
+      label: Formatos e dependências
+      options:
+        - label: "Se a ideia envolve importar/exportar, o formato é aberto e documentado (ex.: SVG, CSV, PDF, .excalidraw)."
+        - label: Não estou pedindo integração com API, SDK ou formato proprietário de terceiros.

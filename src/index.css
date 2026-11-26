@@ -1,0 +1,492 @@
+@import './styles/tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--od-app-bg);
+    color: var(--od-text);
+    font-family: Figtree, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+    transition: background-color var(--od-dur-slow) var(--od-ease-out), color var(--od-dur-slow) var(--od-ease-out);
+  }
+
+  ::selection {
+    background: rgba(143, 190, 114, 0.35);
+  }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Chat 08.6 · A (D-02): contorno TRANSPARENTE em vez de `outline: none` — invisível no tema normal (o anel é a
+     sombra), mas o navegador o pinta com a cor do sistema no alto contraste, onde a sombra é removida. */
+  :focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: var(--od-focus-ring);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--od-border-strong) transparent;
+  }
+}
+
+@layer components {
+  /* ---------- Painéis flutuantes (barras do board) ---------- */
+  .od-panel {
+    background: var(--od-panel);
+    border-radius: var(--od-radius-xl);
+    box-shadow: var(--od-shadow-panel);
+    transition: background-color var(--od-dur-slow) var(--od-ease-out), box-shadow var(--od-dur-slow) var(--od-ease-out);
+  }
+
+  .od-pop {
+    background: var(--od-panel);
+    border-radius: var(--od-radius-2xl);
+    box-shadow: var(--od-shadow-pop);
+  }
+
+  /* ---------- Botões ---------- */
+  .od-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: var(--od-radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+      background-color var(--od-dur-base) var(--od-ease-out),
+      color var(--od-dur-base) var(--od-ease-out),
+      box-shadow var(--od-dur-base) var(--od-ease-out),
+      transform var(--od-dur-fast) var(--od-ease-out),
+      opacity var(--od-dur-base) var(--od-ease-out);
+  }
+  .od-btn:active:not(:disabled),
+  .od-btn.is-active {
+    transform: scale(0.97);
+  }
+  .od-btn:focus-visible,
+  .od-btn.is-focus {
+    box-shadow: var(--od-focus-ring);
+  }
+  .od-btn:disabled,
+  .od-btn.is-disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .od-btn-sm {
+    height: 30px;
+    padding: 0 10px;
+    font-size: 13px;
+    border-radius: var(--od-radius-sm);
+  }
+  .od-btn-lg {
+    height: 44px;
+    padding: 0 20px;
+    font-size: 15px;
+    border-radius: var(--od-radius-lg);
+  }
+
+  .od-btn-primary {
+    background: var(--od-accent);
+    color: var(--od-accent-contrast);
+  }
+  .od-btn-primary:hover:not(:disabled),
+  .od-btn-primary.is-hover {
+    background: var(--od-accent-hover);
+  }
+  .od-btn-primary:active:not(:disabled),
+  .od-btn-primary.is-active {
+    background: var(--od-accent-pressed);
+  }
+
+  .od-btn-secondary {
+    background: var(--od-panel);
+    color: var(--od-text);
+    box-shadow: inset 0 0 0 1px var(--od-border-strong);
+  }
+  .od-btn-secondary:hover:not(:disabled),
+  .od-btn-secondary.is-hover {
+    background: var(--od-panel-hover);
+  }
+  .od-btn-secondary:active:not(:disabled),
+  .od-btn-secondary.is-active {
+    background: var(--od-panel-active);
+  }
+  .od-btn-secondary:focus-visible,
+  .od-btn-secondary.is-focus {
+    box-shadow: inset 0 0 0 1px var(--od-selection), var(--od-focus-ring);
+  }
+
+  .od-btn-soft {
+    background: var(--od-accent-soft);
+    color: var(--od-brand-900);
+  }
+  .dark .od-btn-soft {
+    color: var(--od-brand-200);
+  }
+  .od-btn-soft:hover:not(:disabled),
+  .od-btn-soft.is-hover {
+    filter: brightness(0.96);
+  }
+
+  .od-btn-ghost {
+    background: transparent;
+    color: var(--od-text);
+  }
+  .od-btn-ghost:hover:not(:disabled),
+  .od-btn-ghost.is-hover {
+    background: var(--od-panel-hover);
+  }
+  .od-btn-ghost:active:not(:disabled),
+  .od-btn-ghost.is-active {
+    background: var(--od-panel-active);
+  }
+
+  .od-btn-danger {
+    background: var(--od-danger);
+    color: #fff;
+  }
+  .dark .od-btn-danger {
+    color: #2a0f0a;
+  }
+  .od-btn-danger:hover:not(:disabled),
+  .od-btn-danger.is-hover {
+    filter: brightness(0.92);
+  }
+
+  /* ---------- Botão de ferramenta (barras do board) ---------- */
+  .od-tool {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--od-radius-md);
+    color: var(--od-text);
+    transition:
+      background-color var(--od-dur-base) var(--od-ease-out),
+      color var(--od-dur-base) var(--od-ease-out),
+      transform var(--od-dur-fast) var(--od-ease-out);
+  }
+  .od-tool:hover:not(:disabled),
+  .od-tool.is-hover {
+    background: var(--od-panel-hover);
+  }
+  .od-tool:active:not(:disabled) {
+    transform: scale(0.94);
+  }
+  .od-tool[data-active='true'] {
+    background: var(--od-accent-soft);
+    color: var(--od-brand-900);
+  }
+  .dark .od-tool[data-active='true'] {
+    color: var(--od-brand-200);
+  }
+  .od-tool:disabled,
+  .od-tool.is-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* ---------- Campos ---------- */
+  .od-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: var(--od-radius-md);
+    background: var(--od-panel);
+    color: var(--od-text);
+    font-size: 14px;
+    /* Chat 08.6 · B (D-06): limite do campo ≥ 3:1 com o painel */
+    box-shadow: inset 0 0 0 1px var(--od-input-border);
+    transition: box-shadow var(--od-dur-base) var(--od-ease-out), background-color var(--od-dur-base) var(--od-ease-out);
+  }
+  .od-input::placeholder {
+    color: var(--od-text-subtle);
+  }
+  /* Chat 08.6 · B (D-05): `:not(:focus)` — antes o hover (mais específico) apagava o anel de foco quando o
+     ponteiro ficava sobre o campo focado */
+  .od-input:hover:not(:disabled):not(:focus),
+  .od-input.is-hover {
+    box-shadow: inset 0 0 0 1px var(--od-text-subtle);
+  }
+  .od-input:focus,
+  .od-input.is-focus {
+    outline: none;
+    box-shadow: inset 0 0 0 1.5px var(--od-selection), var(--od-focus-ring);
+  }
+  .od-input[aria-invalid='true'],
+  .od-input.is-error {
+    box-shadow: inset 0 0 0 1.5px var(--od-danger), 0 0 0 3px var(--od-danger-soft);
+  }
+  .od-input:disabled,
+  .od-input.is-disabled {
+    background: var(--od-panel-sunken);
+    color: var(--od-text-subtle);
+    cursor: not-allowed;
+  }
+
+  /* ---------- Itens de menu ---------- */
+  .od-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 34px;
+    padding: 0 10px;
+    border-radius: var(--od-radius-md);
+    font-size: 14px;
+    color: var(--od-text);
+    text-align: left;
+    transition: background-color var(--od-dur-fast) var(--od-ease-out);
+  }
+  .od-menu-item:hover:not(:disabled),
+  .od-menu-item.is-hover,
+  .od-menu-item[data-open='true'] {
+    background: var(--od-panel-hover);
+  }
+  .od-menu-item:disabled,
+  .od-menu-item.is-disabled {
+    color: var(--od-text-subtle);
+    cursor: default;
+  }
+  .od-menu-item.is-danger {
+    color: var(--od-danger);
+  }
+
+  .od-kbd {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 12px;
+    color: var(--od-text-subtle);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .od-divider-v {
+    width: 1px;
+    align-self: stretch;
+    margin: 6px 2px;
+    background: var(--od-border);
+  }
+
+  .od-tooltip {
+    pointer-events: none;
+    padding: 6px 9px;
+    border-radius: var(--od-radius-md);
+    background: #18211c;
+    color: #f4f9ec;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.35);
+  }
+  .dark .od-tooltip {
+    background: #eceee9;
+    color: #12301f;
+  }
+
+  .od-checker {
+    background-image:
+      linear-gradient(45deg, #d9dcd6 25%, transparent 25%),
+      linear-gradient(-45deg, #d9dcd6 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #d9dcd6 75%),
+      linear-gradient(-45deg, transparent 75%, #d9dcd6 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+    background-color: #fff;
+  }
+
+  .od-dot-bg {
+    background-color: var(--od-canvas);
+    background-image: radial-gradient(var(--od-canvas-dot) 1.1px, transparent 1.2px);
+    background-size: 22px 22px;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+/* Acessibilidade: "Reduzir movimento" (Preferências) ou preferência do sistema.
+   Chat 08.6 · A (D-03): só encurtar a duração deixava as animações INFINITAS (giro, ping, pulso) trocando de
+   quadro a cada pintura — cintilação. Agora cada animação roda uma vez só e a rolagem é instantânea. */
+.od-reduce-motion,
+.od-reduce-motion *,
+.od-reduce-motion *::before,
+.od-reduce-motion *::after {
+  animation-duration: 1ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Chat 08.6 · A (D-02): alto contraste do sistema (Windows "Contraste alto", `forced-colors: active`).
+   O navegador remove `box-shadow` — que no LuDraw desenha o anel de foco e as bordas de campos, botões e
+   painéis. Aqui o foco vira contorno na cor de destaque do sistema e as bordas, contornos internos na cor do
+   texto do sistema (sem mudar o tamanho de nada). */
+@media (forced-colors: active) {
+  :focus-visible,
+  .od-input:focus {
+    outline: 2px solid Highlight !important;
+    outline-offset: 2px !important;
+  }
+  .od-input,
+  .od-btn,
+  .od-tool,
+  .od-panel,
+  .od-pop,
+  [role='switch'] {
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
+  }
+  .od-tool[aria-pressed='true'],
+  .od-tool[data-active='true'],
+  [aria-current='page'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
+/* Textarea de edição de texto dentro dos elementos do board */
+.od-element-editor {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  line-height: inherit;
+  caret-color: var(--od-selection);
+}
+
+/* Barra de progresso do "segure para desbloquear" */
+@keyframes od-hold-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---- Chat 07 · B: comemoração do primeiro acesso do servidor (SetupCelebration) ---- */
+.od-confetti {
+  position: absolute;
+  top: -14px;
+  opacity: 0;
+  animation-name: od-confetti-fall;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: forwards;
+}
+@keyframes od-confetti-fall {
+  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate3d(var(--od-drift, 0px), 340px, 0) rotate(var(--od-spin, 540deg)); }
+}
+.od-celebrate-badge { animation: od-celebrate-pop 620ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.od-celebrate-ring { animation: od-celebrate-ring 1400ms ease-out 400ms 2 both; }
+.od-celebrate-title { animation: od-celebrate-rise 520ms cubic-bezier(0.22, 1, 0.36, 1) 160ms both; }
+.od-celebrate-popper { animation: od-celebrate-wiggle 900ms ease-in-out 700ms 2; transform-origin: 30% 80%; }
+.od-celebrate-note { animation: od-celebrate-note 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both; transform: rotate(var(--od-rot, 0deg)); }
+.od-celebrate-connector { stroke-dashoffset: 320; animation: od-celebrate-draw 1200ms cubic-bezier(0.22, 1, 0.36, 1) 1100ms forwards; }
+@keyframes od-celebrate-pop {
+  0% { transform: scale(0.2) rotate(-25deg); opacity: 0; }
+  70% { transform: scale(1.12) rotate(6deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes od-celebrate-ring {
+  0% { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+@keyframes od-celebrate-rise {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes od-celebrate-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-14deg); }
+  60% { transform: rotate(10deg); }
+}
+@keyframes od-celebrate-note {
+  0% { transform: translateY(26px) scale(0.6) rotate(calc(var(--od-rot, 0deg) * -3)); opacity: 0; }
+  100% { transform: translateY(0) scale(1) rotate(var(--od-rot, 0deg)); opacity: 1; }
+}
+@keyframes od-celebrate-draw { to { stroke-dashoffset: 0; } }
+/* "Reduzir movimento" (app ou sistema): tudo já parado, sem confete */
+.od-reduce-motion .od-celebrate .od-confetti { display: none; }
+.od-reduce-motion .od-celebrate-connector { stroke-dashoffset: 0; }
+.od-reduce-motion .od-celebrate-note { transform: rotate(var(--od-rot, 0deg)); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .od-celebrate .od-confetti { display: none; }
+  .od-celebrate-badge, .od-celebrate-ring, .od-celebrate-title, .od-celebrate-popper, .od-celebrate-note, .od-celebrate-connector { animation: none; }
+  .od-celebrate-connector { stroke-dashoffset: 0; }
+  .od-celebrate-ring { opacity: 0; }
+}
+
+/* Chat 08.2 · B — ícones próprios (STUDIO_V2_SPEC §9): um detalhe de acento por ícone, sem token novo */
+.od-icon .acc { fill: var(--od-accent-soft); }
+[data-active='true'] > .od-icon .acc,
+[aria-pressed='true'] > .od-icon .acc { fill: var(--od-accent-contrast); }
+/* Destacar por tag (Exibir): o que não tem a tag fica esmaecido — só na tela */
+[data-od-dimmed='true'] { opacity: 0.22; transition: opacity 180ms cubic-bezier(0.22, 1, 0.36, 1); }
+.od-reduce-motion [data-od-dimmed] { transition: none; }
+
+/* Chat 08.2 · C-1 — Dock (STUDIO_V2_SPEC §4): ferramenta ativa com fundo de acento e ícone em contraste;
+   no tema escuro, fundo suave e ícone na cor de acento. O detalhe `acc` acompanha. */
+/* também no hover: senão o fundo do hover (claro) apaga o ícone em contraste */
+.od-dock-tool[data-active='true'],
+.od-dock-tool[data-active='true']:hover:not(:disabled) { background: var(--od-accent); color: var(--od-accent-contrast); }
+.od-dock-tool[data-active='true'] > .od-icon .acc { fill: var(--od-accent-contrast); }
+.dark .od-dock-tool[data-active='true'],
+.dark .od-dock-tool[data-active='true']:hover:not(:disabled) { background: var(--od-accent-soft); color: var(--od-accent); }
+.dark .od-dock-tool[data-active='true'] > .od-icon .acc { fill: var(--od-accent); }

@@ -1,0 +1,7 @@
+# LuDraw (Chat 09 · R3): arquivos executados dentro de contêineres Linux precisam de fim de linha LF, mesmo
+# quando o repositório é clonado no Windows (core.autocrlf=true converteria para CRLF e o shell quebraria).
+*.sh text eol=lf
+deploy/postgres/* text eol=lf
+Dockerfile text eol=lf
+.dockerignore text eol=lf
+docker-compose.yml text eol=lf

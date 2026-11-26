@@ -1,0 +1,44 @@
+# LuDraw — aplicativo desktop (Chat 09.1 · R7). Casca Tauri v2 sobre o mesmo `dist/` da web.
+#
+# Regras (docs/PROVENANCE.md §3.8):
+#  - crate nova = licença aprovada ANTES de entrar, versão publicada há 7 dias ou mais, `npm run crates` depois;
+#  - sem plugins do Tauri (decisão do usuário); sem `devtools` no release;
+#  - crates MPL-2.0 nunca são modificadas nem copiadas para o repositório;
+#  - o Cargo.lock fixa `wry` 0.57.1 de propósito: a 0.57.2 puxa (só para Android) cssparser 0.38 e selectors 0.41,
+#    MPL-2.0 não aprovadas. O `npm run audit:legal` barra se voltarem. Nada de `cargo update` sem conferir.
+[package]
+name = "ludraw-desktop"
+version = "0.9.0"
+description = "LuDraw — quadro branco infinito open-source, local-first (aplicativo desktop)."
+authors = ["LuDraw"]
+license = "MIT"
+repository = "https://github.com/lukapianco/ludraw"
+edition = "2021"
+rust-version = "1.90"
+publish = false
+
+[[bin]]
+name = "ludraw"
+path = "src/main.rs"
+
+[features]
+default = ["custom-protocol"]
+# o app sempre usa os arquivos embutidos (nunca um servidor de desenvolvimento)
+custom-protocol = ["tauri/custom-protocol"]
+
+[build-dependencies]
+tauri-build = { version = "=2.7.6", default-features = false, features = [] }
+
+[dependencies]
+tauri = { version = "=2.12.7", default-features = false, features = ["wry", "compression", "common-controls-v6", "x11"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = ["Win32_Globalization", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"

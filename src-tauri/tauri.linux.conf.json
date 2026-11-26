@@ -1,0 +1,16 @@
+{
+  "productName": "ludraw",
+  "bundle": {
+    "linux": {
+      "deb": {
+        "section": "graphics",
+        "desktopTemplate": "linux/ludraw.desktop",
+        "files": {
+          "/usr/share/doc/ludraw/copyright": "../LICENSE",
+          "/usr/share/doc/ludraw/THIRD_PARTY_NOTICES-app.txt": "../THIRD_PARTY_NOTICES.txt",
+          "/usr/share/doc/ludraw/THIRD_PARTY_NOTICES-desktop.txt": "THIRD_PARTY_NOTICES.txt"
+        }
+      }
+    }
+  }
+}

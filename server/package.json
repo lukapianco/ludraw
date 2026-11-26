@@ -1,0 +1,61 @@
+{
+  "name": "ludraw-server",
+  "private": true,
+  "version": "0.9.0",
+  "description": "LuDraw — servidor auto-hospedável (API, autenticação, RBAC e primeiro acesso).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukapianco/ludraw.git",
+    "directory": "server"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "node scripts/build.mjs",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node scripts/run-tests.mjs",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/cli.ts db:migrate",
+    "db:roles": "tsx src/cli.ts db:roles",
+    "admin:create": "tsx src/cli.ts admin:create",
+    "admin:reset-password": "tsx src/cli.ts admin:reset-password",
+    "setup:token": "tsx src/cli.ts setup:token",
+    "test:pg": "node scripts/run-tests.mjs --pg",
+    "test:docker": "tsx scripts/test-docker.ts",
+    "test:multi": "tsx scripts/test-multi-instance.ts"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.1.5",
+    "@fastify/cors": "^11.4.1",
+    "@fastify/proxy-addr": "5.1.2",
+    "@fastify/rate-limit": "^11.2.2",
+    "@hocuspocus/server": "4.7.1",
+    "argon2": "^0.45.2",
+    "drizzle-orm": "^0.45.4",
+    "fastify": "^5.12.8",
+    "ioredis": "6.0.0",
+    "jose": "^6.2.16",
+    "nodemailer": "10.2.1",
+    "openid-client": "^6.8.9",
+    "pg": "^8.23.1",
+    "ws": "8.22.0",
+    "y-protocols": "1.0.7",
+    "yjs": "13.6.33"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.15",
+    "@hocuspocus/provider": "4.7.1",
+    "@types/node": "^22.20.5",
+    "@types/pg": "^8.23.1",
+    "@types/ws": "8.18.2",
+    "drizzle-kit": "^0.31.11",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  }
+}

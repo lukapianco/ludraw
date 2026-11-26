@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=LuDraw
+GenericName=Whiteboard
+GenericName[pt_BR]=Quadro branco
+Comment=Open-source infinite whiteboard, local-first
+Comment[pt_BR]=Quadro branco infinito open-source, local-first
+Exec={{exec}}
+Icon={{icon}}
+Terminal=false
+Categories=Office;
+Keywords=whiteboard;diagram;sticky notes;
+Keywords[pt_BR]=quadro;diagrama;post-it;
+StartupWMClass=ludraw
+StartupNotify=true

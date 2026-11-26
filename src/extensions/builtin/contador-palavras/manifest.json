@@ -1,0 +1,29 @@
+{
+  "apiVersion": 1,
+  "id": "dev.ludraw.contador-palavras",
+  "name": "Contador de palavras",
+  "version": "1.0.0",
+  "publisher": "LuDraw",
+  "description": "Comando no Ctrl+K que soma as palavras dos post-its selecionados. Só lê o board; não altera nada.",
+  "i18n": {
+    "en": {
+      "name": "Word counter",
+      "description": "A Ctrl+K command that adds up the words in the selected sticky notes. Read-only; changes nothing."
+    }
+  },
+  "license": "MIT",
+  "kind": "script",
+  "permissions": ["board.read", "ui.command"],
+  "provenance": { "originalWork": true, "thirdParty": [] },
+  "main": "main.js",
+  "contributes": {
+    "commands": [
+      {
+        "id": "contar",
+        "title": "Contar palavras dos post-its selecionados",
+        "i18n": { "en": { "name": "Count words in the selected sticky notes" } },
+        "keywords": ["palavras", "contar", "words", "count"]
+      }
+    ]
+  }
+}

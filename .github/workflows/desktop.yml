@@ -1,0 +1,245 @@
+# LuDraw — instaladores do programa desktop (Chat 09.1 · R8; D15: só NSIS no Windows e .deb no Linux)
+#
+# Disparo MANUAL (Actions → Desktop → Run workflow) e, depois de conferido, por tag `v*` igual à versão do
+# package.json. Gera o instalador NSIS e o .deb, instala, abre e desinstala cada um em máquina descartável, e publica
+# os dois com SHA256SUMS como artefato. Na tag, cria um Release em RASCUNHO; quem publica é o mantenedor.
+#
+# Regras deste arquivo:
+#  - Actions fixadas pelo SHA do commit da tag; imagens pelo digest; ferramentas baixadas com SHA-256 conferido.
+#  - Nenhum segredo. Sem assinatura de código nesta etapa (decisão do usuário, 25/11/2026): o README explica o aviso
+#    do Windows e como conferir o SHA256SUMS.
+#  - Só o job "rascunho" tem contents: write, e só roda na tag.
+name: Desktop
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # compila o .deb no Debian 12 (glibc 2.36): o programa exige no máximo a 2.34 e abre também no Ubuntu 22.04
+  BUILD_IMAGE: rust:1.99.1-slim-bookworm@sha256:f2c004e3d2d8b547e8cf7ffbc29205385f4e71d23e53e4e383065db5e9f822cd
+  # NSIS do Tauri (o mesmo que o @tauri-apps/cli baixaria), com SHA-256 conferido antes de usar
+  NSIS_URL: https://github.com/tauri-apps/binary-releases/releases/download/nsis-3.13/nsis-3.13.zip
+  NSIS_SHA256: ba63dffc4410ee89193e1cb5a41989991bd77c61068da17e3156d136b7b0b3d8
+  NSIS_UTILS_URL: https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.5.3/nsis_tauri_utils.dll
+  NSIS_UTILS_SHA256: 5ba143b5db4a87d32d6e7802e033330aae56cbceabe0d1e3ba41948385ad4709
+
+jobs:
+  windows:
+    name: Instalador do Windows (NSIS)
+    runs-on: windows-2025
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Tag igual à versão do package.json
+        if: startsWith(github.ref, 'refs/tags/')
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependências (exatamente as do package-lock.json)
+        run: npm ci
+
+      - name: NSIS e plugin do Tauri com SHA-256 conferido (o Tauri usa estes e não baixa nada)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $zip = Join-Path $env:RUNNER_TEMP 'nsis.zip'
+          $dll = Join-Path $env:RUNNER_TEMP 'nsis_tauri_utils.dll'
+          Invoke-WebRequest -Uri $env:NSIS_URL -OutFile $zip
+          Invoke-WebRequest -Uri $env:NSIS_UTILS_URL -OutFile $dll
+          if ((Get-FileHash $zip -Algorithm SHA256).Hash -ne $env:NSIS_SHA256) { throw 'SHA-256 do NSIS diferente' }
+          if ((Get-FileHash $dll -Algorithm SHA256).Hash -ne $env:NSIS_UTILS_SHA256) { throw 'SHA-256 do nsis_tauri_utils diferente' }
+          $tmp = Join-Path $env:RUNNER_TEMP 'nsis'
+          Expand-Archive $zip -DestinationPath $tmp
+          $dest = Join-Path $env:LOCALAPPDATA 'tauri\NSIS'
+          New-Item -ItemType Directory -Force $dest | Out-Null
+          Copy-Item -Recurse -Force (Join-Path $tmp 'nsis-3.13\*') $dest
+          $plugins = Join-Path $dest 'Plugins\x86-unicode\additional'
+          New-Item -ItemType Directory -Force $plugins | Out-Null
+          Copy-Item $dll (Join-Path $plugins 'nsis_tauri_utils.dll')
+
+      - name: Testes do desktop (configuração e Rust)
+        run: |
+          npm run test:desktop
+          npm run desktop:web
+          npm run test:desktop:rust
+
+      - name: Instalador (npm run desktop:package)
+        run: |
+          npm run desktop:package 2>&1 | tee "$RUNNER_TEMP/package.log"
+          if grep -q "Downloading" "$RUNNER_TEMP/package.log"; then echo "o Tauri baixou algo fora do conferido"; exit 1; fi
+
+      - name: Instalar, abrir, desinstalar (máquina descartável do CI)
+        run: npm run test:desktop:package -- --run
+
+      - name: Guardar o instalador
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows
+          path: src-tauri/target/release/bundle/nsis/LuDraw_*_x64-setup.exe
+          if-no-files-found: error
+          retention-days: 14
+
+  linux:
+    name: Pacote do Linux (.deb, compilado no Debian 12)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container: rust:1.99.1-slim-bookworm@sha256:f2c004e3d2d8b547e8cf7ffbc29205385f4e71d23e53e4e383065db5e9f822cd
+    steps:
+      - name: Bibliotecas do WebKitGTK (repositório assinado do Debian)
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends libwebkit2gtk-4.1-dev build-essential ca-certificates curl git xz-utils file binutils
+
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Tag igual à versão do package.json
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          test "v$(sed -n 's/^  "version": "\(.*\)",$/\1/p' package.json)" = "$GITHUB_REF_NAME"
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Instalar dependências (exatamente as do package-lock.json)
+        run: npm ci
+
+      - name: Testes do desktop (configuração e Rust)
+        run: |
+          npm run test:desktop
+          npm run desktop:web
+          npm run test:desktop:rust
+
+      - name: Pacote (npm run desktop:package) e conferência
+        run: |
+          npm run desktop:package
+          npm run test:desktop:package
+
+      - name: Guardar o pacote e o executável (o teste de instalação compara os dois)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: linux
+          path: |
+            src-tauri/target/release/bundle/deb/ludraw_*_amd64.deb
+            src-tauri/target/release/ludraw
+          if-no-files-found: error
+          retention-days: 14
+
+  linux-instalar:
+    name: Instalar, abrir e remover — ${{ matrix.image }}
+    needs: linux
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - debian:12-slim@sha256:e67eeead736ff7bbe258ef088bff683635c561b1fcfefad0806c1df4ab49ce0e
+          - debian:trixie-slim@sha256:8aa5a7bf5a1955bddbe7d74fcdd0b91ab30e74362a8b73af672b0481b35b44a0
+          - ubuntu:22.04@sha256:b000e69a50ff940390233025e7a337fb8469b509e2334fa4d018ac30f3e18cdb
+          - ubuntu:24.04@sha256:562111b88caa79c71391c0c4d3c2114a7d5c35915c20561fd893cb1e07929e6b
+    container: ${{ matrix.image }}
+    steps:
+      - name: Ferramentas do teste (repositório assinado da distribuição)
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends ca-certificates xz-utils xvfb xauth dbus binutils desktop-file-utils procps
+
+      - name: Baixar o código (o teste e os avisos)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Pacote gerado no job anterior
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: linux
+          path: ${{ runner.temp }}/pk/release
+
+      - name: Instalar, abrir, remover (dados preservados)
+        env:
+          CARGO_TARGET_DIR: ${{ runner.temp }}/pk
+        run: node scripts/test-desktop-package.mjs --install --run
+
+  somas:
+    name: SHA256SUMS
+    needs: [windows, linux-instalar]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Pacotes
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: ${{ runner.temp }}/in
+
+      - name: Somas
+        run: |
+          mkdir -p "$RUNNER_TEMP/out"
+          cp "$RUNNER_TEMP"/in/windows/*.exe "$RUNNER_TEMP"/in/linux/bundle/deb/*.deb "$RUNNER_TEMP/out/"
+          cd "$RUNNER_TEMP/out"
+          sha256sum -- *.exe *.deb > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Guardar os instaladores e o SHA256SUMS
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ludraw-desktop
+          path: ${{ runner.temp }}/out/*
+          if-no-files-found: error
+          retention-days: 30
+
+  rascunho:
+    name: Release em rascunho (só na tag)
+    needs: somas
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Instaladores e SHA256SUMS
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ludraw-desktop
+          path: ${{ runner.temp }}/out
+
+      - name: Criar o rascunho (quem publica é o mantenedor)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd "$RUNNER_TEMP/out"
+          sha256sum -c SHA256SUMS
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft --verify-tag \
+            --title "LuDraw ${GITHUB_REF_NAME#v}" \
+            --notes "Instaladores do programa desktop (Windows: NSIS · Linux: .deb). Confira os arquivos com o SHA256SUMS antes de instalar (README, seção Programa desktop). Os instaladores não têm assinatura de código. / Desktop installers (Windows: NSIS · Linux: .deb). Check the files against SHA256SUMS before installing. The installers are not code-signed." \
+            -- *.exe *.deb SHA256SUMS

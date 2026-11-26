@@ -1,0 +1,304 @@
+# LuDraw — integração contínua (Chat 05.5; Chat 07: servidor em server/; Chat 09 · R6: segredos, Postgres, Docker)
+# Roda em todo push na main, em pull request e manualmente. Mesmas verificações exigidas no CONTRIBUTING.md.
+#
+# Regras deste arquivo (Chat 09 · R6):
+#  - Toda action fixada pelo SHA do commit da tag (comentário ao lado = a tag). Atualizar = versão publicada há
+#    7 dias ou mais, licença conferida, e o SHA novo conferido no repositório oficial.
+#  - Ferramenta externa (gitleaks) só do release oficial, versão exata e SHA-256 fixado aqui; nunca entra no repositório.
+#  - Nenhum segredo do repositório é usado. Bancos e Valkey de teste são descartáveis, com senha aleatória por execução,
+#    mascarada no log.
+#  - Os testes de navegador (Chrome/Edge) continuam fora do CI; rode-os localmente (docs/TESTAR_LOCALMENTE.md).
+#  - Chat 09.1 · R8: o programa desktop entra com test:desktop (job verificar) e os testes do Rust no Windows e no
+#    Linux. Os instaladores ficam no desktop.yml (manual ou por tag), não aqui.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GITLEAKS_VERSION: 8.30.1
+  # SHA-256 de gitleaks_8.30.1_linux_x64.tar.gz, conferido com o gitleaks_8.30.1_checksums.txt do release oficial
+  GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+  # As mesmas imagens fixadas do docker-compose.yml (o job "postgres" confere que são iguais)
+  PG_IMAGE: postgres:16.15-alpine3.24@sha256:aa6cb33cf4c19c765cefcf48d96176258800870a9a1e930ad126200f9d825139
+  VALKEY_IMAGE: valkey/valkey:9.0.7-alpine3.24@sha256:2d04268dfa26ab31cfa3fdc538866e76438b2d00e41db41b8cb86d780ac5a416
+
+jobs:
+  segredos:
+    name: Segredos no histórico inteiro (gitleaks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Baixar o código com o histórico inteiro
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: gitleaks do release oficial (SHA-256 conferido)
+        run: |
+          cd "$RUNNER_TEMP"
+          file="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          curl -sSfL -o "$file" "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${file}"
+          echo "${GITLEAKS_SHA256}  ${file}" | sha256sum -c -
+          tar -xzf "$file" gitleaks
+          ./gitleaks version
+
+      - name: Varredura (valores redigidos; falsos positivos triados em .gitleaksignore)
+        run: |
+          "$RUNNER_TEMP/gitleaks" git . --redact --no-banner --exit-code 1
+
+  verificar:
+    name: Typecheck, build, testes rápidos e auditorias
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+
+      - name: Instalar dependências (exatamente as do package-lock.json)
+        run: npm ci
+
+      - name: Instalar dependências do servidor (server/package-lock.json)
+        run: npm ci --prefix server
+
+      - name: Assinaturas do registro (app e servidor)
+        run: |
+          npm audit signatures
+          npm --prefix server audit signatures
+
+      - name: Vulnerabilidades altas em produção (app e servidor)
+        run: |
+          npm audit --omit=dev --audit-level=high
+          npm --prefix server audit --omit=dev --audit-level=high
+
+      - name: Typecheck (TypeScript strict)
+        run: npm run typecheck
+
+      - name: Typecheck do servidor (mesmo can() do cliente)
+        run: npm run typecheck:server
+
+      - name: Build de produção (app e servidor)
+        run: |
+          npm run build
+          npm --prefix server run build
+
+      - name: Testes da matriz de permissões
+        run: npm run test:permissions
+
+      - name: Testes da plataforma de extensões (manifest, temas, SVG, pacotes, varredura)
+        run: npm run test:extensions
+
+      - name: Design System (contraste dos tokens, hierarquia, sem hex fixo)
+        run: npm run test:design
+
+      - name: Testes do servidor (PostgreSQL embutido, sem Docker)
+        run: npm run test:server
+
+      - name: Auditoria de Sala Limpa (licenças, termos, assets, domínios)
+        run: npm run audit:legal
+
+      - name: Catálogo de funções em dia com o código
+        run: npm run audit:features
+
+      - name: Internacionalização (catálogos, plurais, texto fixo, docs/LANGUAGES.md)
+        run: npm run audit:i18n
+
+      - name: Versão única (raiz, servidor, lockfiles, Dockerfile, compose, CHANGELOG)
+        run: npm run audit:version
+
+      - name: Nome do projeto (o nome antigo não volta; exceções no próprio script)
+        run: npm run audit:name
+
+      - name: Programa desktop (configuração, permissões, CSP, regras e CORS do /info)
+        run: npm run test:desktop
+
+  desktop-linux:
+    name: Programa desktop — Rust no Linux (Debian 12)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    # a mesma imagem que compila o .deb (desktop.yml): Rust 1.99.1 e glibc 2.36
+    container: rust:1.99.1-slim-bookworm@sha256:f2c004e3d2d8b547e8cf7ffbc29205385f4e71d23e53e4e383065db5e9f822cd
+    steps:
+      - name: Bibliotecas do WebKitGTK (repositório assinado do Debian)
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends libwebkit2gtk-4.1-dev build-essential ca-certificates curl git xz-utils
+
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: App embutido e cabeçalhos do protocolo local (o Rust compila com eles)
+        run: npm run desktop:web
+
+      - name: cargo fmt, clippy -D warnings e cargo test (versão do rust-toolchain.toml)
+        run: npm run test:desktop:rust
+
+  desktop-windows:
+    name: Programa desktop — Rust no Windows
+    runs-on: windows-2025
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: App embutido e cabeçalhos do protocolo local (o Rust compila com eles)
+        run: npm run desktop:web
+
+      - name: cargo fmt, clippy -D warnings e cargo test (versão do rust-toolchain.toml)
+        run: npm run test:desktop:rust
+
+  postgres:
+    name: Servidor no PostgreSQL (papéis separados) e limites no Valkey
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+
+      - name: Instalar dependências
+        run: |
+          npm ci
+          npm ci --prefix server
+
+      - name: Imagens de teste iguais às do docker-compose.yml
+        run: |
+          grep -qF "image: ${PG_IMAGE}" docker-compose.yml
+          grep -qF "image: ${VALKEY_IMAGE}" docker-compose.yml
+
+      - name: PostgreSQL e Valkey descartáveis (senha aleatória, só nesta execução)
+        run: |
+          pw="$(openssl rand -hex 24)"
+          echo "::add-mask::$pw"
+          dir="$RUNNER_TEMP/test-secrets"
+          mkdir -p "$dir"
+          printf '%s' "$pw" > "$dir/pg_pw"
+          printf 'user default on >%s ~* &* +@all\n' "$pw" > "$dir/valkey.acl"
+          chmod 644 "$dir/pg_pw" "$dir/valkey.acl"
+          docker run -d --name ci-pg -p 127.0.0.1:5434:5432 -e POSTGRES_DB=ludraw_test \
+            -e POSTGRES_PASSWORD_FILE=/run/pw -v "$dir/pg_pw:/run/pw:ro" "$PG_IMAGE"
+          docker run -d --name ci-valkey -p 127.0.0.1:6380:6379 -v "$dir/valkey.acl:/etc/valkey.acl:ro" \
+            "$VALKEY_IMAGE" valkey-server --aclfile /etc/valkey.acl --save "" --appendonly no
+          for i in $(seq 1 60); do docker exec ci-pg pg_isready -U postgres -d ludraw_test >/dev/null 2>&1 && break; sleep 1; done
+          docker exec ci-pg pg_isready -U postgres -d ludraw_test
+          test "$(docker inspect -f '{{.State.Running}}' ci-valkey)" = true
+          echo "TEST_DATABASE_URL=postgres://postgres:${pw}@127.0.0.1:5434/ludraw_test" >> "$GITHUB_ENV"
+          echo "TEST_REDIS_URL=redis://default:${pw}@127.0.0.1:6380" >> "$GITHUB_ENV"
+
+      - name: Testes do servidor no PostgreSQL (o app roda num papel sem CREATE) e no Valkey
+        run: npm run test:server:pg
+
+  docker:
+    name: Imagem Docker (build, produção, backup e restauração)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+
+      - name: Instalar dependências (o teste usa o cliente do tempo real)
+        run: |
+          npm ci
+          npm ci --prefix server
+
+      - name: Versões do Docker e do Compose
+        run: |
+          docker version --format '{{.Server.Version}}'
+          docker compose version
+
+      - name: Imagem, compose de produção, Valkey opcional, backup e restauração
+        run: npm run test:docker
+
+  varias-instancias:
+    name: Duas instâncias com Valkey (limites e avisos compartilhados)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Node 22 (versão do .nvmrc)
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+
+      - name: Instalar dependências
+        run: |
+          npm ci
+          npm ci --prefix server
+
+      - name: Duas instâncias, Postgres e Valkey descartáveis (o próprio teste sobe e apaga)
+        run: npm run test:server:multi
