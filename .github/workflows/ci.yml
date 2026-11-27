@@ -84,9 +84,16 @@ jobs:
         run: npm ci --prefix server
 
       - name: Assinaturas do registro (app e servidor)
+        # Falha igual a antes; só quando falha, grava o --json no log para mostrar qual verificação quebrou.
         run: |
-          npm audit signatures
-          npm --prefix server audit signatures
+          for dir in . server; do
+            if ! npm --prefix "$dir" audit signatures; then
+              echo "::group::npm audit signatures --json ($dir)"
+              npm --prefix "$dir" audit signatures --json || true
+              echo "::endgroup::"
+              exit 1
+            fi
+          done
 
       - name: Vulnerabilidades altas em produção (app e servidor)
         run: |

@@ -8,7 +8,7 @@
  * - `GET /info` de um servidor de verdade: CORS só para as duas origens do programa, sem credenciais, e `ssoOrigin`.
  */
 import { spawn } from 'node:child_process';
-import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { register } from 'node:module';
 import { createServer } from 'node:net';
 import { tmpdir } from 'node:os';
@@ -158,6 +158,8 @@ const freePort = () =>
 const work = mkdtempSync(join(tmpdir(), 'ludraw-desktop-info-'));
 const running = [];
 async function server(extra) {
+  // o servidor roda com as dependências do server/ (inclusive o tsx); sem elas ele nunca sobe
+  if (!existsSync(join(root, 'server/node_modules/tsx'))) throw new Error('faltam as dependências do servidor: rode npm ci --prefix server');
   const port = await freePort();
   const env = { ...process.env, DATABASE_URL: 'pglite://memory', PORT: String(port), HOST: '127.0.0.1', LUDRAW_ASSETS_DIR: join(work, String(port)), LUDRAW_JWT_SECRET: '', LUDRAW_PUBLIC_URL: '', LUDRAW_CORS_ORIGINS: 'http://front.test', LUDRAW_MAIL_OUTBOX_DIR: '', LUDRAW_SMTP_HOST: '', LUDRAW_REDIS_URL: '', LUDRAW_WEB_DIR: '', OIDC_ISSUER: '', LOG_LEVEL: 'error', ...extra };
   running.push(spawn(process.execPath, ['--import', 'tsx', 'src/index.ts'], { cwd: join(root, 'server'), stdio: 'ignore', env }));

@@ -56,8 +56,10 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
-      - name: Instalar dependências (exatamente as do package-lock.json)
-        run: npm ci
+      - name: Instalar dependências (app e servidor; o test:desktop sobe o servidor para testar o /info)
+        run: |
+          npm ci
+          npm ci --prefix server
 
       - name: NSIS e plugin do Tauri com SHA-256 conferido (o Tauri usa estes e não baixa nada)
         shell: pwsh
@@ -126,8 +128,10 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      - name: Instalar dependências (exatamente as do package-lock.json)
-        run: npm ci
+      - name: Instalar dependências (app e servidor; o test:desktop sobe o servidor para testar o /info)
+        run: |
+          npm ci
+          npm ci --prefix server
 
       - name: Testes do desktop (configuração e Rust)
         run: |

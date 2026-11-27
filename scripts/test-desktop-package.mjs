@@ -15,7 +15,7 @@
  */
 import { execFileSync, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -95,7 +95,10 @@ async function windows() {
   const desktop = join(ps('[Environment]::GetFolderPath("Desktop")'), 'LuDraw.lnk');
   const shortcutsBefore = [existsSync(startMenu), existsSync(desktop)];
 
-  const target = mkdtempSync(join(tmpdir(), 'ludraw-install-'));
+  // caminho LONGO: no runner do GitHub o tmpdir vem em nome curto (C:\Users\RUNNER~1\…). O atalho é gravado com o caminho
+  // longo e o desinstalador compara com o $INSTDIR do /D: com nome curto, ele não reconhece os atalhos e os deixa
+  // (reproduzido nesta máquina). Instalações normais usam %LOCALAPPDATA%\LuDraw, que já é longo.
+  const target = realpathSync.native(mkdtempSync(join(tmpdir(), 'ludraw-install-')));
   try {
     // /D tem de ser o último parâmetro, sem aspas
     execFileSync(setup, ['/S', `/D=${target}`], { stdio: 'ignore' });

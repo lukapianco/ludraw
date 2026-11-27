@@ -14,6 +14,7 @@ Funciona direto no navegador, guarda os dados com você e pode ser hospedado no 
 
 <br />
 
+
 ![Status](https://img.shields.io/badge/status-projeto%20de%20estudo-D0E4AE?style=for-the-badge&labelColor=194B32)
 ![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-D0E4AE?style=for-the-badge&labelColor=194B32)
 ![React](https://img.shields.io/badge/React-18-D0E4AE?style=for-the-badge&logo=react&logoColor=D0E4AE&labelColor=194B32)

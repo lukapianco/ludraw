@@ -19,6 +19,7 @@
 import { spawnSync, type SpawnSyncOptions } from 'node:child_process';
 import { createHash, randomBytes } from 'node:crypto';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { request as httpRequest } from 'node:http';
 import { createServer } from 'node:net';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -78,7 +79,21 @@ const sha256 = (b: Uint8Array) => createHash('sha256').update(b).digest('hex');
 /** PNG de verdade (1×1) com bytes extras aleatórios no fim: o servidor confere a assinatura, e o hash fica único. */
 const PNG = Buffer.concat([Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64'), randomBytes(512)]);
 
-async function call(method: string, path: string, opts: { token?: string; json?: unknown; body?: Uint8Array; type?: string; headers?: Record<string, string> } = {}) {
+/** Código e mensagem da causa de um erro de rede (o "fetch failed" do CI não dizia nada). */
+function describeCause(e: unknown): string {
+  const err = e as { code?: string; message?: string; cause?: unknown } | null;
+  const c = (err?.cause ?? err) as { code?: string; message?: string } | null;
+  return `${c?.code ?? 'sem código'}: ${c?.message ?? String(c)}`;
+}
+
+type CallResult = { status: number; headers: Headers; bytes: Uint8Array; json: any };
+
+/**
+ * Pedido HTTP ao app. Chat 09.1 · correção do CI: `node:http` com `agent: false` = conexão NOVA a cada pedido. Com o
+ * `fetch`, uma conexão keep-alive aberta com o contêiner antigo podia ser reaproveitada depois de o app ser recriado, e
+ * o POST não é repetido. Erro de rede vira mensagem com o método, o caminho e a causa.
+ */
+async function call(method: string, path: string, opts: { token?: string; json?: unknown; body?: Uint8Array; type?: string; headers?: Record<string, string> } = {}, base = BASE): Promise<CallResult> {
   const headers: Record<string, string> = { [CLIENT_HEADER]: CLIENT_HEADER_VALUE, ...(opts.headers ?? {}) };
   if (opts.token) headers.authorization = `Bearer ${opts.token}`;
   let body: string | Uint8Array | undefined;
@@ -89,15 +104,68 @@ async function call(method: string, path: string, opts: { token?: string; json?:
     headers['content-type'] = opts.type ?? 'application/octet-stream';
     body = opts.body;
   }
-  const res = await fetch(`${BASE}${path}`, { method, headers, body: body as never });
-  const buf = new Uint8Array(await res.arrayBuffer());
-  let json: any = null;
+  if (body !== undefined) headers['content-length'] = String(Buffer.byteLength(body));
   try {
-    json = JSON.parse(Buffer.from(buf).toString('utf8'));
-  } catch {
-    /* não é JSON */
+    return await new Promise<CallResult>((ok, fail) => {
+      const req = httpRequest(new URL(path, base), { method, headers, agent: false, timeout: 60_000 }, (res) => {
+        const chunks: Buffer[] = [];
+        res.on('data', (c: Buffer) => chunks.push(c));
+        res.on('error', fail);
+        res.on('end', () => {
+          const buf = new Uint8Array(Buffer.concat(chunks));
+          let json: any = null;
+          try {
+            json = JSON.parse(Buffer.from(buf).toString('utf8'));
+          } catch {
+            /* não é JSON */
+          }
+          const h = new Headers();
+          for (const [k, v] of Object.entries(res.headers)) if (v !== undefined) h.set(k, Array.isArray(v) ? v.join(', ') : v);
+          ok({ status: res.statusCode ?? 0, headers: h, bytes: buf, json });
+        });
+      });
+      req.on('timeout', () => req.destroy(Object.assign(new Error('sem resposta em 60 s'), { code: 'TIMEOUT' })));
+      req.on('error', fail);
+      if (body !== undefined) req.write(body);
+      req.end();
+    });
+  } catch (e) {
+    throw new Error(`${method} ${path} falhou na rede (${describeCause(e)})`, { cause: e });
   }
-  return { status: res.status, headers: res.headers, bytes: buf, json };
+}
+
+/** Estado do contêiner do app (para a mensagem de falha). */
+function appState(): string {
+  const ps = compose(['--profile', 'redis', 'ps', '-a', '--format', '{{.Service}} {{.State}} {{.Status}}']).out.trim();
+  const id = compose(['ps', '-a', '-q', 'app']).out.trim().split(/\s+/)[0];
+  if (!id) return `  contêiner do app não encontrado\n${ps}`;
+  const s = run('docker', ['inspect', '--format', '{{.State.Status}} reinícios={{.RestartCount}} saúde={{if .State.Health}}{{.State.Health.Status}}{{end}} início={{.State.StartedAt}} código={{.State.ExitCode}}', id]).out.trim();
+  return `  app: ${s}\n${ps.replace(/^/gm, '  ')}`;
+}
+
+/**
+ * Depois de toda recriação ou partida: espera o /health da BASE responder 200, sempre com conexão nova (teto de
+ * tempo). Se não vier, mostra a última causa e o estado do contêiner.
+ */
+async function waitReady(stage: string, ms = 60_000): Promise<void> {
+  const end = Date.now() + ms;
+  let last = 'nenhuma tentativa';
+  let ok = false;
+  while (Date.now() < end) {
+    try {
+      const r = await call('GET', '/health');
+      if (r.status === 200) {
+        ok = true;
+        break;
+      }
+      last = `HTTP ${r.status}`;
+    } catch (e) {
+      last = (e as Error).message;
+    }
+    await sleep(250);
+  }
+  if (!ok) process.stdout.write(`  ${stage}: o /health não respondeu 200 em ${ms / 1000} s; último resultado: ${last}\n${appState()}\n`);
+  expect(`app responde no /health (conexão nova) depois de ${stage}`, ok, true);
 }
 
 async function login(): Promise<string> {
@@ -147,6 +215,11 @@ function cleanup(): void {
 
 async function main(): Promise<void> {
   process.stdout.write(`LuDraw ${VERSION} — teste da imagem Docker (projeto ${PROJECT}, porta ${PORT}, pasta ${WORK})\n`);
+
+  section('Controle: erro de rede mostra a causa');
+  const closed = await freePort();
+  const control = await call('GET', '/health', {}, `http://127.0.0.1:${closed}`).then(() => 'respondeu', (e: Error) => e.message);
+  expect('pedido a uma porta fechada falha com o método, o caminho e a causa (ECONNREFUSED)', /^GET \/health falhou na rede \(ECONNREFUSED: /.test(control), true);
 
   section('Imagem');
   if (!GIVEN_IMAGE) {
@@ -208,6 +281,7 @@ async function main(): Promise<void> {
   expect('o gerador nunca imprime um valor', passwordsOnly.some((v) => secrets.out.includes(v)), false);
   writeFileSync(join(WORK, 'deploy', 'ludraw.env'), `LUDRAW_PUBLIC_URL=${BASE}\n`);
   mustCompose(['up', '-d', '--wait']);
+  await waitReady('subir o compose');
   const states = mustCompose(['ps', '-a', '--format', '{{.Service}}={{.State}}:{{.ExitCode}}']).split(/\r?\n/).filter(Boolean).sort();
   expect('db e app de pé; migração terminou com 0', states.map((s) => s.replace(/:0$/, '').replace(/^(db|app)=running.*/, '$1=running')), ['app=running', 'db=running', 'migrate=exited']);
   const migrateLog = mustCompose(['logs', '--no-color', 'migrate']);
@@ -296,6 +370,7 @@ async function main(): Promise<void> {
   expect('backup concluído', [bk.code, existsSync(join(backupDir, 'db.dump')), existsSync(join(backupDir, 'assets.tar'))], [0, true, true]);
   const manifest = JSON.parse(readFileSync(join(backupDir, 'manifest.json'), 'utf8'));
   expect('manifest com formato, versão, consistência e SHA-256 dos dois arquivos', [manifest.format, manifest.ludrawVersion, manifest.consistent, sha256(readFileSync(join(backupDir, 'db.dump'))) === manifest.files.db.sha256], ['ludraw-backup', VERSION, true, true]);
+  await waitReady('o backup (o script para e religa o app)');
   expect('app voltou depois do backup', (await call('GET', '/health')).status, 200);
   const refused = backupScript(['restore', backupDir]);
   expect('restaurar sem --yes não mexe em nada', [refused.code, /--yes/.test(refused.err)], [2, true]);
@@ -314,6 +389,7 @@ async function main(): Promise<void> {
   const rs = backupScript(['restore', backupDir, '--yes']);
   if (rs.code !== 0) process.stdout.write(rs.err.slice(-3000));
   expect('restauração com segredos novos concluída', rs.code, 0);
+  await waitReady('a restauração (compose recriado)');
   const again = await login();
   expect('mesma senha entra depois da restauração', typeof again, 'string');
   const list = await call('GET', `/api/v1/boards/${boardId}/data`, { token: again });
@@ -327,6 +403,7 @@ async function main(): Promise<void> {
   section('Valkey opcional (perfil "redis", Chat 09 · R4)');
   writeFileSync(join(WORK, 'deploy', 'ludraw.env'), `LUDRAW_PUBLIC_URL=${BASE}\nLUDRAW_REDIS_URL_FILE=/run/secrets/redis_url\n`);
   mustCompose(['--profile', 'redis', 'up', '-d', '--wait']);
+  await waitReady('ligar o Valkey (app recriado)');
   const vkInfo = mustCompose(['--profile', 'redis', 'ps', '--format', '{{.Service}}={{.State}}']).split(/\r?\n/).filter(Boolean).sort();
   expect('Valkey de pé junto com o app (o app esperou o Valkey ficar saudável)', vkInfo.filter((s) => /^(app|valkey)=/.test(s)), ['app=running', 'valkey=running']);
   const vkId = mustCompose(['--profile', 'redis', 'ps', '-q', 'valkey']).trim();
@@ -340,11 +417,19 @@ async function main(): Promise<void> {
   const vkDown = await call('POST', '/api/v1/auth/login', { json: { email: ADMIN_EMAIL, password: PASSWORD } });
   expect('Valkey parado: login responde 503 limitsUnavailable; o app continua de pé', [vkDown.status, vkDown.json?.error?.code, (await call('GET', '/health')).status], [503, 'limitsUnavailable', 200]);
   mustCompose(['--profile', 'redis', 'start', 'valkey']);
+  await waitReady('religar o Valkey');
   let vkBack = 0;
+  let vkLast = 'nenhuma tentativa';
   for (let i = 0; i < 60 && vkBack !== 200; i++) {
     await sleep(500);
-    vkBack = (await call('POST', '/api/v1/auth/login', { json: { email: ADMIN_EMAIL, password: PASSWORD } })).status;
+    try {
+      vkBack = (await call('POST', '/api/v1/auth/login', { json: { email: ADMIN_EMAIL, password: PASSWORD } })).status;
+      vkLast = `HTTP ${vkBack}`;
+    } catch (e) {
+      vkLast = (e as Error).message;
+    }
   }
+  if (vkBack !== 200) process.stdout.write(`  Valkey de volta: último resultado ${vkLast}\n${appState()}\n`);
   expect('Valkey de volta: login volta sem reiniciar o app', vkBack, 200);
 }
 
@@ -352,6 +437,7 @@ try {
   await main();
 } catch (err) {
   failures.push(`erro: ${(err as Error).stack ?? String(err)}`);
+  process.stdout.write(`\n--- estado do app ---\n${appState()}\n`);
   const logs = compose(['logs', '--no-color', '--tail', '60']);
   process.stdout.write(`\n--- logs do compose ---\n${logs.out.slice(-6000)}\n`);
 } finally {
